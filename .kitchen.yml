@@ -1,15 +1,14 @@
 ---
 provisioner:
+  name: chef_zero
   data_bag_path: test/integration/data_bags
 
 suites:
   - name: default
+    attributes:
+      poise-python:
+        provider: system
+      users:
+        - test1-staging
     run_list:
       - recipe[osl-app::default]
-  - name: users
-    run_list:
-      - recipe[osl-app::users]
-    attributes:
-      osl-app:
-        users:
-          - test1-staging
