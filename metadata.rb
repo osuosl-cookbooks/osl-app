@@ -12,6 +12,7 @@ depends          'build-essential'
 depends          'firewall'
 depends          'git'
 depends          'poise-python'
+depends          'nodejs'
 depends          'sudo'
 depends          'user'
 

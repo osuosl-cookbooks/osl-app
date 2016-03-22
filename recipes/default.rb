@@ -20,12 +20,13 @@ node.default['users'] = %(openid-staging)
 
 # rvm package depends
 %w(sqlite-devel libyaml-devel readline-devel zlib-devel libffi-devel
-   openssl-devel automake libtool ).each { |p| package p }
+   openssl-devel automake libtool).each { |p| package p }
 
 python_runtime '2'
 
 include_recipe 'user::data_bag'
 include_recipe 'build-essential'
+include_recipe 'nodejs'
 include_recipe 'firewall::unicorn'
 include_recipe 'git'
 include_recipe 'osl-app::sudo'
