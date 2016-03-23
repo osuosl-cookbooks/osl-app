@@ -16,9 +16,3 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-node['users'].each do |u|
-  sudo u do
-    user u
-    commands ["/bin/systemctl restart #{u}.service"]
-  end
-end
