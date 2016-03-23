@@ -17,6 +17,7 @@
 # limitations under the License.
 
 node.default['users'] = %(openid-staging)
+node.default['poise-python']['provider'] = 'system'
 
 # rvm package depends
 %w(sqlite-devel libyaml-devel readline-devel zlib-devel libffi-devel
