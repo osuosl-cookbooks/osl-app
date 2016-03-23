@@ -16,13 +16,3 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# user service files
-# systemd_service 'openid-staging' do
-#   after %w(network.target)
-#   install do
-#     wanted_by 'multi-user.target'
-#   end
-#   service do
-#     exec_start '/home/openid-staging/'
-#   end
-# end
