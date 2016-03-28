@@ -21,7 +21,8 @@ node.default['poise-python']['provider'] = 'system'
 
 node.override['nodejs']['version'] = '4.4.1'
 node.override['nodejs']['install_method'] = 'binary'
-node.override['nodejs']['binary']['checksum']['linux_x64'] = 'f0a53527f52dbcab3b98921a6cfe8613e5fe26fb796624988f6d615c30305a95'
+node.override['nodejs']['binary']['checksum']['linux_x64'] = 'f0a53527f52dbcab'\
+'3b98921a6cfe8613e5fe26fb796624988f6d615c30305a95'
 
 # rvm package depends
 %w(sqlite-devel libyaml-devel readline-devel zlib-devel libffi-devel
@@ -35,4 +36,4 @@ include_recipe 'nodejs'
 include_recipe 'firewall::unicorn'
 include_recipe 'git'
 include_recipe 'osl-app::sudo'
-# include_recipe 'osl-app::systemd'
+include_recipe 'osl-app::systemd'
