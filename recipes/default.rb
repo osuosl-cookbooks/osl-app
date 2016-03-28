@@ -19,6 +19,10 @@
 node.default['users'] = %(openid-staging)
 node.default['poise-python']['provider'] = 'system'
 
+node.override['nodejs']['version'] = '4.4.1'
+node.override['nodejs']['install_method'] = 'binary'
+node.override['nodejs']['binary']['checksum']['linux_x64'] = 'f0a53527f52dbcab3b98921a6cfe8613e5fe26fb796624988f6d615c30305a95'
+
 # rvm package depends
 %w(sqlite-devel libyaml-devel readline-devel zlib-devel libffi-devel
    openssl-devel automake libtool).each { |p| package p }
