@@ -8,7 +8,11 @@ version          '0.1.0'
 
 supports         'centos', '~> 7.0'
 
+depends          'build-essential'
 depends          'firewall'
+depends          'git'
+depends          'poise-python'
+depends          'nodejs'
 depends          'sudo'
 depends          'user'
 
