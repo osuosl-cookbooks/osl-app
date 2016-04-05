@@ -4,7 +4,7 @@ maintainer_email 'chef@osuosl.org'
 license          'apache2'
 description      'Installs/Configures osl-app'
 long_description 'Installs/Configures osl-app'
-version          '1.0.0'
+version          '1.0.1'
 
 supports         'centos', '~> 7.0'
 
