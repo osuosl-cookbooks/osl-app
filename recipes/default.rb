@@ -16,7 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-node.default['users'] = node['users'] + %w(openid-staging)
+node.normal['users'] = node['users'] + %w(openid-staging openid-production)
 node.default['poise-python']['provider'] = 'system'
 
 node.override['nodejs']['version'] = '4.4.1'
