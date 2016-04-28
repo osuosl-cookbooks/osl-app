@@ -16,7 +16,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-node.normal['users'] = node['users'] + %w(openid-staging openid-production)
+node.normal['users'] = %w(osl-root osl-osuadmin
+                          openid-staging openid-production)
 node.default['poise-python']['provider'] = 'system'
 
 node.override['nodejs']['version'] = '4.4.1'
