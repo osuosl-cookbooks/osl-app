@@ -10,3 +10,6 @@ suites:
         - test1-staging
     run_list:
       - recipe[osl-app::default]
+  - name: systemd
+    run_list:
+      - recipe[osl-app::systemd]
