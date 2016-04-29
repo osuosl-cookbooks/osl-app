@@ -16,6 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+node.override['users']['home_dir_mode'] = '2750'
 node.normal['users'] = %w(osl-root osl-osuadmin
                           openid-staging openid-production)
 node.default['poise-python']['provider'] = 'system'
