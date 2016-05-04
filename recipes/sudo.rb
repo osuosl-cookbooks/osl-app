@@ -15,3 +15,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+sudo 'openid-staging' do
+  user 'openid-staging'
+  commands sudo_commands(%w(openid-staging-unicorn openid-staging-delayed-job))
+end
+
+sudo 'openid-production' do
+  user 'openid-production'
+  commands sudo_commands(%w(openid-production-unicorn
+                            openid-production-delayed-job))
+end
