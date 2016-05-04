@@ -3,7 +3,7 @@ def sudo_commands(services)
 end
 
 def systemctl_commands(service)
-  %w(enable disable stop start reload restart).collect do |x|
+  %w(enable disable stop start status reload restart).collect do |x|
     "/usr/bin/systemctl #{x} #{service}"
   end
 end

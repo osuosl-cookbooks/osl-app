@@ -14,12 +14,14 @@ describe 'osl-app::sudo' do
                    '/usr/bin/systemctl disable openid-staging-unicorn',
                    '/usr/bin/systemctl stop openid-staging-unicorn',
                    '/usr/bin/systemctl start openid-staging-unicorn',
+                   '/usr/bin/systemctl status openid-staging-unicorn',
                    '/usr/bin/systemctl reload openid-staging-unicorn',
                    '/usr/bin/systemctl restart openid-staging-unicorn',
                    '/usr/bin/systemctl enable openid-staging-delayed-job',
                    '/usr/bin/systemctl disable openid-staging-delayed-job',
                    '/usr/bin/systemctl stop openid-staging-delayed-job',
                    '/usr/bin/systemctl start openid-staging-delayed-job',
+                   '/usr/bin/systemctl status openid-staging-delayed-job',
                    '/usr/bin/systemctl reload openid-staging-delayed-job',
                    '/usr/bin/systemctl restart openid-staging-delayed-job']
       )
@@ -31,12 +33,14 @@ describe 'osl-app::sudo' do
                    '/usr/bin/systemctl disable openid-production-unicorn',
                    '/usr/bin/systemctl stop openid-production-unicorn',
                    '/usr/bin/systemctl start openid-production-unicorn',
+                   '/usr/bin/systemctl status openid-production-unicorn',
                    '/usr/bin/systemctl reload openid-production-unicorn',
                    '/usr/bin/systemctl restart openid-production-unicorn',
                    '/usr/bin/systemctl enable openid-production-delayed-job',
                    '/usr/bin/systemctl disable openid-production-delayed-job',
                    '/usr/bin/systemctl stop openid-production-delayed-job',
                    '/usr/bin/systemctl start openid-production-delayed-job',
+                   '/usr/bin/systemctl status openid-production-delayed-job',
                    '/usr/bin/systemctl reload openid-production-delayed-job',
                    '/usr/bin/systemctl restart openid-production-delayed-job']
       )
