@@ -16,6 +16,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+node.default['authorization']['sudo']['include_sudoers_d'] = true
+
 sudo 'openid-staging' do
   user 'openid-staging'
   commands sudo_commands(%w(openid-staging-unicorn openid-staging-delayed-job))
