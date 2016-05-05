@@ -23,7 +23,8 @@ describe 'osl-app::sudo' do
                    '/usr/bin/systemctl start openid-staging-delayed-job',
                    '/usr/bin/systemctl status openid-staging-delayed-job',
                    '/usr/bin/systemctl reload openid-staging-delayed-job',
-                   '/usr/bin/systemctl restart openid-staging-delayed-job']
+                   '/usr/bin/systemctl restart openid-staging-delayed-job'],
+        nopasswd: true
       )
     end
 
@@ -42,7 +43,8 @@ describe 'osl-app::sudo' do
                    '/usr/bin/systemctl start openid-production-delayed-job',
                    '/usr/bin/systemctl status openid-production-delayed-job',
                    '/usr/bin/systemctl reload openid-production-delayed-job',
-                   '/usr/bin/systemctl restart openid-production-delayed-job']
+                   '/usr/bin/systemctl restart openid-production-delayed-job'],
+        nopasswd: true
       )
     end
   end

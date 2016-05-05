@@ -1,0 +1,10 @@
+{
+  "id": "openid",
+  "secret_key_base": {
+    "encrypted_data": "Lgw0IaPxjP2uMkzT2iHiJQHDTjIln5U5naHXreK2Hz/YWO1n+iKFBcqizKAj\noRDAfDvTiVNs87Qmy8lRhvakR39Zx9ScRKYOnXGsWlRX8dCEszB84M3ecbTi\n23g/sXdkuAF9YHoWFVHEtFpYPedAIilnw+5I72cwc2l0WPu4Ft/7zCZSomjN\ndgzL9Arg93kftLWJg5lLbqJ7rZ5BG+r7Zw==\n",
+    "hmac": "+XjUJlWkhSB+IpG4CFda8zdt+WreFBxhr2OI+Nt+wmc=\n",
+    "iv": "6e6uAeDOoCD9Gb7efJSm5w==\n",
+    "version": 2,
+    "cipher": "aes-256-cbc"
+  }
+}
