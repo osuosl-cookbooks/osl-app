@@ -16,7 +16,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-node.default['authorization']['sudo']['include_sudoers_d'] = true
+# rewind the sudoers template to support sudoers_d
+temp = resources(template: '/etc/sudoers')
+temp.variables['include_sudoers_d'] = true
 
 sudo 'openid-staging' do
   user 'openid-staging'

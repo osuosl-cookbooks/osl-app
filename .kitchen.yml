@@ -13,3 +13,7 @@ suites:
   - name: systemd
     run_list:
       - recipe[osl-app::systemd]
+  - name: sudo
+    run_list:
+      - recipe[sudo]
+      - recipe[osl-app::sudo]
