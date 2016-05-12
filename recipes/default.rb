@@ -18,7 +18,7 @@
 
 node.override['user']['home_dir_mode'] = '2750'
 node.normal['users'] = %w(osl-root osl-osuadmin
-                          openid-staging openid-production)
+                          openid-staging openid-production fenestra)
 node.default['poise-python']['provider'] = 'system'
 
 node.override['nodejs']['version'] = '4.4.1'
