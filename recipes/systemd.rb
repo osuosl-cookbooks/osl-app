@@ -99,3 +99,18 @@ systemd_service 'openid-production-delayed-job' do
     'bin/delayed_job -n 2 restart'
   end
 end
+
+systemd_service 'fenestra' do
+  description 'osuosl dashboard'
+  after %w(network.target)
+  install do
+    wanted_by 'multi-user.target'
+  end
+  service do
+    type 'forking'
+    user 'fenestra'
+    working_directory '/home/fenestra/fenestra'
+    exec_start '/home/fenestra/.rvm/bin/rvm 2.2.5 do bundle exec unicorn -l '\
+    '8082 -c config/unicorn.rb -E deployment'
+  end
+end

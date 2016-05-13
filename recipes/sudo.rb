@@ -32,3 +32,8 @@ sudo 'openid-production' do
                             openid-production-delayed-job))
   nopasswd true
 end
+
+sudo 'fenestra' do
+  user 'fenestra'
+  commands sudo_commands(%w(fenestra))
+end
