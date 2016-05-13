@@ -28,7 +28,7 @@ node.override['nodejs']['binary']['checksum']['linux_x64'] = 'f0a53527f52dbcab'\
 
 # rvm package depends
 %w(sqlite-devel libyaml-devel readline-devel zlib-devel libffi-devel
-   openssl-devel automake libtool mysql-devel ImageMagick-devel).each do |p|
+   openssl-devel automake libtool mariadb-devel ImageMagick-devel).each do |p|
   package p
 end
 

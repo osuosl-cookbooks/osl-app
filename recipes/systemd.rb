@@ -110,6 +110,7 @@ systemd_service 'fenestra' do
     type 'forking'
     user 'fenestra'
     working_directory '/home/fenestra/fenestra'
+    pid_file '/home/fenestra/pids/unicorn.pid'
     exec_start '/home/fenestra/.rvm/bin/rvm 2.2.5 do bundle exec unicorn -l '\
     '8082 -c config/unicorn.rb -E deployment'
   end
