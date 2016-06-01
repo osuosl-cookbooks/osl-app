@@ -15,3 +15,13 @@ describe command('node --version') do
   its(:exit_status) { should eq 0 }
   its(:stdout) { should match(/v4\.4\.1/) }
 end
+
+describe file('/etc/systemd/system') do
+  it { should be_directory }
+  it { should be_mode 750 }
+end
+
+describe file('/etc/sudoers') do
+  it { should be_file }
+  its(:content) { should match(%r{#includedir \/etc\/sudoers\.d}) }
+end

@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: osl-app
-# Recipe:: systemd
+# Recipe:: app1
 #
 # Copyright 2016 Oregon State University
 #
@@ -16,12 +16,33 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-secrets = data_bag_item('osl-app', 'openid')
+node.normal['users'] = %w(osl-root osl-osuadmin
+                          openid-staging openid-production fenestra)
 
-# Keep systemd services private from non-root users
-directory '/etc/systemd/system' do
-  mode 0750
+openid_secrets = data_bag_item('osl-app', 'openid')
+
+#### Sudo Privs ####
+
+sudo 'openid-staging' do
+  user 'openid-staging'
+  commands sudo_commands(%w(openid-staging-unicorn openid-staging-delayed-job))
+  nopasswd true
 end
+
+sudo 'openid-production' do
+  user 'openid-production'
+  commands sudo_commands(%w(openid-production-unicorn
+                            openid-production-delayed-job))
+  nopasswd true
+end
+
+sudo 'fenestra' do
+  user 'fenestra'
+  commands sudo_commands(%w(fenestra))
+  nopasswd true
+end
+
+#### Systemd Services ####
 
 systemd_service 'openid-staging-unicorn' do
   description 'openid staging app'
@@ -71,7 +92,7 @@ systemd_service 'openid-production-unicorn' do
     type 'forking'
     user 'openid-production'
     environment(RAILS_ENV: 'production',
-                SECRET_KEY_BASE: secrets['secret_key_base'])
+                SECRET_KEY_BASE: openid_secrets['secret_key_base'])
     working_directory '/home/openid-production/current'
     pid_file '/home/openid-production/current/tmp/pids/unicorn.pid'
     exec_start '/home/openid-production/.rvm/bin/rvm 2.2.4 do bundle exec '\
