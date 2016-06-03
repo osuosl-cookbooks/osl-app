@@ -1,5 +1,5 @@
-def sudo_commands(services)
-  services.reduce([]) { |total, service| total + systemctl_commands(service) }
+def sudo_commands(*args)
+  args.reduce([]) { |a, e| a + systemctl_commands(e) }
 end
 
 def systemctl_commands(service)

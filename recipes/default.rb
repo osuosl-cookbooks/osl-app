@@ -17,8 +17,6 @@
 # limitations under the License.
 
 node.override['user']['home_dir_mode'] = '2750'
-node.normal['users'] = %w(osl-root osl-osuadmin
-                          openid-staging openid-production fenestra)
 node.default['poise-python']['provider'] = 'system'
 
 node.override['nodejs']['version'] = '4.4.1'
@@ -34,10 +32,17 @@ end
 
 python_runtime '2'
 
+# Keep systemd services private from non-root users
+directory '/etc/systemd/system' do
+  mode 0750
+end
+
+# rewind the sudoers template to support sudoers_d
+temp = resources(template: '/etc/sudoers')
+temp.variables['include_sudoers_d'] = true
+
 include_recipe 'user::data_bag'
 include_recipe 'build-essential'
 include_recipe 'nodejs'
 include_recipe 'firewall::unicorn'
 include_recipe 'git'
-include_recipe 'osl-app::sudo'
-include_recipe 'osl-app::systemd'
