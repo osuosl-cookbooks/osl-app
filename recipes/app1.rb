@@ -16,6 +16,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+include_recipe 'osl-app::default'
+
 node.normal['users'] = %w(osl-root osl-osuadmin iam
                           openid-staging openid-production fenestra)
 
