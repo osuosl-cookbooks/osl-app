@@ -16,7 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-node.normal['users'] = %w(osl-root osl-osuadmin
+node.normal['users'] = %w(osl-root osl-osuadmin iam
                           openid-staging openid-production fenestra)
 
 openid_secrets = data_bag_item('osl-app', 'openid')

@@ -11,3 +11,10 @@ suites:
     run_list:
       - recipe[sudo]
       - recipe[osl-app::default]
+  - name: app1
+    attributes:
+      users:
+        - iam
+    run_list:
+      - recipe[user::data_bag]
+      - recipe[osl-app::app1]
