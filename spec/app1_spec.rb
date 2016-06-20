@@ -61,4 +61,5 @@ describe 'osl-app::app1' do
         expect(chef_run).to create_systemd_service(s)
       end
     end
+  end
 end
