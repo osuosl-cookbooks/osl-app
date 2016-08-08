@@ -1,0 +1,4 @@
+cookbook=osl-app
+version=1.4.3
+envs=~
+pr_link=https://github.com/osuosl-cookbooks/osl-app/pull/4

@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+1.4.5 (2016-08-08)
+------------------
+- remove osl-root and osl-osuadmin data bag users
+
 1.4.4 (2016-06-29)
 ------------------
 - Add postgresql dev packages
