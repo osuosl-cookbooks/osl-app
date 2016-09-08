@@ -1,5 +1,10 @@
 {
-  "id": "iam",
-  "username": "iam",
+  "id": "iam-staging",
+  "username": "iam-staging",
+  "ssh_keygen": false
+}
+{
+  "id": "iam-production",
+  "username": "iam-production",
   "ssh_keygen": false
 }

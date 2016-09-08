@@ -14,7 +14,7 @@ suites:
   - name: app1
     attributes:
       users:
-        - iam
+        - test1-staging
     run_list:
       - recipe[sudo]
       - recipe[user::data_bag]
@@ -24,6 +24,8 @@ suites:
       users:
         - formsender-staging
         - formsender-production
+        - iam-staging
+        - iam-production
     run_list:
       - recipe[sudo]
       - recipe[user::data_bag]

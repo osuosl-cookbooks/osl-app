@@ -32,7 +32,49 @@ describe 'osl-app::app2' do
     )
   end
 
-  %w(formsender-staging-gunicorn formsender-production-gunicorn).each do |s|
+  it 'should create systemctl privs for iam-staging' do
+    expect(chef_run).to install_sudo('iam-staging').with(
+      commands: ['/usr/bin/systemctl enable iam-staging-unicorn',
+                 '/usr/bin/systemctl disable iam-staging-unicorn',
+                 '/usr/bin/systemctl stop iam-staging-unicorn',
+                 '/usr/bin/systemctl start iam-staging-unicorn',
+                 '/usr/bin/systemctl status iam-staging-unicorn',
+                 '/usr/bin/systemctl reload iam-staging-unicorn',
+                 '/usr/bin/systemctl restart iam-staging-unicorn',
+                 '/usr/bin/systemctl enable iam-staging-delayed-job',
+                 '/usr/bin/systemctl disable iam-staging-delayed-job',
+                 '/usr/bin/systemctl stop iam-staging-delayed-job',
+                 '/usr/bin/systemctl start iam-staging-delayed-job',
+                 '/usr/bin/systemctl status iam-staging-delayed-job',
+                 '/usr/bin/systemctl reload iam-staging-delayed-job',
+                 '/usr/bin/systemctl restart iam-staging-delayed-job'],
+      nopasswd: true
+    )
+  end
+
+  it 'should create systemctl privs for iam-production' do
+    expect(chef_run).to install_sudo('iam-production').with(
+      commands: ['/usr/bin/systemctl enable iam-production-unicorn',
+                 '/usr/bin/systemctl disable iam-production-unicorn',
+                 '/usr/bin/systemctl stop iam-production-unicorn',
+                 '/usr/bin/systemctl start iam-production-unicorn',
+                 '/usr/bin/systemctl status iam-production-unicorn',
+                 '/usr/bin/systemctl reload iam-production-unicorn',
+                 '/usr/bin/systemctl restart iam-production-unicorn',
+                 '/usr/bin/systemctl enable iam-production-delayed-job',
+                 '/usr/bin/systemctl disable iam-production-delayed-job',
+                 '/usr/bin/systemctl stop iam-production-delayed-job',
+                 '/usr/bin/systemctl start iam-production-delayed-job',
+                 '/usr/bin/systemctl status iam-production-delayed-job',
+                 '/usr/bin/systemctl reload iam-production-delayed-job',
+                 '/usr/bin/systemctl restart iam-production-delayed-job'],
+      nopasswd: true
+    )
+  end
+
+  %w(formsender-staging-gunicorn formsender-production-gunicorn
+     iam-staging-unicorn iam-staging-delayed-job
+     iam-production-unicorn iam-production-delayed-job).each do |s|
     it "should create system service #{s}" do
       expect(chef_run).to create_systemd_service(s)
     end
