@@ -24,15 +24,13 @@ node.normal['users'] = %w(formsender-production, formsender-staging)
 
 sudo 'formsender-production' do
   user 'formsender-production'
-  commands sudo_commands('formsender-production-unicorn',
-                         'formsender-production-delayed-job')
+  commands sudo_commands('formsender-production-gunicorn')
   nopasswd true
 end
 
 sudo 'formsender-staging' do
   user 'formsender-staging'
-  commands sudo_commands('formsender-staging-unicorn',
-                         'formsender-staging-delayed-job')
+  commands sudo_commands('formsender-staging-gunicorn')
   nopasswd true
 end
 
