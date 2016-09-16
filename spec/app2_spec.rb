@@ -73,8 +73,7 @@ describe 'osl-app::app2' do
   end
 
   %w(formsender-staging-gunicorn formsender-production-gunicorn
-     iam-staging-unicorn iam-staging-delayed-job
-     iam-production-unicorn iam-production-delayed-job).each do |s|
+     iam-staging iam-production).each do |s|
     it "should create system service #{s}" do
       expect(chef_run).to create_systemd_service(s)
     end
