@@ -12,6 +12,16 @@ snakeoil_file_path = 'test/integration/data_bags/certificates/snakeoil.json'
 encrypted_data_bag_secret_path = 'test/integration/encrypted_data_bag_secret'
 
 ##
+# Run command wrapper
+def run_command(command)
+  if File.exist?('Gemfile.lock')
+    sh %(bundle exec #{command})
+  else
+    sh %(chef exec #{command})
+  end
+end
+
+##
 # Create a self-signed SSL certificate
 #
 def gen_ssl_cert
@@ -100,11 +110,21 @@ task snakeoil: snakeoil_file_path
 desc 'Create an Encrypted Databag Secret'
 task secret_file: encrypted_data_bag_secret_path
 
-task default: :snakeoil
+require 'rubocop/rake_task'
+desc 'Run RuboCop (style) tests'
+RuboCop::RakeTask.new(:style)
 
-begin
-  require 'kitchen/rake_tasks'
-  Kitchen::RakeTasks.new
-rescue LoadError
-  puts '>>>>> Kitchen gem not loaded, omitting tasks' unless ENV['CI']
+desc 'Run FoodCritic (lint) tests'
+task :lint do
+    run_command('foodcritic --epic-fail any .')
 end
+
+desc 'Run RSpec (unit) tests'
+task :unit do
+    run_command('rspec')
+end
+
+desc 'Run all tests'
+task test: [:style, :lint, :unit]
+
+task default: :test
