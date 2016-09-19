@@ -19,3 +19,4 @@ suites:
       - recipe[sudo]
       - recipe[user::data_bag]
       - recipe[osl-app::app1]
+      - recipe[osl-app::app2]
