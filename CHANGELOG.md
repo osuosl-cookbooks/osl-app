@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+1.4.6 (2016-09-19)
+------------------
+- Cleanup and fix chefspec tests so they run and pass
+
 1.4.5 (2016-08-08)
 ------------------
 - remove osl-root and osl-osuadmin data bag users
