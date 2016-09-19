@@ -1,6 +1,8 @@
 name             'osl-app'
 maintainer       'Oregon State University'
 maintainer_email 'chef@osuosl.org'
+issues_url       'https://github.com/osuosl-cookbooks/osl-app/issues'
+source_url       'https://github.com/osuosl-cookbooks/osl-app'
 license          'apache2'
 description      'Installs/Configures osl-app'
 long_description 'Installs/Configures osl-app'
