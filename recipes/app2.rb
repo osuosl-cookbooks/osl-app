@@ -45,7 +45,7 @@ systemd_service 'formsender-staging-gunicorn' do
   service do
     type 'forking'
     user 'formsender-staging'
-    environment 'PATH => /home/formsender-staging/venv/bin'
+    environment 'PATH' => '/home/formsender-staging/venv/bin'
     working_directory '/home/formsender-staging/formsender'
     pid_file '/home/formsender-staging/tmp/pids/gunicorn.pid'
     exec_start '/home/formsender-staging/venv/bin/gunicorn -b 0.0.0.0:8086 '\
@@ -63,7 +63,7 @@ systemd_service 'formsender-production-gunicorn' do
   service do
     type 'forking'
     user 'formsender-production'
-    environment 'PATH => /home/formsender-production/venv/bin'
+    environment 'PATH' => '/home/formsender-production/venv/bin'
     working_directory '/home/formsender-production/formsender'
     pid_file '/home/formsender-production/tmp/pids/gunicorn.pid'
     exec_start '/home/formsender-production/venv/bin/gunicorn -b 0.0.0.0:8085 '\
