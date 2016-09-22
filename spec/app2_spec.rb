@@ -16,8 +16,8 @@ describe 'osl-app::app2' do
 
   it 'should create systemctl privs for formsender-staging' do
     expect(chef_run).to install_sudo('formsender-staging').with(
-      commands: ['/usr/bin/systemctl enable formsender-staging-ggunicorn',
-                 '/usr/bin/systemctl disable formsender-staging-ggunicorn',
+      commands: ['/usr/bin/systemctl enable formsender-staging-gunicorn',
+                 '/usr/bin/systemctl disable formsender-staging-gunicorn',
                  '/usr/bin/systemctl stop formsender-staging-gunicorn',
                  '/usr/bin/systemctl start formsender-staging-gunicorn',
                  '/usr/bin/systemctl status formsender-staging-gunicorn',
