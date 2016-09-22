@@ -19,4 +19,12 @@ suites:
       - recipe[sudo]
       - recipe[user::data_bag]
       - recipe[osl-app::app1]
+  - name: app2
+    attributes:
+      users:
+        - formsender-staging
+        - formsender-production
+    run_list:
+      - recipe[sudo]
+      - recipe[user::data_bag]
       - recipe[osl-app::app2]
