@@ -6,14 +6,6 @@ describe 'osl-app::app2' do
   end
   include_context 'common_stubs'
 
-  before do
-    stub_data_bag_item('osl-app', 'formsender').and_return(
-      secret_key_base: '7eef5c70ecb083192f46e601144f9d77c9b66061b634963a507'\
-        '0fb086ae78bc9353af2c6311edb168abbb9d0bd428f800a0b1713534cf4ad239e8d'\
-        '07fdd16c34'
-    )
-  end
-
   it 'should create systemctl privs for formsender-staging' do
     expect(chef_run).to install_sudo('formsender-staging').with(
       commands: ['/usr/bin/systemctl enable formsender-staging-gunicorn',
