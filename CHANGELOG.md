@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+1.5.0 (2016-09-23)
+------------------
+- Kennric/app2 formsender
+
 1.4.6 (2016-09-19)
 ------------------
 - Cleanup and fix chefspec tests so they run and pass
