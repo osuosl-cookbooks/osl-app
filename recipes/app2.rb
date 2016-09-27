@@ -49,6 +49,7 @@ systemd_service 'formsender-staging-gunicorn' do
     working_directory '/home/formsender-staging/formsender'
     pid_file '/home/formsender-staging/tmp/pids/gunicorn.pid'
     exec_start '/home/formsender-staging/venv/bin/gunicorn -b 0.0.0.0:8086 '\
+      '-D --pid /home/formsender-staging/tmp/pids/gunicorn.pid '\
       'formsender.wsgi:application'
     exec_reload '/bin/kill -USR2 $MAINPID'
   end
@@ -67,6 +68,7 @@ systemd_service 'formsender-production-gunicorn' do
     working_directory '/home/formsender-production/formsender'
     pid_file '/home/formsender-production/tmp/pids/gunicorn.pid'
     exec_start '/home/formsender-production/venv/bin/gunicorn -b 0.0.0.0:8085 '\
+      '-D --pid /home/formsender-production/tmp/pids/gunicorn.pid '\
       'formsender.wsgi:application'
     exec_reload '/bin/kill -USR2 $MAINPID'
   end
