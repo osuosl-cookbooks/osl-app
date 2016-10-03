@@ -32,7 +32,34 @@ describe 'osl-app::app2' do
     )
   end
 
-  %w(formsender-staging-gunicorn formsender-production-gunicorn).each do |s|
+  it 'should create systemctl privs for iam-staging' do
+    expect(chef_run).to install_sudo('iam-staging').with(
+      commands: ['/usr/bin/systemctl enable iam-staging',
+                 '/usr/bin/systemctl disable iam-staging',
+                 '/usr/bin/systemctl stop iam-staging',
+                 '/usr/bin/systemctl start iam-staging',
+                 '/usr/bin/systemctl status iam-staging',
+                 '/usr/bin/systemctl reload iam-staging',
+                 '/usr/bin/systemctl restart iam-staging'],
+      nopasswd: true
+    )
+  end
+
+  it 'should create systemctl privs for iam-production' do
+    expect(chef_run).to install_sudo('iam-production').with(
+      commands: ['/usr/bin/systemctl enable iam-production',
+                 '/usr/bin/systemctl disable iam-production',
+                 '/usr/bin/systemctl stop iam-production',
+                 '/usr/bin/systemctl start iam-production',
+                 '/usr/bin/systemctl status iam-production',
+                 '/usr/bin/systemctl reload iam-production',
+                 '/usr/bin/systemctl restart iam-production'],
+      nopasswd: true
+    )
+  end
+
+  %w(formsender-staging-gunicorn formsender-production-gunicorn
+     iam-staging iam-production).each do |s|
     it "should create system service #{s}" do
       expect(chef_run).to create_systemd_service(s)
     end

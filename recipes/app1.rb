@@ -18,8 +18,7 @@
 
 include_recipe 'osl-app::default'
 
-node.normal['users'] = %w(iam-staging iam-production
-                          openid-staging openid-production fenestra)
+node.normal['users'] = %w(openid-staging openid-production fenestra)
 
 openid_secrets = data_bag_item('osl-app', 'openid')
 

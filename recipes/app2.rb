@@ -18,7 +18,8 @@
 
 include_recipe 'osl-app::default'
 
-node.normal['users'] = %w(formsender-production formsender-staging)
+node.normal['users'] = %w(formsender-production formsender-staging
+                          iam-staging iam-production)
 
 #### Sudo Privs ####
 
@@ -31,6 +32,18 @@ end
 sudo 'formsender-staging' do
   user 'formsender-staging'
   commands sudo_commands('formsender-staging-gunicorn')
+  nopasswd true
+end
+
+sudo 'iam-staging' do
+  user 'iam-staging'
+  commands sudo_commands('iam-staging')
+  nopasswd true
+end
+
+sudo 'iam-production' do
+  user 'iam-production'
+  commands sudo_commands('iam-production')
   nopasswd true
 end
 
@@ -71,5 +84,37 @@ systemd_service 'formsender-production-gunicorn' do
       '-D --pid /home/formsender-production/tmp/pids/gunicorn.pid '\
       'formsender.wsgi:application'
     exec_reload '/bin/kill -USR2 $MAINPID'
+  end
+end
+
+systemd_service 'iam-staging' do
+  description 'osuosl metrics'
+  after %w(network.target)
+  install do
+    wanted_by 'multi-user.target'
+  end
+  service do
+    type 'forking'
+    user 'iam-staging'
+    working_directory '/home/iam-staging/iam'
+    pid_file '/home/iam-staging/pids/unicorn.pid'
+    exec_start '/home/iam-staging/.rvm/bin/rvm 2.3.0 do bundle exec '\
+      'unicorn -l 8083 -c config/unicorn.rb -E deployment -D'
+  end
+end
+
+systemd_service 'iam-production' do
+  description 'osuosl metrics'
+  after %w(network.target)
+  install do
+    wanted_by 'multi-user.target'
+  end
+  service do
+    type 'forking'
+    user 'iam-production'
+    working_directory '/home/iam-production/iam'
+    pid_file '/home/iam-production/pids/unicorn.pid'
+    exec_start '/home/iam-production/.rvm/bin/rvm 2.3.0 do bundle exec '\
+      'unicorn -l 8084 -c config/unicorn.rb -E deployment -D'
   end
 end
