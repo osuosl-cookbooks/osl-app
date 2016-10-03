@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+1.6.0 (2016-10-03)
+------------------
+- add iam to app2
+
 1.5.1 (2016-09-27)
 ------------------
 - Kennric/app2 formsender
