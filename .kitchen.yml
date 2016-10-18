@@ -30,3 +30,12 @@ suites:
       - recipe[sudo]
       - recipe[user::data_bag]
       - recipe[osl-app::app2]
+  - name: app3
+    attributes:
+      users:
+        - streamwebs-staging
+        - streamwebs-production
+    run_list:
+      - recipe[sudo]
+      - recipe[user::data_bag]
+      - recipe[osl-app::app3]
