@@ -13,7 +13,7 @@ end
 
 describe command('node --version') do
   its(:exit_status) { should eq 0 }
-  its(:stdout) { should match(/v4\.4\.1/) }
+  its(:stdout) { should match(/v6\.9\.1/) }
 end
 
 describe file('/etc/systemd/system') do
