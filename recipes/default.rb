@@ -19,10 +19,10 @@
 node.override['user']['home_dir_mode'] = '2750'
 node.default['poise-python']['provider'] = 'system'
 
-node.override['nodejs']['version'] = '4.4.1'
+node.override['nodejs']['version'] = '6.9.1'
 node.override['nodejs']['install_method'] = 'binary'
-node.override['nodejs']['binary']['checksum']['linux_x64'] = 'f0a53527f52dbcab'\
-'3b98921a6cfe8613e5fe26fb796624988f6d615c30305a95'
+node.override['nodejs']['binary']['checksum']['linux_x64'] = 'd4eb161e4715e1' \
+'1bbef816a6c577974271e2bddae9cf008744627676ff00036a'
 
 # rvm package depends
 %w(sqlite-devel libyaml-devel readline-devel zlib-devel libffi-devel
