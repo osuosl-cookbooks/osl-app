@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+1.8.0 (2016-11-04)
+------------------
+- Upgrade NodeJS to LTS v6.9.1.
+
 1.7.0 (2016-10-18)
 ------------------
 - Kennric/streamwebs app3
