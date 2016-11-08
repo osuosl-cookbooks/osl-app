@@ -48,6 +48,18 @@ sudo 'iam-production' do
   nopasswd true
 end
 
+sudo 'timesync-production' do
+  user 'timesync-production'
+  commands sudo_commands('timesync-production')
+  nopasswd true
+end
+
+sudo 'timesync-staging' do
+  user 'timesync-staging'
+  commands sudo_commands('timesync-staging')
+  nopasswd true
+end
+
 #### Systemd Services ####
 
 systemd_service 'formsender-staging-gunicorn' do
