@@ -139,12 +139,11 @@ systemd_service 'timesync-staging' do
     wanted_by 'multi-user.target'
   end
   service do
-    type 'forking'
     environment_file '/home/timesync-staging/timesync.env'
     user 'timesync-staging'
     working_directory '/home/timesync-staging/timesync'
     pid_file '/home/timesync-staging/pids/timesync.pid'
-    exec_start 'node src/app.js'
+    exec_start '/usr/local/bin/node /home/timesync-staging/timesync/src/app.js'
   end
 end
 
@@ -155,11 +154,10 @@ systemd_service 'timesync-production' do
     wanted_by 'multi-user.target'
   end
   service do
-    type 'forking'
     environment_file '/home/timesync-production/timesync.env'
     user 'timesync-production'
     working_directory '/home/timesync-production/timesync'
     pid_file '/home/timesync-production/pids/timesync.pid'
-    exec_start 'node src/app.js'
+    exec_start '/usr/local/bin/node /home/timesync-production/timesync/src/app.js'
   end
 end
