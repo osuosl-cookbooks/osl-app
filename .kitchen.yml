@@ -26,6 +26,8 @@ suites:
         - formsender-production
         - iam-staging
         - iam-production
+        - timesync-production
+        - timesync-staging
     run_list:
       - recipe[sudo]
       - recipe[user::data_bag]

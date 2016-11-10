@@ -19,7 +19,8 @@
 include_recipe 'osl-app::default'
 
 node.normal['users'] = %w(formsender-production formsender-staging
-                          iam-staging iam-production)
+                          iam-staging iam-production
+                          timesync-staging timesync-production)
 
 #### Sudo Privs ####
 
@@ -44,6 +45,18 @@ end
 sudo 'iam-production' do
   user 'iam-production'
   commands sudo_commands('iam-production')
+  nopasswd true
+end
+
+sudo 'timesync-production' do
+  user 'timesync-production'
+  commands sudo_commands('timesync-production')
+  nopasswd true
+end
+
+sudo 'timesync-staging' do
+  user 'timesync-staging'
+  commands sudo_commands('timesync-staging')
   nopasswd true
 end
 
@@ -116,5 +129,36 @@ systemd_service 'iam-production' do
     pid_file '/home/iam-production/pids/unicorn.pid'
     exec_start '/home/iam-production/.rvm/bin/rvm 2.3.0 do bundle exec '\
       'unicorn -l 8084 -c config/unicorn.rb -E deployment -D'
+  end
+end
+
+systemd_service 'timesync-staging' do
+  description 'Time tracker'
+  after %w(network.target)
+  install do
+    wanted_by 'multi-user.target'
+  end
+  service do
+    environment_file '/home/timesync-staging/timesync.env'
+    user 'timesync-staging'
+    working_directory '/home/timesync-staging/timesync'
+    pid_file '/home/timesync-staging/pids/timesync.pid'
+    exec_start '/usr/local/bin/node /home/timesync-staging/timesync/src/app.js'
+  end
+end
+
+systemd_service 'timesync-production' do
+  description 'Time tracker'
+  after %w(network.target)
+  install do
+    wanted_by 'multi-user.target'
+  end
+  service do
+    environment_file '/home/timesync-production/timesync.env'
+    user 'timesync-production'
+    working_directory '/home/timesync-production/timesync'
+    pid_file '/home/timesync-production/pids/timesync.pid'
+    exec_start '/usr/local/bin/node ' \
+      '/home/timesync-production/timesync/src/app.js'
   end
 end

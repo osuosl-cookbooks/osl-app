@@ -58,8 +58,35 @@ describe 'osl-app::app2' do
     )
   end
 
+  it 'should create systemctl privs for timesync-production' do
+    expect(chef_run).to install_sudo('timesync-production').with(
+      commands: ['/usr/bin/systemctl enable timesync-production',
+                 '/usr/bin/systemctl disable timesync-production',
+                 '/usr/bin/systemctl stop timesync-production',
+                 '/usr/bin/systemctl start timesync-production',
+                 '/usr/bin/systemctl status timesync-production',
+                 '/usr/bin/systemctl reload timesync-production',
+                 '/usr/bin/systemctl restart timesync-production'],
+      nopasswd: true
+    )
+  end
+
+  it 'should create systemctl privs for timesync-staging' do
+    expect(chef_run).to install_sudo('timesync-staging').with(
+      commands: ['/usr/bin/systemctl enable timesync-staging',
+                 '/usr/bin/systemctl disable timesync-staging',
+                 '/usr/bin/systemctl stop timesync-staging',
+                 '/usr/bin/systemctl start timesync-staging',
+                 '/usr/bin/systemctl status timesync-staging',
+                 '/usr/bin/systemctl reload timesync-staging',
+                 '/usr/bin/systemctl restart timesync-staging'],
+      nopasswd: true
+    )
+  end
+
   %w(formsender-staging-gunicorn formsender-production-gunicorn
-     iam-staging iam-production).each do |s|
+     iam-staging iam-production
+     timesync-staging timesync-production).each do |s|
     it "should create system service #{s}" do
       expect(chef_run).to create_systemd_service(s)
     end
