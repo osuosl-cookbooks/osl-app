@@ -158,6 +158,7 @@ systemd_service 'timesync-production' do
     user 'timesync-production'
     working_directory '/home/timesync-production/timesync'
     pid_file '/home/timesync-production/pids/timesync.pid'
-    exec_start '/usr/local/bin/node /home/timesync-production/timesync/src/app.js'
+    exec_start '/usr/local/bin/node ' \
+      '/home/timesync-production/timesync/src/app.js'
   end
 end
