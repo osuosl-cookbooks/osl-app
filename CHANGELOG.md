@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+1.9.0 (2016-11-10)
+------------------
+- Add timesync services to app2.
+
 1.8.0 (2016-11-04)
 ------------------
 - Upgrade NodeJS to LTS v6.9.1.
