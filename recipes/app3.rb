@@ -18,7 +18,8 @@
 
 include_recipe 'osl-app::default'
 
-node.normal['users'] = %w(streamwebs-production streamwebs-staging)
+node.normal['users'] = %w(streamwebs-production streamwebs-staging
+                          timesync-web-staging timesync-web-production)
 
 #### Sudo Privs ####
 
@@ -31,6 +32,18 @@ end
 sudo 'streamwebs-staging' do
   user 'streamwebs-staging'
   commands sudo_commands('streamwebs-staging-gunicorn')
+  nopasswd true
+end
+
+sudo 'timesync-web-production' do
+  user 'timesync-web-production'
+  commands sudo_commands('timesync-web-production')
+  nopasswd true
+end
+
+sudo 'timesync-web-staging' do
+  user 'timesync-web-staging'
+  commands sudo_commands('timesync-web-staging')
   nopasswd true
 end
 
@@ -67,9 +80,48 @@ systemd_service 'streamwebs-production-gunicorn' do
     environment 'PATH' => '/home/streamwebs-production/venv/bin'
     working_directory '/home/streamwebs-production/streamwebs'
     pid_file '/home/streamwebs-production/tmp/pids/gunicorn.pid'
-    exec_start '/home/streamwebs-production/venv/bin/gunicorn -b 0.0.0.0:8081 '\
+    exec_start '/home/streamwebs-production/venv/bin/gunicorn -b 0.0.0.0:8082 '\
       '-D --pid /home/streamwebs-production/tmp/pids/gunicorn.pid '\
       'streamwebs.wsgi:application'
+    exec_reload '/bin/kill -USR2 $MAINPID'
+  end
+end
+
+systemd_service 'timesync-web-staging' do
+  description 'timesync-web staging app'
+  after %w(network.target)
+  install do
+    wanted_by 'multi-user.target'
+  end
+  service do
+    type 'forking'
+    user 'timesync-web-staging'
+    environment 'PATH' => '/home/timesync-web-staging/venv/bin'
+    working_directory '/home/timesync-web-staging/timesync-web'
+    pid_file '/home/timesync-web-staging/tmp/pids/gunicorn.pid'
+    exec_start '/home/timesync-web-staging/venv/bin/gunicorn -b 0.0.0.0:8083 '\
+      '-D --pid /home/timesync-web-staging/tmp/pids/gunicorn.pid '\
+      'timesync-web.wsgi:application'
+    exec_reload '/bin/kill -USR2 $MAINPID'
+  end
+end
+
+systemd_service 'timesync-web-production' do
+  description 'timesync-web production app'
+  after %w(network.target)
+  install do
+    wanted_by 'multi-user.target'
+  end
+  service do
+    type 'forking'
+    user 'timesync-web-production'
+    environment 'PATH' => '/home/timesync-web-production/venv/bin'
+    working_directory '/home/timesync-web-production/timesync-web'
+    pid_file '/home/timesync-web-production/tmp/pids/gunicorn.pid'
+    exec_start '/home/timesync-web-production/venv/bin/gunicorn '\
+      '-b 0.0.0.0:8083 '\
+      '-D --pid /home/timesync-web-production/tmp/pids/gunicorn.pid '\
+      'timesync-web.wsgi:application'
     exec_reload '/bin/kill -USR2 $MAINPID'
   end
 end
