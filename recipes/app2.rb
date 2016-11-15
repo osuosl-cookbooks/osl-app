@@ -112,7 +112,7 @@ systemd_service 'iam-staging' do
     working_directory '/home/iam-staging/iam'
     pid_file '/home/iam-staging/pids/unicorn.pid'
     exec_start '/home/iam-staging/.rvm/bin/rvm 2.3.0 do bundle exec '\
-      'unicorn -l 8083 -c config/unicorn.rb -E deployment -D'
+      'unicorn -l 8084 -c unicorn.rb -E deployment -D'
   end
 end
 
@@ -128,7 +128,7 @@ systemd_service 'iam-production' do
     working_directory '/home/iam-production/iam'
     pid_file '/home/iam-production/pids/unicorn.pid'
     exec_start '/home/iam-production/.rvm/bin/rvm 2.3.0 do bundle exec '\
-      'unicorn -l 8084 -c config/unicorn.rb -E deployment -D'
+      'unicorn -l 8083 -c unicorn.rb -E deployment -D'
   end
 end
 
