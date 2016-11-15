@@ -80,7 +80,7 @@ systemd_service 'streamwebs-production-gunicorn' do
     environment 'PATH' => '/home/streamwebs-production/venv/bin'
     working_directory '/home/streamwebs-production/streamwebs'
     pid_file '/home/streamwebs-production/tmp/pids/gunicorn.pid'
-    exec_start '/home/streamwebs-production/venv/bin/gunicorn -b 0.0.0.0:8081 '\
+    exec_start '/home/streamwebs-production/venv/bin/gunicorn -b 0.0.0.0:8082 '\
       '-D --pid /home/streamwebs-production/tmp/pids/gunicorn.pid '\
       'streamwebs.wsgi:application'
     exec_reload '/bin/kill -USR2 $MAINPID'

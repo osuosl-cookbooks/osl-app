@@ -86,7 +86,8 @@ describe 'osl-app::app2' do
 
   %w(formsender-staging-gunicorn formsender-production-gunicorn
      iam-staging iam-production
-     timesync-staging timesync-production).each do |s|
+     timesync-staging timesync-production
+     timesync-web-staging timesync-web-production).each do |s|
     it "should create system service #{s}" do
       expect(chef_run).to create_systemd_service(s)
     end
