@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+1.9.2 (2016-11-15)
+------------------
+- fix unicorn command for iam instances
+
 1.9.1 (2016-11-15)
 ------------------
 - Add comments clarifying timesync port numbers.
