@@ -57,8 +57,9 @@ describe 'osl-app::app3' do
       nopasswd: true
     )
   end
-  
-  %w(streamwebs-staging-gunicorn streamwebs-production-gunicorn).each do |s|
+
+  %w(streamwebs-staging-gunicorn streamwebs-production-gunicorn
+     timesync-web-staging timesync-web-production).each do |s|
     it "should create system service #{s}" do
       expect(chef_run).to create_systemd_service(s)
     end
