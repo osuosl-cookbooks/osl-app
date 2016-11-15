@@ -112,7 +112,7 @@ systemd_service 'iam-staging' do
     working_directory '/home/iam-staging/iam'
     pid_file '/home/iam-staging/pids/unicorn.pid'
     exec_start '/home/iam-staging/.rvm/bin/rvm 2.3.0 do bundle exec '\
-      'unicorn -l 8083 -c config/unicorn.rb -E deployment -D'
+      'unicorn -l 8084 -c unicorn.rb -E deployment -D'
   end
 end
 
@@ -128,7 +128,46 @@ systemd_service 'iam-production' do
     working_directory '/home/iam-production/iam'
     pid_file '/home/iam-production/pids/unicorn.pid'
     exec_start '/home/iam-production/.rvm/bin/rvm 2.3.0 do bundle exec '\
-      'unicorn -l 8084 -c config/unicorn.rb -E deployment -D'
+      'unicorn -l 8083 -c unicorn.rb -E deployment -D'
+  end
+end
+
+systemd_service 'timesync-web-staging-gunicorn' do
+  description 'timesync-web staging app'
+  after %w(network.target)
+  install do
+    wanted_by 'multi-user.target'
+  end
+  service do
+    type 'forking'
+    user 'timesync-web-staging'
+    environment 'PATH' => '/home/timesync-web-staging/venv/bin'
+    working_directory '/home/timesync-web-staging/timesync-web'
+    pid_file '/home/timesync-web-staging/tmp/pids/gunicorn.pid'
+    exec_start '/home/timesync-web-staging/venv/bin/gunicorn -b 0.0.0.0:8087 '\
+      '-D --pid /home/timesync-web-staging/tmp/pids/gunicorn.pid '\
+      'timesync-web.wsgi:application'
+    exec_reload '/bin/kill -USR2 $MAINPID'
+  end
+end
+
+systemd_service 'timesync-web-production-gunicorn' do
+  description 'timesync-web production app'
+  after %w(network.target)
+  install do
+    wanted_by 'multi-user.target'
+  end
+  service do
+    type 'forking'
+    user 'timesync-web-production'
+    environment 'PATH' => '/home/timesync-web-production/venv/bin'
+    working_directory '/home/timesync-web-production/timesync-web'
+    pid_file '/home/timesync-web-production/tmp/pids/gunicorn.pid'
+    exec_start '/home/timesync-web-production/venv/bin/gunicorn '\
+      '-b 0.0.0.0:8087 '\
+      '-D --pid /home/timesync-web-production/tmp/pids/gunicorn.pid '\
+      'timesync-web.wsgi:application'
+    exec_reload '/bin/kill -USR2 $MAINPID'
   end
 end
 
