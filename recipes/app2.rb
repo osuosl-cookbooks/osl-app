@@ -163,7 +163,8 @@ systemd_service 'timesync-web-production-gunicorn' do
     environment 'PATH' => '/home/timesync-web-production/venv/bin'
     working_directory '/home/timesync-web-production/timesync-web'
     pid_file '/home/timesync-web-production/tmp/pids/gunicorn.pid'
-    exec_start '/home/timesync-web-production/venv/bin/gunicorn -b 0.0.0.0:8087 '\
+    exec_start '/home/timesync-web-production/venv/bin/gunicorn '\
+      '-b 0.0.0.0:8087 '\
       '-D --pid /home/timesync-web-production/tmp/pids/gunicorn.pid '\
       'timesync-web.wsgi:application'
     exec_reload '/bin/kill -USR2 $MAINPID'
