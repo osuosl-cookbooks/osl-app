@@ -19,6 +19,10 @@
 node.override['user']['home_dir_mode'] = '2750'
 node.default['poise-python']['provider'] = 'system'
 
+# WARNING!
+# If this gets updated, all NodeJS apps running will need to have their
+# node_modules directories completely removed and `npm install` run again to
+# update the modules to match the new Node version's ABI.
 node.override['nodejs']['version'] = '6.9.1'
 node.override['nodejs']['install_method'] = 'binary'
 node.override['nodejs']['binary']['checksum']['linux_x64'] = 'd4eb161e4715e1' \
