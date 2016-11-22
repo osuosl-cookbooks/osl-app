@@ -15,6 +15,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+include_recipe 'yum-epel'
 
 node.override['user']['home_dir_mode'] = '2750'
 node.default['poise-python']['provider'] = 'system'
@@ -57,4 +58,3 @@ include_recipe 'build-essential'
 include_recipe 'nodejs'
 include_recipe 'firewall::unicorn'
 include_recipe 'git'
-include_recipe 'yum-epel'
