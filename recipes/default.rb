@@ -35,7 +35,7 @@ node.override['nodejs']['binary']['checksum']['linux_x64'] = 'd4eb161e4715e1' \
   package p
 end
 
-# postgis depends
+# geo-django depends
 %w(gdal-python geos-python proj proj-nad postgresql-devel freetype-devel
    libjpeg-devel libpng-devel).each do |p|
    package p
