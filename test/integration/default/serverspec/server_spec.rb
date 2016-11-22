@@ -6,8 +6,7 @@ set :path, '/usr/local/bin:$PATH'
 
 %w(sqlite-devel libyaml-devel readline-devel zlib-devel libffi-devel
    openssl-devel automake libtool python git postgresql-devel gdal-python
-   geos-python proj proj-nad freetype-devel epel-release
-   libpng-devel).each do |p|
+   geos-python proj proj-nad freetype-devel libpng-devel).each do |p|
   describe package(p) do
     it { should be_installed }
   end

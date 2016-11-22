@@ -36,7 +36,7 @@ node.override['nodejs']['binary']['checksum']['linux_x64'] = 'd4eb161e4715e1' \
 end
 
 # geo-django depends
-%w(epel-release gdal-python geos-python proj proj-nad postgresql-devel
+%w(gdal-python geos-python proj proj-nad postgresql-devel
    freetype-devel libpng-devel).each do |p|
   package p
 end
@@ -57,3 +57,4 @@ include_recipe 'build-essential'
 include_recipe 'nodejs'
 include_recipe 'firewall::unicorn'
 include_recipe 'git'
+include_recipe 'yum-epel'
