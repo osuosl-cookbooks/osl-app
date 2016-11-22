@@ -38,7 +38,7 @@ end
 # geo-django depends
 %w(gdal-python geos-python proj proj-nad postgresql-devel freetype-devel
    libjpeg-devel libpng-devel).each do |p|
-   package p
+  package p
 end
 
 python_runtime '2'
