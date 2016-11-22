@@ -35,6 +35,12 @@ node.override['nodejs']['binary']['checksum']['linux_x64'] = 'd4eb161e4715e1' \
   package p
 end
 
+# postgis depends
+%w(gdal-python geos-python proj proj-nad postgresql-devel freetype-devel
+   libjpeg-devel libpng-devel).each do |p|
+   package p
+end
+
 python_runtime '2'
 
 # Keep systemd services private from non-root users
