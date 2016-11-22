@@ -36,8 +36,8 @@ node.override['nodejs']['binary']['checksum']['linux_x64'] = 'd4eb161e4715e1' \
 end
 
 # geo-django depends
-%w(gdal-python geos-python proj proj-nad postgresql-devel freetype-devel
-   libjpeg-devel libpng-devel).each do |p|
+%w(epel-release gdal-python geos-python proj proj-nad postgresql-devel
+   freetype-devel libpng-devel).each do |p|
   package p
 end
 
