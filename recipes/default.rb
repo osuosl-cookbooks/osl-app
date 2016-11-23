@@ -15,6 +15,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+include_recipe 'yum-epel'
 
 node.override['user']['home_dir_mode'] = '2750'
 node.default['poise-python']['provider'] = 'system'
@@ -32,6 +33,12 @@ node.override['nodejs']['binary']['checksum']['linux_x64'] = 'd4eb161e4715e1' \
 %w(sqlite-devel libyaml-devel readline-devel zlib-devel libffi-devel
    openssl-devel automake libtool mariadb-devel ImageMagick-devel
    postgresql-devel).each do |p|
+  package p
+end
+
+# geo-django depends
+%w(gdal-python geos-python proj proj-nad postgresql-devel
+   freetype-devel libpng-devel libjpeg-turbo-devel).each do |p|
   package p
 end
 
