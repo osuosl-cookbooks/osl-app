@@ -6,7 +6,7 @@ source_url       'https://github.com/osuosl-cookbooks/osl-app'
 license          'apache2'
 description      'Installs/Configures osl-app'
 long_description 'Installs/Configures osl-app'
-version          '1.9.3'
+version          '1.9.4'
 
 supports         'centos', '~> 7.0'
 

@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+1.9.4 (2016-11-23)
+------------------
+- Packages for Geo-Django
+
 1.9.3 (2016-11-17)
 ------------------
 - Add warning comment about updating NodeJS version.
