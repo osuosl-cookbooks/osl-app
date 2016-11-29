@@ -37,6 +37,8 @@ suites:
       users:
         - streamwebs-staging
         - streamwebs-production
+        - timesync-web-staging
+        - timesync-web-production
     run_list:
       - recipe[sudo]
       - recipe[user::data_bag]
