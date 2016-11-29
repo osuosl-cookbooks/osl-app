@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+1.10.0 (2016-11-29)
+-------------------
+- Kennric/add timesync web2
+
 1.9.4 (2016-11-23)
 ------------------
 - Packages for Geo-Django
