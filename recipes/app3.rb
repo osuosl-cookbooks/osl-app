@@ -100,8 +100,7 @@ systemd_service 'timesync-web-staging' do
     working_directory '/home/timesync-web-staging/timesync-web'
     pid_file '/home/timesync-web-staging/tmp/pids/gunicorn.pid'
     exec_start '/home/timesync-web-staging/venv/bin/gunicorn -b 0.0.0.0:8082 '\
-      '-D --pid /home/timesync-web-staging/tmp/pids/gunicorn.pid '\
-      'timesync-web.wsgi:application'
+      '-D --pid /home/timesync-web-staging/tmp/pids/gunicorn.pid wsgi:app'
     exec_reload '/bin/kill -USR2 $MAINPID'
   end
 end
@@ -120,8 +119,7 @@ systemd_service 'timesync-web-production' do
     pid_file '/home/timesync-web-production/tmp/pids/gunicorn.pid'
     exec_start '/home/timesync-web-production/venv/bin/gunicorn '\
       '-b 0.0.0.0:8083 '\
-      '-D --pid /home/timesync-web-production/tmp/pids/gunicorn.pid '\
-      'timesync-web.wsgi:application'
+      '-D --pid /home/timesync-web-production/tmp/pids/gunicorn.pid wsgi:app'
     exec_reload '/bin/kill -USR2 $MAINPID'
   end
 end
