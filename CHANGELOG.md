@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+1.10.3 (2016-12-09)
+-------------------
+- Installs psycopg2
+
 1.10.2 (2016-12-09)
 -------------------
 - Add postgis to list of packages
