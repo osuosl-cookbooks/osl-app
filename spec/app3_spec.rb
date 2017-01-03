@@ -8,26 +8,26 @@ describe 'osl-app::app3' do
 
   it 'should create systemctl privs for streamwebs-staging' do
     expect(chef_run).to install_sudo('streamwebs-staging').with(
-      commands: ['/usr/bin/systemctl enable streamwebs-staging-gunicorn',
-                 '/usr/bin/systemctl disable streamwebs-staging-gunicorn',
-                 '/usr/bin/systemctl stop streamwebs-staging-gunicorn',
-                 '/usr/bin/systemctl start streamwebs-staging-gunicorn',
-                 '/usr/bin/systemctl status streamwebs-staging-gunicorn',
-                 '/usr/bin/systemctl reload streamwebs-staging-gunicorn',
-                 '/usr/bin/systemctl restart streamwebs-staging-gunicorn'],
+      commands: ['/usr/bin/systemctl enable streamwebs-staging',
+                 '/usr/bin/systemctl disable streamwebs-staging',
+                 '/usr/bin/systemctl stop streamwebs-staging',
+                 '/usr/bin/systemctl start streamwebs-staging',
+                 '/usr/bin/systemctl status streamwebs-staging',
+                 '/usr/bin/systemctl reload streamwebs-staging',
+                 '/usr/bin/systemctl restart streamwebs-staging'],
       nopasswd: true
     )
   end
 
   it 'should create systemctl privs for streamwebs-production' do
     expect(chef_run).to install_sudo('streamwebs-production').with(
-      commands: ['/usr/bin/systemctl enable streamwebs-production-gunicorn',
-                 '/usr/bin/systemctl disable streamwebs-production-gunicorn',
-                 '/usr/bin/systemctl stop streamwebs-production-gunicorn',
-                 '/usr/bin/systemctl start streamwebs-production-gunicorn',
-                 '/usr/bin/systemctl status streamwebs-production-gunicorn',
-                 '/usr/bin/systemctl reload streamwebs-production-gunicorn',
-                 '/usr/bin/systemctl restart streamwebs-production-gunicorn'],
+      commands: ['/usr/bin/systemctl enable streamwebs-production',
+                 '/usr/bin/systemctl disable streamwebs-production',
+                 '/usr/bin/systemctl stop streamwebs-production',
+                 '/usr/bin/systemctl start streamwebs-production',
+                 '/usr/bin/systemctl status streamwebs-production',
+                 '/usr/bin/systemctl reload streamwebs-production',
+                 '/usr/bin/systemctl restart streamwebs-production'],
       nopasswd: true
     )
   end
