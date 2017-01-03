@@ -61,7 +61,7 @@ systemd_service 'streamwebs-staging' do
     environment 'PATH' => '/home/streamwebs-staging/venv/bin'
     working_directory '/home/streamwebs-staging/streamwebs/streamwebs_frontend'
     pid_file '/home/streamwebs-staging/tmp/pids/gunicorn.pid'
-    exec_start '/home/streamwebs-staging/venv/bin/gunicorn -b 0.0.0.0:8080 '\
+    exec_start '/home/streamwebs-staging/venv/bin/gunicorn -b 0.0.0.0:8081 '\
       '-D --pid /home/streamwebs-staging/tmp/pids/gunicorn.pid '\
       'streamwebs_frontend.wsgi:application'
     exec_reload '/bin/kill -USR2 $MAINPID'
@@ -80,7 +80,7 @@ systemd_service 'streamwebs-production' do
     environment 'PATH' => '/home/streamwebs-production/venv/bin'
     working_directory '/home/streamwebs-production/streamwebs/streamwebs_frontend'
     pid_file '/home/streamwebs-production/tmp/pids/gunicorn.pid'
-    exec_start '/home/streamwebs-production/venv/bin/gunicorn -b 0.0.0.0:8081 '\
+    exec_start '/home/streamwebs-production/venv/bin/gunicorn -b 0.0.0.0:8080 '\
       '-D --pid /home/streamwebs-production/tmp/pids/gunicorn.pid '\
       'streamwebs_frontend.wsgi:application'
     exec_reload '/bin/kill -USR2 $MAINPID'
