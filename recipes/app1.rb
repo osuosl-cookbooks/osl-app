@@ -18,7 +18,7 @@
 
 include_recipe 'osl-app::default'
 
-node.normal['users'] = %w(openid-staging openid-production fenestra)
+node.normal['users'] = %w(openid-staging openid-production fenestra-staging fenestra-production)
 
 openid_secrets = data_bag_item('osl-app', 'openid')
 
@@ -37,9 +37,15 @@ sudo 'openid-production' do
   nopasswd true
 end
 
-sudo 'fenestra' do
-  user 'fenestra'
-  commands sudo_commands('fenestra')
+sudo 'fenestra-staging' do
+  user 'fenestra-staging'
+  commands sudo_commands('fenestra-staging_service')
+  nopasswd true
+end
+
+sudo 'fenestra-production' do
+  user 'fenestra-production'
+  commands sudo_commands('fenestra-production_service')
   nopasswd true
 end
 
@@ -122,22 +128,6 @@ systemd_service 'openid-production-delayed-job' do
   end
 end
 
-systemd_service 'fenestra' do
-  description 'osuosl dashboard'
-  after %w(network.target)
-  install do
-    wanted_by 'multi-user.target'
-  end
-  service do
-    type 'forking'
-    user 'fenestra'
-    working_directory '/home/fenestra/fenestra'
-    pid_file '/home/fenestra/pids/unicorn.pid'
-    exec_start '/home/fenestra/.rvm/bin/rvm 2.2.5 do bundle exec unicorn -l '\
-    '8082 -c config/unicorn.rb -E deployment -D'
-  end
-end
-
 # Setup logrotate, also make sure that unicorn releases the file handles
 # by sending it a USR1 signal, which will cause it reopen its logs
 %w(production staging).each do |type|
@@ -149,3 +139,36 @@ end
     rotate 30
   end
 end
+
+systemd_service 'fenestra-staging_service' do
+  description 'osuosl dashboard'
+  after %w(network.target)
+  install do
+    wanted_by 'multi-user.target'
+  end
+  service do
+    type 'forking'
+    user 'fenestra-staging'
+    working_directory '/home/fenestra-staging/fenestra'
+    pid_file '/home/fenestra-staging/pids/unicorn.pid'
+    exec_start '/home/fenestra-staging/.rvm/bin/rvm 2.2.5 do bundle exec unicorn -l '\
+    '8082 -c config/unicorn.rb -E deployment -D'
+  end
+end
+
+systemd_service 'fenestra-production_service' do
+  description 'osuosl dashboard'
+  after %w(network.target)
+  install do
+    wanted_by 'multi-user.target'
+  end
+  service do
+    type 'forking'
+    user 'fenestra-production'
+    working_directory '/home/fenestra-production/fenestra'
+    pid_file '/home/fenestra-production/pids/unicorn.pid'
+    exec_start '/home/fenestra-production/.rvm/bin/rvm 2.2.5 do bundle exec unicorn -l '\
+    '8083 -c config/unicorn.rb -E deployment -D'
+  end
+end
+
