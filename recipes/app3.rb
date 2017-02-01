@@ -49,7 +49,7 @@ end
 
 #### Systemd Services ####
 
-systemd_service 'streamwebs-staging' do
+systemd_service 'streamwebs-staging-gunicorn' do
   description 'streamwebs staging app'
   after %w(network.target)
   install do
@@ -68,7 +68,7 @@ systemd_service 'streamwebs-staging' do
   end
 end
 
-systemd_service 'streamwebs-production' do
+systemd_service 'streamwebs-production-gunicorn' do
   description 'streamwebs production app'
   after %w(network.target)
   install do
