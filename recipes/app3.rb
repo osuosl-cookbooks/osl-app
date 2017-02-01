@@ -78,7 +78,8 @@ systemd_service 'streamwebs-production-gunicorn' do
     type 'forking'
     user 'streamwebs-production'
     environment 'PATH' => '/home/streamwebs-production/venv/bin'
-    working_directory '/home/streamwebs-production/streamwebs/streamwebs_frontend'
+    working_directory '/home/streamwebs-production/streamwebs/'\
+      'streamwebs_frontend'
     pid_file '/home/streamwebs-production/tmp/pids/gunicorn.pid'
     exec_start '/home/streamwebs-production/venv/bin/gunicorn -b 0.0.0.0:8080 '\
       '-D --pid /home/streamwebs-production/tmp/pids/gunicorn.pid '\
