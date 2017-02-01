@@ -20,7 +20,7 @@ include_recipe 'osl-app::default'
 
 node.normal['users'] = %w(formsender-production formsender-staging
                           iam-staging iam-production
-                          timesync-staging timesync-production)
+                          timesync-staging timesync-production replicant)
 
 #### Sudo Privs ####
 
@@ -58,6 +58,11 @@ sudo 'timesync-staging' do
   user 'timesync-staging'
   commands sudo_commands('timesync-staging')
   nopasswd true
+end
+
+sudo 'replicant' do
+  user 'replicant'
+  commands sudo_commands('replicant-redmine-unicorn')
 end
 
 #### Systemd Services ####
@@ -162,5 +167,21 @@ systemd_service 'timesync-production' do
     # Port 8088 (set in env file)
     exec_start '/usr/local/bin/node ' \
       '/home/timesync-production/timesync/src/app.js'
+  end
+end
+
+systemd_service 'replicant-redmine-unicorn' do
+  description 'Replicant Redmine'
+  after %(network.target)
+  install do
+    wanted_by 'multi-user.target'
+  end
+  service do
+    type 'forking'
+    user 'replicant'
+    working_directory '/home/replicant/redmine'
+    pid_file '/home/replicant/pids/unicorn.pid'
+    exec_start '/home/replicant/.rvm/bin/rvm 2.3.0 do bundle exec '\
+      'unicorn -l 8090 -c unicorn.rb -E deployment -D'
   end
 end
