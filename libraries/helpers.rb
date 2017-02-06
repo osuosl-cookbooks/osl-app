@@ -1,5 +1,5 @@
 def sudo_commands(*args)
-  args.reduce([]) { |a, e| a + systemctl_commands(e) }
+  args.reduce([]) { |acc, elem| acc + systemctl_commands(elem) }
 end
 
 def systemctl_commands(service)
