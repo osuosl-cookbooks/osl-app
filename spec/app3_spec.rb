@@ -6,7 +6,7 @@ describe 'osl-app::app3' do
   end
   include_context 'common_stubs'
 
-  it 'should create systemctl privs for streamwebs-staging' do
+  it 'should create systemctl privs for streamwebs-staging-gunicorn' do
     expect(chef_run).to install_sudo('streamwebs-staging').with(
       commands: ['/usr/bin/systemctl enable streamwebs-staging-gunicorn',
                  '/usr/bin/systemctl disable streamwebs-staging-gunicorn',
@@ -19,7 +19,7 @@ describe 'osl-app::app3' do
     )
   end
 
-  it 'should create systemctl privs for streamwebs-production' do
+  it 'should create systemctl privs for streamwebs-production-gunicorn' do
     expect(chef_run).to install_sudo('streamwebs-production').with(
       commands: ['/usr/bin/systemctl enable streamwebs-production-gunicorn',
                  '/usr/bin/systemctl disable streamwebs-production-gunicorn',
