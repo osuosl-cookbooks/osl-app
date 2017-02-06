@@ -63,6 +63,7 @@ end
 sudo 'replicant' do
   user 'replicant'
   commands sudo_commands('replicant-redmine-unicorn')
+  nopasswd true
 end
 
 #### Systemd Services ####
