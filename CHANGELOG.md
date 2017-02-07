@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+1.10.5 (2017-02-07)
+-------------------
+- Redmine replicant on app2
+
 1.10.4 (2017-02-01)
 -------------------
 - Kennric/adjust streamwebs
