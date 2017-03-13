@@ -137,3 +137,14 @@ systemd_service 'fenestra' do
     '8082 -c config/unicorn.rb -E deployment -D'
   end
 end
+
+# Setup logrotate, also make sure that unicorn releases the file handles
+# by sending it a USR1 signal, which will cause it reopen its logs
+logrotate_app 'OpenID' do
+  path '/home/openid-production/shared/log/*'
+  options ['postrotate',
+           '/bin/kill -USR1 /home/openid-production/current/tmp/pids/unicorn.pid',
+           'endscript']
+  frequency 'daily'
+  rotate 30
+end
