@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+1.10.6 (2017-03-23)
+-------------------
+- Enable seperate logs for formsender's gunicorn.
+
 1.10.5 (2017-02-07)
 -------------------
 - Redmine replicant on app2
