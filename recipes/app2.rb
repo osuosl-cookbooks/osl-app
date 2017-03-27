@@ -82,8 +82,8 @@ systemd_service 'formsender-staging-gunicorn' do
     pid_file '/home/formsender-staging/tmp/pids/gunicorn.pid'
     exec_start '/home/formsender-staging/venv/bin/gunicorn -b 0.0.0.0:8086 '\
       '-D --pid /home/formsender-staging/tmp/pids/gunicorn.pid '\
-      '--access-logfile /var/log/formsender-staging_access.log '\
-      '--error-logfile /var/log/formsender-staging_error.log '\
+      '--access-logfile /home/formsender-staging/logs/formsender-staging_access.log '\
+      '--error-logfile /home/formsender-staging/logs/formsender-staging_error.log '\
       '--log-level debug '\
       'formsender.wsgi:application'
     exec_reload '/bin/kill -USR2 $MAINPID'
@@ -104,8 +104,8 @@ systemd_service 'formsender-production-gunicorn' do
     pid_file '/home/formsender-production/tmp/pids/gunicorn.pid'
     exec_start '/home/formsender-production/venv/bin/gunicorn -b 0.0.0.0:8085 '\
       '-D --pid /home/formsender-production/tmp/pids/gunicorn.pid '\
-      '--access-logfile /var/log/formsender-production_error.log '\
-      '--error-logfile /var/log/formsender-production_error.log '\
+      '--access-logfile /home/formsender-production/logs/formsender-production_access.log '\
+      '--error-logfile /home/formsender-production/logs/formsender-production_error.log '\
       '--log-level debug '\
       'formsender.wsgi:application'
     exec_reload '/bin/kill -USR2 $MAINPID'
