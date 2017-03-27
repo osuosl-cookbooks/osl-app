@@ -1,0 +1,7 @@
+{
+    "id": "replicant",
+    "username": "replicant",
+    "home": "/home/replicant",
+    "ssh_keygen": "false",
+    "password": "*"
+}
