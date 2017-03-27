@@ -68,6 +68,25 @@ end
 
 #### Systemd Services ####
 
+# directories required for formsender gunicorn services to start successfully
+
+%w(
+  formsender-production
+  formsender-staging
+).each do |u|
+  %w(
+    logs
+    tmp
+    tmp/pids
+  ).each do |d|
+    directory "/home/#{u}/#{d}" do
+      owner u
+      group u
+      mode '0755'
+    end
+  end
+end
+
 systemd_service 'formsender-staging-gunicorn' do
   description 'formsender staging app'
   after %w(network.target)
@@ -82,8 +101,8 @@ systemd_service 'formsender-staging-gunicorn' do
     pid_file '/home/formsender-staging/tmp/pids/gunicorn.pid'
     exec_start '/home/formsender-staging/venv/bin/gunicorn -b 0.0.0.0:8086 '\
       '-D --pid /home/formsender-staging/tmp/pids/gunicorn.pid '\
-      '--access-logfile /home/formsender-staging/logs/formsender-staging_access.log '\
-      '--error-logfile /home/formsender-staging/logs/formsender-staging_error.log '\
+      '--access-logfile /home/formsender-staging/logs/access.log '\
+      '--error-logfile /home/formsender-staging/logs/error.log '\
       '--log-level debug '\
       'formsender.wsgi:application'
     exec_reload '/bin/kill -USR2 $MAINPID'
@@ -104,8 +123,8 @@ systemd_service 'formsender-production-gunicorn' do
     pid_file '/home/formsender-production/tmp/pids/gunicorn.pid'
     exec_start '/home/formsender-production/venv/bin/gunicorn -b 0.0.0.0:8085 '\
       '-D --pid /home/formsender-production/tmp/pids/gunicorn.pid '\
-      '--access-logfile /home/formsender-production/logs/formsender-production_access.log '\
-      '--error-logfile /home/formsender-production/logs/formsender-production_error.log '\
+      '--access-logfile /home/formsender-production/logs/access.log '\
+      '--error-logfile /home/formsender-production/logs/error.log '\
       '--log-level debug '\
       'formsender.wsgi:application'
     exec_reload '/bin/kill -USR2 $MAINPID'
