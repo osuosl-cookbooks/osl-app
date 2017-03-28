@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+1.10.9 (2017-03-28)
+-------------------
+- fix for failing formsender systemd service
+
 1.10.8 (2017-03-27)
 -------------------
 - Replicant user data bag to make kitchen for app2 work again
