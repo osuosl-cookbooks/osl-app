@@ -97,25 +97,6 @@ describe 'osl-app::app2' do
     )
   end
 
-  %w(
-    formsender-production
-    formsender-staging
-  ).each do |u|
-    %w(
-      logs
-      tmp
-      tmp/pids
-    ).each do |d|
-      it do
-        expect(chef_run).to create_directory("/home/#{u}/#{d}").with(
-          user: u,
-          group: u,
-          mode: '0755'
-        )
-      end
-    end
-  end
-
   %w(formsender-staging-gunicorn formsender-production-gunicorn
      iam-staging iam-production
      timesync-staging timesync-production

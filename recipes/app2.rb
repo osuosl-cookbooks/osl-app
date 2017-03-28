@@ -68,25 +68,8 @@ end
 
 #### Systemd Services ####
 
-# directories required for formsender gunicorn services to start successfully
-
-%w(
-  formsender-production
-  formsender-staging
-).each do |u|
-  %w(
-    logs
-    tmp
-    tmp/pids
-  ).each do |d|
-    directory "/home/#{u}/#{d}" do
-      owner u
-      group u
-      mode '0755'
-    end
-  end
-end
-
+# this service depends on the logs/ directory being present inside
+# ~formsender-staging/
 systemd_service 'formsender-staging-gunicorn' do
   description 'formsender staging app'
   after %w(network.target)
@@ -109,6 +92,8 @@ systemd_service 'formsender-staging-gunicorn' do
   end
 end
 
+# this service depends on the logs/ directory being present inside
+# ~formsender-production/
 systemd_service 'formsender-production-gunicorn' do
   description 'formsender production app'
   after %w(network.target)
