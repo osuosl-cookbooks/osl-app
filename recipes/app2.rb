@@ -68,6 +68,8 @@ end
 
 #### Systemd Services ####
 
+# this service depends on the logs/ directory being present inside
+# ~formsender-staging/
 systemd_service 'formsender-staging-gunicorn' do
   description 'formsender staging app'
   after %w(network.target)
@@ -82,14 +84,16 @@ systemd_service 'formsender-staging-gunicorn' do
     pid_file '/home/formsender-staging/tmp/pids/gunicorn.pid'
     exec_start '/home/formsender-staging/venv/bin/gunicorn -b 0.0.0.0:8086 '\
       '-D --pid /home/formsender-staging/tmp/pids/gunicorn.pid '\
-      '--access-logfile /var/log/formsender-staging_access.log '\
-      '--error-logfile /var/log/formsender-staging_error.log '\
+      '--access-logfile /home/formsender-staging/logs/access.log '\
+      '--error-logfile /home/formsender-staging/logs/error.log '\
       '--log-level debug '\
       'formsender.wsgi:application'
     exec_reload '/bin/kill -USR2 $MAINPID'
   end
 end
 
+# this service depends on the logs/ directory being present inside
+# ~formsender-production/
 systemd_service 'formsender-production-gunicorn' do
   description 'formsender production app'
   after %w(network.target)
@@ -104,8 +108,8 @@ systemd_service 'formsender-production-gunicorn' do
     pid_file '/home/formsender-production/tmp/pids/gunicorn.pid'
     exec_start '/home/formsender-production/venv/bin/gunicorn -b 0.0.0.0:8085 '\
       '-D --pid /home/formsender-production/tmp/pids/gunicorn.pid '\
-      '--access-logfile /var/log/formsender-production_error.log '\
-      '--error-logfile /var/log/formsender-production_error.log '\
+      '--access-logfile /home/formsender-production/logs/access.log '\
+      '--error-logfile /home/formsender-production/logs/error.log '\
       '--log-level debug '\
       'formsender.wsgi:application'
     exec_reload '/bin/kill -USR2 $MAINPID'
