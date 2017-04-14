@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+1.11.0 (2017-04-14)
+-------------------
+- Add logrotate for OpenID on app1
+
 1.10.9 (2017-03-28)
 -------------------
 - fix for failing formsender systemd service
