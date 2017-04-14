@@ -142,9 +142,7 @@ end
 # by sending it a USR1 signal, which will cause it reopen its logs
 logrotate_app 'OpenID' do
   path '/home/openid-production/shared/log/*'
-  options ['postrotate',
-           '/bin/kill -USR1 /home/openid-production/current/tmp/pids/unicorn.pid',
-           'endscript']
+  postrotate '/bin/kill -USR1 /home/openid-production/current/tmp/pids/unicorn.pid'
   frequency 'daily'
   rotate 30
 end
