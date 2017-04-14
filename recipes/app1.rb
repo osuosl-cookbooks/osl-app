@@ -140,9 +140,11 @@ end
 
 # Setup logrotate, also make sure that unicorn releases the file handles
 # by sending it a USR1 signal, which will cause it reopen its logs
-logrotate_app 'OpenID' do
-  path '/home/openid-production/shared/log/*'
-  postrotate '/bin/kill -USR1 /home/openid-production/current/tmp/pids/unicorn.pid'
-  frequency 'daily'
-  rotate 30
+%w(production staging).each do |type|
+  logrotate_app "OpenID-#{type}" do
+    path "/home/openid-#{type}/shared/log/*"
+    postrotate "/bin/kill -USR1 /home/openid-#{type}/current/tmp/pids/unicorn.pid"
+    frequency 'daily'
+    rotate 30
+  end
 end
