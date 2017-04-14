@@ -60,4 +60,13 @@ describe 'osl-app::app1' do
       expect(chef_run).to create_systemd_service(s)
     end
   end
+
+  it 'should create LogRotate service for OpenID' do
+    expect(chef_run).to enable_logrotate_app('OpenID').with(
+      path: '/home/openid-production/shared/log/*',
+      frequency: 'daily',
+      postrotate: '/bin/kill -USR1 /home/openid-production/current/tmp/pids/unicorn.pid',
+      rotate: 30
+    )
+  end
 end
