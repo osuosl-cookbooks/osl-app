@@ -61,12 +61,14 @@ describe 'osl-app::app1' do
     end
   end
 
-  it 'should create LogRotate service for OpenID' do
-    expect(chef_run).to enable_logrotate_app('OpenID').with(
-      path: '/home/openid-production/shared/log/*',
-      frequency: 'daily',
-      postrotate: '/bin/kill -USR1 /home/openid-production/current/tmp/pids/unicorn.pid',
-      rotate: 30
-    )
+  %w(production staging).each do |type|
+    it "should create LogRotate service for OpenID-#{type}" do
+      expect(chef_run).to enable_logrotate_app("OpenID-#{type}").with(
+        path: "/home/openid-#{type}/shared/log/*",
+        frequency: 'daily',
+        postrotate: "/bin/kill -USR1 /home/openid-#{type}/current/tmp/pids/unicorn.pid",
+        rotate: 30
+      )
+    end
   end
 end
