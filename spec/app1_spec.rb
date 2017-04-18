@@ -115,7 +115,7 @@ describe 'osl-app::app1' do
     )
   end
 
-  %w(fenestra-staging-unicorn fenestra-production-unicorn).each do |s|
+  %w(fenestra-staging_service fenestra-production_service).each do |s|
     it "should create system service #{s}" do
       expect(chef_run).to create_systemd_service(s)
     end
