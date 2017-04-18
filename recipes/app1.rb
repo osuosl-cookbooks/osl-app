@@ -171,4 +171,3 @@ systemd_service 'fenestra-production_service' do
     '8083 -c config/unicorn.rb -E deployment -D'
   end
 end
-
