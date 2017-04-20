@@ -4,7 +4,6 @@ AllCops:
     - '**/Cheffile'
   Exclude:
     - 'metadata.rb'
-    - 'files/default/build_cookbook/test-fixture-recipe.rb'
 
 Metrics/BlockNesting:
   Max: 4
