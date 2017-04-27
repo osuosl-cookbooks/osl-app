@@ -145,6 +145,7 @@ end
     path "/home/openid-#{type}/shared/log/*"
     postrotate "/bin/kill -USR1 /home/openid-#{type}/current/tmp/pids/unicorn.pid"
     frequency 'daily'
+    su "openid-#{type} openid-#{type}"
     rotate 30
   end
 end
