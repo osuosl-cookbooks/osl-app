@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+1.11.2 (2017-04-27)
+-------------------
+- Set proper permissions for logrotate
+
 1.11.1 (2017-04-15)
 -------------------
 - Add logrotate to OpenID staging
