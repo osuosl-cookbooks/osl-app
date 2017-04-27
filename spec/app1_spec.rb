@@ -67,6 +67,7 @@ describe 'osl-app::app1' do
         path: "/home/openid-#{type}/shared/log/*",
         frequency: 'daily',
         postrotate: "/bin/kill -USR1 /home/openid-#{type}/current/tmp/pids/unicorn.pid",
+        su: "openid-#{type} openid-#{type}",
         rotate: 30
       )
     end
