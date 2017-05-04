@@ -192,6 +192,7 @@ systemd_service 'replicant-redmine-unicorn' do
     user 'replicant'
     working_directory '/home/replicant/redmine'
     pid_file '/home/replicant/pids/unicorn.pid'
-    exec_start '/home/replicant/.rvm/bin/rvm 1.8.7-p374 exec ./script/server -b 140.211.9.86 -p 8090'
+    exec_start 'RAILS_ENV=production /home/replicant/.rvm/bin/rvm 1.8.7-p374 '\
+      'exec ./script/server -b 140.211.9.86 -p 8090'
   end
 end
