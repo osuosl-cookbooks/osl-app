@@ -188,7 +188,7 @@ systemd_service 'replicant-redmine-unicorn' do
     wanted_by 'multi-user.target'
   end
   service do
-    type 'forking'
+    type 'simple'
     user 'replicant'
     environment 'RAILS_ENV' => 'production'
     working_directory '/home/replicant/redmine'
