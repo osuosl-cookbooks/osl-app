@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+1.11.4 (2017-05-04)
+-------------------
+- quick fix for replicant redmine systemd command
+
 1.11.3 (2017-05-03)
 -------------------
 - Use command to run replicant redmine until we upgrade
