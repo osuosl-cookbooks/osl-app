@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+1.11.6 (2017-05-04)
+-------------------
+- Change type from forking to simple
+
 1.11.5 (2017-05-04)
 -------------------
 - Move env variable to envrionemnt property
