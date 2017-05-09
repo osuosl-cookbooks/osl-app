@@ -142,7 +142,7 @@ end
 # by sending it a USR1 signal, which will cause it reopen its logs
 %w(production staging).each do |type|
   logrotate_app "OpenID-#{type}" do
-    path "/home/openid-#{type}/shared/log/*"
+    path "/home/openid-#{type}/shared/log/*.log"
     postrotate "/bin/kill -USR1 /home/openid-#{type}/current/tmp/pids/unicorn.pid"
     frequency 'daily'
     su "openid-#{type} openid-#{type}"
