@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+1.11.8 (2017-06-10)
+-------------------
+- update replicant redmine command to redmine 3.3.3
+
 1.11.7 (2017-05-09)
 -------------------
 - only rotate new log files
