@@ -86,13 +86,13 @@ describe 'osl-app::app2' do
 
   it 'should create systemctl privs for replicant' do
     expect(chef_run).to install_sudo('replicant').with(
-      commands: ['/usr/bin/systemctl enable replicant-redmine-unicorn',
-                 '/usr/bin/systemctl disable replicant-redmine-unicorn',
-                 '/usr/bin/systemctl stop replicant-redmine-unicorn',
-                 '/usr/bin/systemctl start replicant-redmine-unicorn',
-                 '/usr/bin/systemctl status replicant-redmine-unicorn',
-                 '/usr/bin/systemctl reload replicant-redmine-unicorn',
-                 '/usr/bin/systemctl restart replicant-redmine-unicorn'],
+      commands: ['/usr/bin/systemctl enable replicant-redmine-webrick',
+                 '/usr/bin/systemctl disable replicant-redmine-webrick',
+                 '/usr/bin/systemctl stop replicant-redmine-webrick',
+                 '/usr/bin/systemctl start replicant-redmine-webrick',
+                 '/usr/bin/systemctl status replicant-redmine-webrick',
+                 '/usr/bin/systemctl reload replicant-redmine-webrick',
+                 '/usr/bin/systemctl restart replicant-redmine-webrick'],
       nopasswd: true
     )
   end
@@ -100,7 +100,7 @@ describe 'osl-app::app2' do
   %w(formsender-staging-gunicorn formsender-production-gunicorn
      iam-staging iam-production
      timesync-staging timesync-production
-     replicant-redmine-unicorn).each do |s|
+     replicant-redmine-webrick).each do |s|
     it "should create system service #{s}" do
       expect(chef_run).to create_systemd_service(s)
     end
