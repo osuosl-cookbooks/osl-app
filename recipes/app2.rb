@@ -62,7 +62,7 @@ end
 
 sudo 'replicant' do
   user 'replicant'
-  commands sudo_commands('replicant-redmine-unicorn')
+  commands sudo_commands('replicant-redmine-webrick')
   nopasswd true
 end
 
@@ -181,7 +181,7 @@ systemd_service 'timesync-production' do
   end
 end
 
-systemd_service 'replicant-redmine-unicorn' do
+systemd_service 'replicant-redmine-webrick' do
   description 'Replicant Redmine'
   after %(network.target)
   install do
