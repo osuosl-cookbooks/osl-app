@@ -93,7 +93,8 @@ systemd_service 'openid-production-unicorn' do
     type 'forking'
     user 'openid-production'
     environment(RAILS_ENV: 'production',
-                SECRET_KEY_BASE: openid_secrets['secret_key_base'])
+                SECRET_KEY_BASE: openid_secrets['secret_key_base'],
+                BRAINTREE_ACCESS_TOKEN: openid_secrets['braintree_access_token'])
     working_directory '/home/openid-production/current'
     pid_file '/home/openid-production/current/tmp/pids/unicorn.pid'
     exec_start '/home/openid-production/.rvm/bin/rvm 2.2.4 do bundle exec '\

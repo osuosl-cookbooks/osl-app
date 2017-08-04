@@ -10,7 +10,8 @@ describe 'osl-app::app1' do
     stub_data_bag_item('osl-app', 'openid').and_return(
       secret_key_base: '7eef5c70ecb083192f46e601144f9d77c9b66061b634963a507'\
         '0fb086ae78bc9353af2c6311edb168abbb9d0bd428f800a0b1713534cf4ad239e8d'\
-        '07fdd16c34'
+        '07fdd16c34',
+      braintree_access_token: 'access_token$production$mnlc24xq7uGUqKczYhg5PpNGiVOkss'
     )
   end
 

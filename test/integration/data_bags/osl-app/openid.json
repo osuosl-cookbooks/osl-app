@@ -1,9 +1,16 @@
 {
   "id": "openid",
   "secret_key_base": {
-    "encrypted_data": "Lgw0IaPxjP2uMkzT2iHiJQHDTjIln5U5naHXreK2Hz/YWO1n+iKFBcqizKAj\noRDAfDvTiVNs87Qmy8lRhvakR39Zx9ScRKYOnXGsWlRX8dCEszB84M3ecbTi\n23g/sXdkuAF9YHoWFVHEtFpYPedAIilnw+5I72cwc2l0WPu4Ft/7zCZSomjN\ndgzL9Arg93kftLWJg5lLbqJ7rZ5BG+r7Zw==\n",
-    "hmac": "+XjUJlWkhSB+IpG4CFda8zdt+WreFBxhr2OI+Nt+wmc=\n",
-    "iv": "6e6uAeDOoCD9Gb7efJSm5w==\n",
+    "encrypted_data": "HI8wmRswSKuYAHey9h3wk9qicabD1GjI2TkFkjzp6BsBjsvRPDh7gD/iKhuK\nt29zeQ4Ia+4+yjyD7Fq0Hk4D9SW+/XbHXOjbz0jmXJ91uMaqFfYbWcXhYL6D\n/JEHP2FV2QR/PlWDNKrf8n86JHlKWdDz3SIoAWyzPi1lgBSYw9T0Z2iupNGd\n8FVuMOfqpo+3u45hb2dySI8kp1Z4GrGKWw==\n",
+    "hmac": "aALe8OIYUCwm1i/H6gIJ0jGn6rcYN0QiojXmHdny3ro=\n",
+    "iv": "y+QGvrPX9yNgntif1RxdKQ==\n",
+    "version": 2,
+    "cipher": "aes-256-cbc"
+  },
+  "braintree_access_token": {
+    "encrypted_data": "zJtPlAud7EYFZZCBnCGUy2+r0vhcE1Mhlw9Ol9zO4t4N8KGm8vM+6kYq4tHO\nFqICBEtxzrJAcN15glMOUkq2dU7/yiTIzpXyzSabhQFRTSo=\n",
+    "hmac": "pq+U6VcFf6dhcbKD8vJsEsa/Cz4eUsJdIi4FFU/HxMs=\n",
+    "iv": "QU/3akDhdTjeRIapobCaGw==\n",
     "version": 2,
     "cipher": "aes-256-cbc"
   }
