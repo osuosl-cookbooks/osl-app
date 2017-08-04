@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+1.11.10 (2017-08-04)
+--------------------
+- Add braintree access token for openid
+
 1.11.9 (2017-07-03)
 -------------------
 - Use unicorn instead of webrick in replicant's systemd command
