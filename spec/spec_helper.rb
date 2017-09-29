@@ -15,5 +15,6 @@ end
 shared_context 'common_stubs' do
   before do
     stub_command('which sudo')
+    stub_command('which nginx')
   end
 end

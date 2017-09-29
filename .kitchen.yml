@@ -43,3 +43,4 @@ suites:
       - recipe[sudo]
       - recipe[user::data_bag]
       - recipe[osl-app::app3]
+      - recipe[app_test::app3]

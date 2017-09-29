@@ -1,0 +1,16 @@
+<% node['osl-app']['nginx'].each do |server_name, data| %>
+server {
+  server_name <%= server_name %>;
+  <% node['osl-app']['haproxy_ips'].each do |ip| %>
+  set_real_ip_from <%= ip %>;
+  <% end %>
+  real_ip_header X-Forwarded-For;
+  access_log /var/log/nginx/<%= server_name %>.access.log;
+  error_log /var/log/nginx/<%= server_name %>.error.log;
+
+  location <%= data['uri'] %> {
+    alias <%= data['folder'] %>;
+  }
+}
+
+<% end %>

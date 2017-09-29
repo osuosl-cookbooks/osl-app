@@ -17,6 +17,7 @@
 # limitations under the License.
 
 include_recipe 'osl-app::default'
+include_recipe 'osl-nginx'
 
 node.normal['users'] = %w(streamwebs-production streamwebs-staging
                           timesync-web-staging timesync-web-production)
@@ -123,4 +124,30 @@ systemd_service 'timesync-web-production' do
       '-D --pid /home/timesync-web-production/tmp/pids/gunicorn.pid wsgi:app'
     exec_reload '/bin/kill -USR2 $MAINPID'
   end
+end
+
+# Nginx
+node.default['osl-app']['nginx'] = {
+  'new.streamwebs.org' => {
+    'uri' => '/streamwebs-production/media',
+    'folder' => '/home/streamwebs-production/streamwebs/streamwebs_frontend/streamwebs/media'
+  },
+  'streamwebs-staging.osuosl.org' => {
+    'uri' => '/streamwebs-staging/media',
+    'folder' => '/home/streamwebs-staging/streamwebs/streamwebs_frontend/streamwebs/media'
+  }
+}
+
+# Give nginx access to their homedirs
+%w(production staging).each do |env|
+  group "streamwebs-#{env}" do
+    members ["streamwebs-#{env}", 'nginx']
+    action :modify
+    notifies :restart, 'service[nginx]'
+  end
+end
+
+nginx_app 'app3.osuosl.org' do
+  template 'app-nginx.erb'
+  cookbook 'osl-app'
 end
