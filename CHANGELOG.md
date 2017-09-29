@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+1.11.11 (2017-09-29)
+--------------------
+- Setup nginx on app3 for media serving on the streamwebs websites
+
 1.11.10 (2017-08-04)
 --------------------
 - Add braintree access token for openid
