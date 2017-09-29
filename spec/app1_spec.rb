@@ -1,7 +1,7 @@
 require_relative 'spec_helper'
 
 describe 'osl-app::app1' do
-  let(:chef_run) do
+  cached(:chef_run) do
     ChefSpec::SoloRunner.new(CENTOS_7).converge('sudo', described_recipe)
   end
   include_context 'common_stubs'
