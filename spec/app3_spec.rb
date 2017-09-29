@@ -1,7 +1,7 @@
 require_relative 'spec_helper'
 
 describe 'osl-app::app3' do
-  let(:chef_run) do
+  cached(:chef_run) do
     ChefSpec::SoloRunner.new(CENTOS_7).converge('sudo', described_recipe)
   end
   include_context 'common_stubs'
@@ -63,5 +63,11 @@ describe 'osl-app::app3' do
     it "should create system service #{s}" do
       expect(chef_run).to create_systemd_service(s)
     end
+  end
+  it do
+    expect(chef_run).to modify_group('streamwebs-production').with(members: %w(streamwebs-production nginx))
+  end
+  it do
+    expect(chef_run).to modify_group('streamwebs-staging').with(members: %w(streamwebs-staging nginx))
   end
 end
