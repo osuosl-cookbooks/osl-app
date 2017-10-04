@@ -130,11 +130,11 @@ end
 node.default['osl-app']['nginx'] = {
   'new.streamwebs.org' => {
     'uri' => '/streamwebs-production/media',
-    'folder' => '/home/streamwebs-production/streamwebs/streamwebs_frontend/streamwebs/media'
+    'folder' => '/home/streamwebs-production/streamwebs/streamwebs_frontend/media'
   },
   'streamwebs-staging.osuosl.org' => {
     'uri' => '/streamwebs-staging/media',
-    'folder' => '/home/streamwebs-staging/streamwebs/streamwebs_frontend/streamwebs/media'
+    'folder' => '/home/streamwebs-staging/streamwebs/streamwebs_frontend/media'
   }
 }
 
