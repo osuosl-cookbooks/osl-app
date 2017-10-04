@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+1.11.12 (2017-10-04)
+--------------------
+- Update media folder location for streamwebs
+
 1.11.11 (2017-09-29)
 --------------------
 - Setup nginx on app3 for media serving on the streamwebs websites
