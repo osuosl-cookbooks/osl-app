@@ -132,7 +132,7 @@ end
 
 # Nginx
 node.default['osl-app']['nginx'] = {
-  'new.streamwebs.org' => {
+  'streamwebs.org' => {
     'uri' => '/streamwebs-production/media',
     'folder' => '/home/streamwebs-production/streamwebs/streamwebs_frontend/media'
   },
