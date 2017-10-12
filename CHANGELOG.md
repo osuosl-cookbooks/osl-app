@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+1.11.14 (2017-10-12)
+--------------------
+- Use correct domain for streamwebs
+
 1.11.13 (2017-10-12)
 --------------------
 - Setup transfer and error logging for streamwebs
