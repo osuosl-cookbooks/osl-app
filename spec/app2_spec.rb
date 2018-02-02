@@ -96,13 +96,18 @@ describe 'osl-app::app2' do
       nopasswd: true
     )
   end
-
-  %w(formsender-staging-gunicorn formsender-production-gunicorn
-     iam-staging iam-production
-     timesync-staging timesync-production
-     replicant-redmine-unicorn).each do |s|
+  %w(formsender-production-gunicorn
+     formsender-staging-gunicorn
+     iam-production
+     iam-staging
+     replicant-redmine-unicorn
+     timesync-production
+     timesync-staging).each do |s|
     it "should create system service #{s}" do
       expect(chef_run).to create_systemd_service(s)
+    end
+    it "should enable system service #{s}" do
+      expect(chef_run).to enable_systemd_service(s)
     end
   end
 end

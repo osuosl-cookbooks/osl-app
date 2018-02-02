@@ -55,10 +55,29 @@ describe 'osl-app::app1' do
     )
   end
 
-  %w(openid-staging-unicorn openid-staging-delayed-job
-     openid-production-unicorn openid-production-delayed-job).each do |s|
+  it 'should create systemctl privs for fenestra' do
+    expect(chef_run).to install_sudo('fenestra').with(
+      commands: ['/usr/bin/systemctl enable fenestra',
+                 '/usr/bin/systemctl disable fenestra',
+                 '/usr/bin/systemctl stop fenestra',
+                 '/usr/bin/systemctl start fenestra',
+                 '/usr/bin/systemctl status fenestra',
+                 '/usr/bin/systemctl reload fenestra',
+                 '/usr/bin/systemctl restart fenestra'],
+      nopasswd: true
+    )
+  end
+
+  %w(openid-staging-unicorn
+     openid-staging-delayed-job
+     openid-production-unicorn
+     openid-production-delayed-job
+     fenestra).each do |s|
     it "should create system service #{s}" do
       expect(chef_run).to create_systemd_service(s)
+    end
+    it "should enable system service #{s}" do
+      expect(chef_run).to enable_systemd_service(s)
     end
   end
 

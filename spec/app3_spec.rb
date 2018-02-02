@@ -58,10 +58,15 @@ describe 'osl-app::app3' do
     )
   end
 
-  %w(streamwebs-staging-gunicorn streamwebs-production-gunicorn
-     timesync-web-staging timesync-web-production).each do |s|
+  %w(streamwebs-production-gunicorn
+     streamwebs-staging-gunicorn
+     timesync-web-production
+     timesync-web-staging).each do |s|
     it "should create system service #{s}" do
       expect(chef_run).to create_systemd_service(s)
+    end
+    it "should enable system service #{s}" do
+      expect(chef_run).to enable_systemd_service(s)
     end
   end
   it do

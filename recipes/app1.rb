@@ -62,6 +62,7 @@ systemd_service 'openid-staging-unicorn' do
     'deployment -D'
     exec_reload '/bin/kill -USR2 $MAINPID'
   end
+  action [:create, :enable]
 end
 
 systemd_service 'openid-staging-delayed-job' do
@@ -81,6 +82,7 @@ systemd_service 'openid-staging-delayed-job' do
     exec_reload '/home/openid-staging/.rvm/bin/rvm 2.2.4 do bundle exec '\
     'bin/delayed_job -n 2 restart'
   end
+  action [:create, :enable]
 end
 
 systemd_service 'openid-production-unicorn' do
@@ -102,6 +104,7 @@ systemd_service 'openid-production-unicorn' do
     '-E deployment -D'
     exec_reload '/bin/kill -USR2 $MAINPID'
   end
+  action [:create, :enable]
 end
 
 systemd_service 'openid-production-delayed-job' do
@@ -121,6 +124,7 @@ systemd_service 'openid-production-delayed-job' do
     exec_reload '/home/openid-production/.rvm/bin/rvm 2.2.4 do bundle exec '\
     'bin/delayed_job -n 2 restart'
   end
+  action [:create, :enable]
 end
 
 systemd_service 'fenestra' do
@@ -137,6 +141,7 @@ systemd_service 'fenestra' do
     exec_start '/home/fenestra/.rvm/bin/rvm 2.2.5 do bundle exec unicorn -l '\
     '8082 -c config/unicorn.rb -E deployment -D'
   end
+  action [:create, :enable]
 end
 
 # Setup logrotate, also make sure that unicorn releases the file handles
