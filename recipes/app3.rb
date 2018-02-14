@@ -69,6 +69,7 @@ systemd_service 'streamwebs-staging-gunicorn' do
       'streamwebs_frontend.wsgi:application'
     exec_reload '/bin/kill -USR2 $MAINPID'
   end
+  action [:create, :enable]
 end
 
 systemd_service 'streamwebs-production-gunicorn' do
@@ -91,6 +92,7 @@ systemd_service 'streamwebs-production-gunicorn' do
       'streamwebs_frontend.wsgi:application'
     exec_reload '/bin/kill -USR2 $MAINPID'
   end
+  action [:create, :enable]
 end
 
 systemd_service 'timesync-web-staging' do
@@ -109,6 +111,7 @@ systemd_service 'timesync-web-staging' do
       '-D --pid /home/timesync-web-staging/tmp/pids/gunicorn.pid wsgi:app'
     exec_reload '/bin/kill -USR2 $MAINPID'
   end
+  action [:create, :enable]
 end
 
 systemd_service 'timesync-web-production' do
@@ -128,6 +131,7 @@ systemd_service 'timesync-web-production' do
       '-D --pid /home/timesync-web-production/tmp/pids/gunicorn.pid wsgi:app'
     exec_reload '/bin/kill -USR2 $MAINPID'
   end
+  action [:create, :enable]
 end
 
 # Nginx

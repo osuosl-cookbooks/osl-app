@@ -90,6 +90,7 @@ systemd_service 'formsender-staging-gunicorn' do
       'formsender.wsgi:application'
     exec_reload '/bin/kill -USR2 $MAINPID'
   end
+  action [:create, :enable]
 end
 
 # this service depends on the logs/ directory being present inside
@@ -114,6 +115,7 @@ systemd_service 'formsender-production-gunicorn' do
       'formsender.wsgi:application'
     exec_reload '/bin/kill -USR2 $MAINPID'
   end
+  action [:create, :enable]
 end
 
 systemd_service 'iam-staging' do
@@ -130,6 +132,7 @@ systemd_service 'iam-staging' do
     exec_start '/home/iam-staging/.rvm/bin/rvm 2.3.0 do bundle exec '\
       'unicorn -l 8084 -c unicorn.rb -E deployment -D'
   end
+  action [:create, :enable]
 end
 
 systemd_service 'iam-production' do
@@ -146,6 +149,7 @@ systemd_service 'iam-production' do
     exec_start '/home/iam-production/.rvm/bin/rvm 2.3.0 do bundle exec '\
       'unicorn -l 8083 -c unicorn.rb -E deployment -D'
   end
+  action [:create, :enable]
 end
 
 systemd_service 'timesync-staging' do
@@ -162,6 +166,7 @@ systemd_service 'timesync-staging' do
     # Port 8089 (set in env file)
     exec_start '/usr/local/bin/node /home/timesync-staging/timesync/src/app.js'
   end
+  action [:create, :enable]
 end
 
 systemd_service 'timesync-production' do
@@ -179,6 +184,7 @@ systemd_service 'timesync-production' do
     exec_start '/usr/local/bin/node ' \
       '/home/timesync-production/timesync/src/app.js'
   end
+  action [:create, :enable]
 end
 
 systemd_service 'replicant-redmine-unicorn' do
@@ -195,4 +201,5 @@ systemd_service 'replicant-redmine-unicorn' do
     pid_file '/home/replicant/redmine/pids/unicorn.pid'
     exec_start '/home/replicant/.rvm/bin/rvm 2.3.0 do bundle exec unicorn -l 8090 -c unicorn.rb -E production -D'
   end
+  action [:create, :enable]
 end
