@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+1.11.15 (2018-02-14)
+--------------------
+- Enable systemd services and improve tests.
+
 1.11.14 (2017-10-12)
 --------------------
 - Use correct domain for streamwebs
