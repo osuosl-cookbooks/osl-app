@@ -1,9 +1,6 @@
 osl-app Cookbook
 ================
-TODO: Enter the cookbook description here.
-
-e.g.
-This cookbook makes your favorite breakfast sandwich.
+This cookbook configures various applications.
 
 Requirements
 ------------
