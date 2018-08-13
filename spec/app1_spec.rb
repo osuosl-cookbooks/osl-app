@@ -16,7 +16,7 @@ describe 'osl-app::app1' do
   end
 
   it 'should create systemctl privs for openid-staging' do
-    expect(chef_run).to install_sudo('openid-staging').with(
+    expect(chef_run).to create_sudo('openid-staging').with(
       commands: ['/usr/bin/systemctl enable openid-staging-unicorn',
                  '/usr/bin/systemctl disable openid-staging-unicorn',
                  '/usr/bin/systemctl stop openid-staging-unicorn',
@@ -36,7 +36,7 @@ describe 'osl-app::app1' do
   end
 
   it 'should create systemctl privs for openid-production' do
-    expect(chef_run).to install_sudo('openid-production').with(
+    expect(chef_run).to create_sudo('openid-production').with(
       commands: ['/usr/bin/systemctl enable openid-production-unicorn',
                  '/usr/bin/systemctl disable openid-production-unicorn',
                  '/usr/bin/systemctl stop openid-production-unicorn',
@@ -56,7 +56,7 @@ describe 'osl-app::app1' do
   end
 
   it 'should create systemctl privs for fenestra' do
-    expect(chef_run).to install_sudo('fenestra').with(
+    expect(chef_run).to create_sudo('fenestra').with(
       commands: ['/usr/bin/systemctl enable fenestra',
                  '/usr/bin/systemctl disable fenestra',
                  '/usr/bin/systemctl stop fenestra',

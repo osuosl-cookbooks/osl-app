@@ -7,7 +7,7 @@ describe 'osl-app::app3' do
   include_context 'common_stubs'
 
   it 'should create systemctl privs for streamwebs-staging-gunicorn' do
-    expect(chef_run).to install_sudo('streamwebs-staging').with(
+    expect(chef_run).to create_sudo('streamwebs-staging').with(
       commands: ['/usr/bin/systemctl enable streamwebs-staging-gunicorn',
                  '/usr/bin/systemctl disable streamwebs-staging-gunicorn',
                  '/usr/bin/systemctl stop streamwebs-staging-gunicorn',
@@ -20,7 +20,7 @@ describe 'osl-app::app3' do
   end
 
   it 'should create systemctl privs for streamwebs-production-gunicorn' do
-    expect(chef_run).to install_sudo('streamwebs-production').with(
+    expect(chef_run).to create_sudo('streamwebs-production').with(
       commands: ['/usr/bin/systemctl enable streamwebs-production-gunicorn',
                  '/usr/bin/systemctl disable streamwebs-production-gunicorn',
                  '/usr/bin/systemctl stop streamwebs-production-gunicorn',
@@ -33,7 +33,7 @@ describe 'osl-app::app3' do
   end
 
   it 'should create systemctl privs for timesync-web-production' do
-    expect(chef_run).to install_sudo('timesync-web-production').with(
+    expect(chef_run).to create_sudo('timesync-web-production').with(
       commands: ['/usr/bin/systemctl enable timesync-web-production',
                  '/usr/bin/systemctl disable timesync-web-production',
                  '/usr/bin/systemctl stop timesync-web-production',
@@ -46,7 +46,7 @@ describe 'osl-app::app3' do
   end
 
   it 'should create systemctl privs for timesync-web-staging' do
-    expect(chef_run).to install_sudo('timesync-web-staging').with(
+    expect(chef_run).to create_sudo('timesync-web-staging').with(
       commands: ['/usr/bin/systemctl enable timesync-web-staging',
                  '/usr/bin/systemctl disable timesync-web-staging',
                  '/usr/bin/systemctl stop timesync-web-staging',

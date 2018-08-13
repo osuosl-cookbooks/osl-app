@@ -7,7 +7,7 @@ describe 'osl-app::app2' do
   include_context 'common_stubs'
 
   it 'should create systemctl privs for formsender-staging' do
-    expect(chef_run).to install_sudo('formsender-staging').with(
+    expect(chef_run).to create_sudo('formsender-staging').with(
       commands: ['/usr/bin/systemctl enable formsender-staging-gunicorn',
                  '/usr/bin/systemctl disable formsender-staging-gunicorn',
                  '/usr/bin/systemctl stop formsender-staging-gunicorn',
@@ -20,7 +20,7 @@ describe 'osl-app::app2' do
   end
 
   it 'should create systemctl privs for formsender-production' do
-    expect(chef_run).to install_sudo('formsender-production').with(
+    expect(chef_run).to create_sudo('formsender-production').with(
       commands: ['/usr/bin/systemctl enable formsender-production-gunicorn',
                  '/usr/bin/systemctl disable formsender-production-gunicorn',
                  '/usr/bin/systemctl stop formsender-production-gunicorn',
@@ -33,7 +33,7 @@ describe 'osl-app::app2' do
   end
 
   it 'should create systemctl privs for iam-staging' do
-    expect(chef_run).to install_sudo('iam-staging').with(
+    expect(chef_run).to create_sudo('iam-staging').with(
       commands: ['/usr/bin/systemctl enable iam-staging',
                  '/usr/bin/systemctl disable iam-staging',
                  '/usr/bin/systemctl stop iam-staging',
@@ -46,7 +46,7 @@ describe 'osl-app::app2' do
   end
 
   it 'should create systemctl privs for iam-production' do
-    expect(chef_run).to install_sudo('iam-production').with(
+    expect(chef_run).to create_sudo('iam-production').with(
       commands: ['/usr/bin/systemctl enable iam-production',
                  '/usr/bin/systemctl disable iam-production',
                  '/usr/bin/systemctl stop iam-production',
@@ -59,7 +59,7 @@ describe 'osl-app::app2' do
   end
 
   it 'should create systemctl privs for timesync-production' do
-    expect(chef_run).to install_sudo('timesync-production').with(
+    expect(chef_run).to create_sudo('timesync-production').with(
       commands: ['/usr/bin/systemctl enable timesync-production',
                  '/usr/bin/systemctl disable timesync-production',
                  '/usr/bin/systemctl stop timesync-production',
@@ -72,7 +72,7 @@ describe 'osl-app::app2' do
   end
 
   it 'should create systemctl privs for timesync-staging' do
-    expect(chef_run).to install_sudo('timesync-staging').with(
+    expect(chef_run).to create_sudo('timesync-staging').with(
       commands: ['/usr/bin/systemctl enable timesync-staging',
                  '/usr/bin/systemctl disable timesync-staging',
                  '/usr/bin/systemctl stop timesync-staging',
@@ -85,7 +85,7 @@ describe 'osl-app::app2' do
   end
 
   it 'should create systemctl privs for replicant' do
-    expect(chef_run).to install_sudo('replicant').with(
+    expect(chef_run).to create_sudo('replicant').with(
       commands: ['/usr/bin/systemctl enable replicant-redmine-unicorn',
                  '/usr/bin/systemctl disable replicant-redmine-unicorn',
                  '/usr/bin/systemctl stop replicant-redmine-unicorn',
