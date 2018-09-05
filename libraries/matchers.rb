@@ -6,4 +6,12 @@ if defined?(ChefSpec)
       resource_name
     )
   end
+
+  def create_osl_app(resource_name)
+    ChefSpec::Matchers::ResourceMatcher.new(
+      :osl_app,
+      :create,
+      resource_name
+    )
+  end
 end

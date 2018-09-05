@@ -2,7 +2,7 @@ require_relative 'spec_helper'
 
 describe 'osl-app::app1' do
   cached(:chef_run) do
-    ChefSpec::SoloRunner.new(CENTOS_7).converge('sudo', described_recipe)
+    ChefSpec::SoloRunner.new(CENTOS_7.dup.merge(step_into: %w(osl_app))).converge('sudo', described_recipe)
   end
   include_context 'common_stubs'
 
@@ -66,6 +66,10 @@ describe 'osl-app::app1' do
                  '/usr/bin/systemctl restart fenestra'],
       nopasswd: true
     )
+  end
+
+  it do
+    expect(chef_run).to create_osl_app('fenestra')
   end
 
   %w(openid-staging-unicorn

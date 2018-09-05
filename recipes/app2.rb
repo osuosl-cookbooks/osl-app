@@ -22,184 +22,76 @@ node.normal['users'] = %w(formsender-production formsender-staging
                           iam-staging iam-production
                           timesync-staging timesync-production replicant)
 
-#### Sudo Privs ####
+#### Apps ####
 
-sudo 'formsender-production' do
-  user 'formsender-production'
-  commands sudo_commands('formsender-production-gunicorn')
-  nopasswd true
-end
-
-sudo 'formsender-staging' do
-  user 'formsender-staging'
-  commands sudo_commands('formsender-staging-gunicorn')
-  nopasswd true
-end
-
-sudo 'iam-staging' do
-  user 'iam-staging'
-  commands sudo_commands('iam-staging')
-  nopasswd true
-end
-
-sudo 'iam-production' do
-  user 'iam-production'
-  commands sudo_commands('iam-production')
-  nopasswd true
-end
-
-sudo 'timesync-production' do
-  user 'timesync-production'
-  commands sudo_commands('timesync-production')
-  nopasswd true
-end
-
-sudo 'timesync-staging' do
-  user 'timesync-staging'
-  commands sudo_commands('timesync-staging')
-  nopasswd true
-end
-
-sudo 'replicant' do
-  user 'replicant'
-  commands sudo_commands('replicant-redmine-unicorn')
-  nopasswd true
-end
-
-#### Systemd Services ####
-
-# this service depends on the logs/ directory being present inside
+# this app's service depends on the logs/ directory being present inside
 # ~formsender-staging/
-systemd_service 'formsender-staging-gunicorn' do
+osl_app 'formsender-staging-gunicorn' do
   description 'formsender staging app'
-  after %w(network.target)
-  install do
-    wanted_by 'multi-user.target'
-  end
-  service do
-    type 'forking'
-    user 'formsender-staging'
-    environment 'PATH' => '/home/formsender-staging/venv/bin'
-    working_directory '/home/formsender-staging/formsender'
-    pid_file '/home/formsender-staging/tmp/pids/gunicorn.pid'
-    exec_start '/home/formsender-staging/venv/bin/gunicorn -b 0.0.0.0:8086 '\
-      '-D --pid /home/formsender-staging/tmp/pids/gunicorn.pid '\
-      '--access-logfile /home/formsender-staging/logs/access.log '\
-      '--error-logfile /home/formsender-staging/logs/error.log '\
-      '--log-level debug '\
-      'formsender.wsgi:application'
-    exec_reload '/bin/kill -USR2 $MAINPID'
-  end
-  action [:create, :enable]
+  user 'formsender-staging'
+  start_cmd '/home/formsender-staging/venv/bin/gunicorn -b 0.0.0.0:8086 '\
+    '-D --pid /home/formsender-staging/tmp/pids/gunicorn.pid '\
+    '--access-logfile /home/formsender-staging/logs/access.log '\
+    '--error-logfile /home/formsender-staging/logs/error.log '\
+    '--log-level debug '\
+    'formsender.wsgi:application'
+  environment 'PATH' => '/home/formsender-staging/venv/bin'
+  working_directory '/home/formsender-staging/formsender'
 end
 
 # this service depends on the logs/ directory being present inside
 # ~formsender-production/
-systemd_service 'formsender-production-gunicorn' do
+osl_app 'formsender-production-gunicorn' do
   description 'formsender production app'
-  after %w(network.target)
-  install do
-    wanted_by 'multi-user.target'
-  end
-  service do
-    type 'forking'
-    user 'formsender-production'
-    environment 'PATH' => '/home/formsender-production/venv/bin'
-    working_directory '/home/formsender-production/formsender'
-    pid_file '/home/formsender-production/tmp/pids/gunicorn.pid'
-    exec_start '/home/formsender-production/venv/bin/gunicorn -b 0.0.0.0:8085 '\
-      '-D --pid /home/formsender-production/tmp/pids/gunicorn.pid '\
-      '--access-logfile /home/formsender-production/logs/access.log '\
-      '--error-logfile /home/formsender-production/logs/error.log '\
-      '--log-level debug '\
-      'formsender.wsgi:application'
-    exec_reload '/bin/kill -USR2 $MAINPID'
-  end
-  action [:create, :enable]
+  user 'formsender-production'
+  start_cmd '/home/formsender-production/venv/bin/gunicorn -b 0.0.0.0:8085 '\
+    '-D --pid /home/formsender-production/tmp/pids/gunicorn.pid '\
+    '--access-logfile /home/formsender-production/logs/access.log '\
+    '--error-logfile /home/formsender-production/logs/error.log '\
+    '--log-level debug '\
+    'formsender.wsgi:application'
+  environment 'PATH' => '/home/formsender-production/venv/bin'
+  working_directory '/home/formsender-production/formsender'
 end
 
-systemd_service 'iam-staging' do
+osl_app 'iam-staging' do
   description 'osuosl metrics'
-  after %w(network.target)
-  install do
-    wanted_by 'multi-user.target'
-  end
-  service do
-    type 'forking'
-    user 'iam-staging'
-    working_directory '/home/iam-staging/iam'
-    pid_file '/home/iam-staging/pids/unicorn.pid'
-    exec_start '/home/iam-staging/.rvm/bin/rvm 2.3.0 do bundle exec '\
-      'unicorn -l 8084 -c unicorn.rb -E deployment -D'
-  end
-  action [:create, :enable]
+  start_cmd '/home/iam-staging/.rvm/bin/rvm 2.3.0 do bundle exec unicorn -l 8084 -c unicorn.rb -E deployment -D'
+  pid_file '/home/iam-staging/pids/unicorn.pid'
+  working_directory '/home/iam-staging/iam'
 end
 
-systemd_service 'iam-production' do
+osl_app 'iam-production' do
   description 'osuosl metrics'
-  after %w(network.target)
-  install do
-    wanted_by 'multi-user.target'
-  end
-  service do
-    type 'forking'
-    user 'iam-production'
-    working_directory '/home/iam-production/iam'
-    pid_file '/home/iam-production/pids/unicorn.pid'
-    exec_start '/home/iam-production/.rvm/bin/rvm 2.3.0 do bundle exec '\
-      'unicorn -l 8083 -c unicorn.rb -E deployment -D'
-  end
-  action [:create, :enable]
+  start_cmd '/home/iam-production/.rvm/bin/rvm 2.3.0 do bundle exec unicorn -l 8083 -c unicorn.rb -E deployment -D'
+  working_directory '/home/iam-production/iam'
+  pid_file '/home/iam-production/pids/unicorn.pid'
 end
 
-systemd_service 'timesync-staging' do
+osl_app 'timesync-staging' do
   description 'Time tracker'
-  after %w(network.target)
-  install do
-    wanted_by 'multi-user.target'
-  end
-  service do
-    environment_file '/home/timesync-staging/timesync.env'
-    user 'timesync-staging'
-    working_directory '/home/timesync-staging/timesync'
-    pid_file '/home/timesync-staging/pids/timesync.pid'
-    # Port 8089 (set in env file)
-    exec_start '/usr/local/bin/node /home/timesync-staging/timesync/src/app.js'
-  end
-  action [:create, :enable]
+  # Port 8089 (set in env file)
+  start_cmd '/usr/local/bin/node /home/timesync-staging/timesync/src/app.js'
+  environment_file '/home/timesync-staging/timesync.env'
+  working_directory '/home/timesync-staging/timesync'
+  pid_file '/home/timesync-staging/pids/timesync.pid'
 end
 
-systemd_service 'timesync-production' do
+osl_app 'timesync-production' do
   description 'Time tracker'
-  after %w(network.target)
-  install do
-    wanted_by 'multi-user.target'
-  end
-  service do
-    environment_file '/home/timesync-production/timesync.env'
-    user 'timesync-production'
-    working_directory '/home/timesync-production/timesync'
-    pid_file '/home/timesync-production/pids/timesync.pid'
-    # Port 8088 (set in env file)
-    exec_start '/usr/local/bin/node ' \
-      '/home/timesync-production/timesync/src/app.js'
-  end
-  action [:create, :enable]
+  # Port 8088 (set in env file)
+  start_cmd '/usr/local/bin/node /home/timesync-production/timesync/src/app.js'
+  environment_file '/home/timesync-production/timesync.env'
+  working_directory '/home/timesync-production/timesync'
+  pid_file '/home/timesync-production/pids/timesync.pid'
 end
 
-systemd_service 'replicant-redmine-unicorn' do
+osl_app 'replicant-redmine-unicorn' do
+  user 'replicant'
   description 'Replicant Redmine'
-  after %(network.target)
-  install do
-    wanted_by 'multi-user.target'
-  end
-  service do
-    type 'simple'
-    user 'replicant'
-    environment 'RAILS_ENV' => 'production'
-    working_directory '/home/replicant/redmine'
-    pid_file '/home/replicant/redmine/pids/unicorn.pid'
-    exec_start '/home/replicant/.rvm/bin/rvm 2.3.0 do bundle exec unicorn -l 8090 -c unicorn.rb -E production -D'
-  end
-  action [:create, :enable]
+  start_cmd '/home/replicant/.rvm/bin/rvm 2.3.0 do bundle exec unicorn -l 8090 -c unicorn.rb -E production -D'
+  service_type 'simple'
+  environment 'RAILS_ENV' => 'production'
+  working_directory '/home/replicant/redmine'
+  pid_file '/home/replicant/redmine/pids/unicorn.pid'
 end

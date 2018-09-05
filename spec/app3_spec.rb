@@ -2,7 +2,7 @@ require_relative 'spec_helper'
 
 describe 'osl-app::app3' do
   cached(:chef_run) do
-    ChefSpec::SoloRunner.new(CENTOS_7).converge('sudo', described_recipe)
+    ChefSpec::SoloRunner.new(CENTOS_7.dup.merge(step_into: %w(osl_app))).converge('sudo', described_recipe)
   end
   include_context 'common_stubs'
 
@@ -62,13 +62,19 @@ describe 'osl-app::app3' do
      streamwebs-staging-gunicorn
      timesync-web-production
      timesync-web-staging).each do |s|
+    it do
+      expect(chef_run).to create_osl_app(s)
+    end
+
     it "should create system service #{s}" do
       expect(chef_run).to create_systemd_service(s)
     end
+
     it "should enable system service #{s}" do
       expect(chef_run).to enable_systemd_service(s)
     end
   end
+
   it do
     expect(chef_run).to modify_group('streamwebs-production').with(members: %w(streamwebs-production nginx))
   end
