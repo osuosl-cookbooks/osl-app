@@ -50,6 +50,6 @@ action :delete do
   end
 
   systemd_service new_resource.service_name do
-    action :delete
+    action [:stop, :delete]
   end
 end
