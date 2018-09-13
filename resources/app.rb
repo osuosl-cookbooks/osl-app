@@ -10,7 +10,7 @@ property :start_cmd, String, required: true
 property :reload_cmd, String, default: '/bin/kill -USR2 $MAINPID'
 property :description, [String, nil], default: nil
 property :environment, Hash, default: {}
-property :pid_file, String, default: lazy { "/home/#{user}/tmp/pids/gunicorn.pid" }
+property :pid_file, String, required: true
 property :wanted_by, String, default: 'multi-user.target'
 property :working_directory, [String, nil], default: nil
 property :environment_file, [String, nil], default: nil

@@ -37,6 +37,7 @@ osl_app 'formsender-staging-gunicorn' do
     'formsender.wsgi:application'
   environment 'PATH' => '/home/formsender-staging/venv/bin'
   working_directory '/home/formsender-staging/formsender'
+  pid_file '/home/formsender-staging/tmp/pids/gunicorn.pid'
 end
 
 # this service depends on the logs/ directory being present inside
@@ -52,6 +53,7 @@ osl_app 'formsender-production-gunicorn' do
     'formsender.wsgi:application'
   environment 'PATH' => '/home/formsender-production/venv/bin'
   working_directory '/home/formsender-production/formsender'
+  pid_file '/home/formsender-production/tmp/pids/gunicorn.pid'
 end
 
 osl_app 'iam-staging' do
