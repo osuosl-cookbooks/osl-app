@@ -69,7 +69,28 @@ describe 'osl-app::app1' do
   end
 
   it do
-    expect(chef_run).to create_osl_app('fenestra')
+    expect(chef_run).to create_osl_app('fenestra').with(
+      description: 'osuosl dashboard',
+      start_cmd: '/home/fenestra/.rvm/bin/rvm 2.2.5 do bundle exec unicorn -l 8082 -c config/unicorn.rb -E deployment -D',
+      working_directory: '/home/fenestra/fenestra',
+      pid_file: '/home/fenestra/pids/unicorn.pid'
+    )
+  end
+
+  it do
+    expect(chef_run).to create_systemd_service('fenestra').with(
+      description: 'osuosl dashboard',
+      after: %w(network.target),
+      wanted_by: 'multi-user.target',
+      type: 'forking',
+      user: 'fenestra',
+      environment: {},
+      environment_file: nil,
+      working_directory: '/home/fenestra/fenestra',
+      pid_file: '/home/fenestra/pids/unicorn.pid',
+      exec_start: '/home/fenestra/.rvm/bin/rvm 2.2.5 do bundle exec unicorn -l 8082 -c config/unicorn.rb -E deployment -D',
+      exec_reload: '/bin/kill -USR2 $MAINPID'
+    )
   end
 
   %w(openid-staging-unicorn
@@ -80,6 +101,7 @@ describe 'osl-app::app1' do
     it "should create system service #{s}" do
       expect(chef_run).to create_systemd_service(s)
     end
+
     it "should enable system service #{s}" do
       expect(chef_run).to enable_systemd_service(s)
     end
