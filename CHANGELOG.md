@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+2.0.0 (2018-09-19)
+------------------
+- Chef 13 compatibility fixes
+
 1.11.15 (2018-02-14)
 --------------------
 - Enable systemd services and improve tests.
