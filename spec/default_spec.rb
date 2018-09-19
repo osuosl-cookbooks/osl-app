@@ -43,7 +43,7 @@ describe 'osl-app::default' do
   end
 
   it do
-    expect(chef_run).to install_python_runtime 2
+    expect(chef_run).to install_python_runtime('2')
   end
 
   it do

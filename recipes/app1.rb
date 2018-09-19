@@ -37,12 +37,6 @@ sudo 'openid-production' do
   nopasswd true
 end
 
-sudo 'fenestra' do
-  user 'fenestra'
-  commands sudo_commands('fenestra')
-  nopasswd true
-end
-
 #### Systemd Services ####
 
 systemd_service 'openid-staging-unicorn' do
@@ -127,21 +121,11 @@ systemd_service 'openid-production-delayed-job' do
   action [:create, :enable]
 end
 
-systemd_service 'fenestra' do
+osl_app 'fenestra' do
   description 'osuosl dashboard'
-  after %w(network.target)
-  install do
-    wanted_by 'multi-user.target'
-  end
-  service do
-    type 'forking'
-    user 'fenestra'
-    working_directory '/home/fenestra/fenestra'
-    pid_file '/home/fenestra/pids/unicorn.pid'
-    exec_start '/home/fenestra/.rvm/bin/rvm 2.2.5 do bundle exec unicorn -l '\
-    '8082 -c config/unicorn.rb -E deployment -D'
-  end
-  action [:create, :enable]
+  start_cmd '/home/fenestra/.rvm/bin/rvm 2.2.5 do bundle exec unicorn -l 8082 -c config/unicorn.rb -E deployment -D'
+  working_directory '/home/fenestra/fenestra'
+  pid_file '/home/fenestra/pids/unicorn.pid'
 end
 
 # Setup logrotate, also make sure that unicorn releases the file handles

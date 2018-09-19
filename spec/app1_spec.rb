@@ -2,7 +2,7 @@ require_relative 'spec_helper'
 
 describe 'osl-app::app1' do
   cached(:chef_run) do
-    ChefSpec::SoloRunner.new(CENTOS_7).converge('sudo', described_recipe)
+    ChefSpec::SoloRunner.new(CENTOS_7.dup.merge(step_into: %w(osl_app))).converge('sudo', described_recipe)
   end
   include_context 'common_stubs'
 
@@ -16,7 +16,7 @@ describe 'osl-app::app1' do
   end
 
   it 'should create systemctl privs for openid-staging' do
-    expect(chef_run).to install_sudo('openid-staging').with(
+    expect(chef_run).to create_sudo('openid-staging').with(
       commands: ['/usr/bin/systemctl enable openid-staging-unicorn',
                  '/usr/bin/systemctl disable openid-staging-unicorn',
                  '/usr/bin/systemctl stop openid-staging-unicorn',
@@ -36,7 +36,7 @@ describe 'osl-app::app1' do
   end
 
   it 'should create systemctl privs for openid-production' do
-    expect(chef_run).to install_sudo('openid-production').with(
+    expect(chef_run).to create_sudo('openid-production').with(
       commands: ['/usr/bin/systemctl enable openid-production-unicorn',
                  '/usr/bin/systemctl disable openid-production-unicorn',
                  '/usr/bin/systemctl stop openid-production-unicorn',
@@ -56,7 +56,7 @@ describe 'osl-app::app1' do
   end
 
   it 'should create systemctl privs for fenestra' do
-    expect(chef_run).to install_sudo('fenestra').with(
+    expect(chef_run).to create_sudo('fenestra').with(
       commands: ['/usr/bin/systemctl enable fenestra',
                  '/usr/bin/systemctl disable fenestra',
                  '/usr/bin/systemctl stop fenestra',
@@ -68,6 +68,31 @@ describe 'osl-app::app1' do
     )
   end
 
+  it do
+    expect(chef_run).to create_osl_app('fenestra').with(
+      description: 'osuosl dashboard',
+      start_cmd: '/home/fenestra/.rvm/bin/rvm 2.2.5 do bundle exec unicorn -l 8082 -c config/unicorn.rb -E deployment -D',
+      working_directory: '/home/fenestra/fenestra',
+      pid_file: '/home/fenestra/pids/unicorn.pid'
+    )
+  end
+
+  it do
+    expect(chef_run).to create_systemd_service('fenestra').with(
+      description: 'osuosl dashboard',
+      after: %w(network.target),
+      wanted_by: 'multi-user.target',
+      type: 'forking',
+      user: 'fenestra',
+      environment: {},
+      environment_file: nil,
+      working_directory: '/home/fenestra/fenestra',
+      pid_file: '/home/fenestra/pids/unicorn.pid',
+      exec_start: '/home/fenestra/.rvm/bin/rvm 2.2.5 do bundle exec unicorn -l 8082 -c config/unicorn.rb -E deployment -D',
+      exec_reload: '/bin/kill -USR2 $MAINPID'
+    )
+  end
+
   %w(openid-staging-unicorn
      openid-staging-delayed-job
      openid-production-unicorn
@@ -76,6 +101,7 @@ describe 'osl-app::app1' do
     it "should create system service #{s}" do
       expect(chef_run).to create_systemd_service(s)
     end
+
     it "should enable system service #{s}" do
       expect(chef_run).to enable_systemd_service(s)
     end
