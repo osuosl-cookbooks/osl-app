@@ -26,8 +26,8 @@ node.default['poise-python']['provider'] = 'system'
 # update the modules to match the new Node version's ABI.
 node.override['nodejs']['version'] = '6.9.1'
 node.override['nodejs']['install_method'] = 'binary'
-node.override['nodejs']['binary']['checksum']['linux_x64'] = 'd4eb161e4715e1' \
-'1bbef816a6c577974271e2bddae9cf008744627676ff00036a'
+node.override['nodejs']['binary']['checksum']['linux_x64'] =
+  'a9d9e6308931fa2a2b0cada070516d45b76d752430c31c9198933c78f8d54b17'
 
 # rvm package depends
 %w(sqlite-devel libyaml-devel readline-devel zlib-devel libffi-devel
