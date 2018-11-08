@@ -56,6 +56,6 @@ temp.variables['include_sudoers_d'] = true
 
 include_recipe 'user::data_bag'
 include_recipe 'build-essential'
-include_recipe 'nodejs'
+include_recipe 'osl-nodejs'
 include_recipe 'firewall::unicorn'
 include_recipe 'git'
