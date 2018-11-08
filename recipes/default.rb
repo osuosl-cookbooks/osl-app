@@ -43,7 +43,9 @@ end
   package p
 end
 
-python_runtime '2'
+python_runtime '2' do
+  pip_version '18.0' if node['platform_version'].to_i >= 7
+end
 
 # Keep systemd services private from non-root users
 directory '/etc/systemd/system' do
