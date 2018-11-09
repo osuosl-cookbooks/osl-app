@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+2.0.1 (2018-11-09)
+------------------
+- Replace nodejs with osl-nodejs
+
 2.0.0 (2018-09-19)
 ------------------
 - Chef 13 compatibility fixes
