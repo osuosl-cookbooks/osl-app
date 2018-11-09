@@ -26,8 +26,8 @@ node.default['poise-python']['provider'] = 'system'
 # update the modules to match the new Node version's ABI.
 node.override['nodejs']['version'] = '6.9.1'
 node.override['nodejs']['install_method'] = 'binary'
-node.override['nodejs']['binary']['checksum']['linux_x64'] = 'd4eb161e4715e1' \
-'1bbef816a6c577974271e2bddae9cf008744627676ff00036a'
+node.override['nodejs']['binary']['checksum']['linux_x64'] =
+  'a9d9e6308931fa2a2b0cada070516d45b76d752430c31c9198933c78f8d54b17'
 
 # rvm package depends
 %w(sqlite-devel libyaml-devel readline-devel zlib-devel libffi-devel
@@ -43,7 +43,9 @@ end
   package p
 end
 
-python_runtime '2'
+python_runtime '2' do
+  pip_version '18.0' if node['platform_version'].to_i >= 7
+end
 
 # Keep systemd services private from non-root users
 directory '/etc/systemd/system' do
@@ -56,6 +58,6 @@ temp.variables['include_sudoers_d'] = true
 
 include_recipe 'user::data_bag'
 include_recipe 'build-essential'
-include_recipe 'nodejs'
+include_recipe 'osl-nodejs'
 include_recipe 'firewall::unicorn'
 include_recipe 'git'
