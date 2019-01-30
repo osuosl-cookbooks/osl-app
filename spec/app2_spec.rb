@@ -93,7 +93,8 @@ describe 'osl-app::app2' do
         start_cmd: "/usr/local/bin/node /home/timesync-#{env}/timesync/src/app.js",
         environment_file: "/home/timesync-#{env}/timesync.env",
         working_directory: "/home/timesync-#{env}/timesync",
-        pid_file: "/home/timesync-#{env}/pids/timesync.pid"
+        pid_file: "/home/timesync-#{env}/pids/timesync.pid",
+        service_type: 'simple'
       )
     end
 
@@ -102,7 +103,7 @@ describe 'osl-app::app2' do
         description: 'Time tracker',
         after: %w(network.target),
         wanted_by: 'multi-user.target',
-        type: 'forking',
+        type: 'simple',
         user: "timesync-#{env}",
         environment: {},
         environment_file: "/home/timesync-#{env}/timesync.env",

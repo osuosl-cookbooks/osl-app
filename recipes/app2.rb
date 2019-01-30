@@ -77,6 +77,7 @@ osl_app 'timesync-staging' do
   environment_file '/home/timesync-staging/timesync.env'
   working_directory '/home/timesync-staging/timesync'
   pid_file '/home/timesync-staging/pids/timesync.pid'
+  service_type 'simple'
 end
 
 osl_app 'timesync-production' do
@@ -86,6 +87,7 @@ osl_app 'timesync-production' do
   environment_file '/home/timesync-production/timesync.env'
   working_directory '/home/timesync-production/timesync'
   pid_file '/home/timesync-production/pids/timesync.pid'
+  service_type 'simple'
 end
 
 osl_app 'replicant-redmine-unicorn' do
