@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+2.0.2 (2019-01-30)
+------------------
+- Use simple systemd type for timesync application
+
 2.0.1 (2018-11-09)
 ------------------
 - Replace nodejs with osl-nodejs
