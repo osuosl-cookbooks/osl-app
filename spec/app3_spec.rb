@@ -20,7 +20,7 @@ describe 'osl-app::app3' do
           'streamwebs_frontend.wsgi:application',
         environment: { 'PATH' => "/home/streamwebs-#{env}/venv/bin" },
         working_directory: "/home/streamwebs-#{env}/streamwebs/streamwebs_frontend",
-        pid_file: "/home/streamwebs-#{env}/tmp/pids/unicorn.pid"
+        pid_file: "/home/streamwebs-#{env}/tmp/pids/gunicorn.pid"
       )
     end
 
@@ -35,7 +35,7 @@ describe 'osl-app::app3' do
         environment: { 'PATH' => "/home/streamwebs-#{env}/venv/bin" },
         environment_file: nil,
         working_directory: "/home/streamwebs-#{env}/streamwebs/streamwebs_frontend",
-        pid_file: "/home/streamwebs-#{env}/tmp/pids/unicorn.pid",
+        pid_file: "/home/streamwebs-#{env}/tmp/pids/gunicorn.pid",
         exec_start: "/home/streamwebs-#{env}/venv/bin/gunicorn -b 0.0.0.0:#{port} "\
           "-D --pid /home/streamwebs-#{env}/tmp/pids/gunicorn.pid "\
           "--access-logfile /home/streamwebs-#{env}/logs/access.log "\
