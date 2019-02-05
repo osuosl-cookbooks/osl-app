@@ -34,7 +34,7 @@ osl_app 'streamwebs-staging-gunicorn' do
     'streamwebs_frontend.wsgi:application'
   environment 'PATH' => '/home/streamwebs-staging/venv/bin'
   working_directory '/home/streamwebs-staging/streamwebs/streamwebs_frontend'
-  pid_file '/home/streamwebs-staging/tmp/pids/unicorn.pid'
+  pid_file '/home/streamwebs-staging/tmp/pids/gunicorn.pid'
 end
 
 osl_app 'streamwebs-production-gunicorn' do
@@ -47,7 +47,7 @@ osl_app 'streamwebs-production-gunicorn' do
     'streamwebs_frontend.wsgi:application'
   environment 'PATH' => '/home/streamwebs-production/venv/bin'
   working_directory '/home/streamwebs-production/streamwebs/streamwebs_frontend'
-  pid_file '/home/streamwebs-production/tmp/pids/unicorn.pid'
+  pid_file '/home/streamwebs-production/tmp/pids/gunicorn.pid'
 end
 
 osl_app 'timesync-web-staging' do
