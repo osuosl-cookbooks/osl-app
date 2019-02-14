@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+2.0.4 (2019-02-14)
+------------------
+- Fix typo in timesync-web systemd configs
+
 2.0.3 (2019-02-05)
 ------------------
 - Fix mismatch in streamwebs' service PID file
