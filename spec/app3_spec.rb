@@ -53,7 +53,7 @@ describe 'osl-app::app3' do
           "-D --pid /home/timesync-web-#{env}/tmp/pids/gunicorn.pid wsgi:app",
         environment: { 'PATH' => "/home/timesync-web-#{env}/venv/bin" },
         working_directory: "/home/timesync-web-#{env}/timesync-web",
-        pid_file: "/home/timesync-web-#{env}/tmp/pids/unicorn.pid"
+        pid_file: "/home/timesync-web-#{env}/tmp/pids/gunicorn.pid"
       )
     end
 
@@ -68,7 +68,7 @@ describe 'osl-app::app3' do
         environment: { 'PATH' => "/home/timesync-web-#{env}/venv/bin" },
         environment_file: nil,
         working_directory: "/home/timesync-web-#{env}/timesync-web",
-        pid_file: "/home/timesync-web-#{env}/tmp/pids/unicorn.pid",
+        pid_file: "/home/timesync-web-#{env}/tmp/pids/gunicorn.pid",
         exec_start: "/home/timesync-web-#{env}/venv/bin/gunicorn -b 0.0.0.0:#{port} "\
           "-D --pid /home/timesync-web-#{env}/tmp/pids/gunicorn.pid wsgi:app",
         exec_reload: '/bin/kill -USR2 $MAINPID'

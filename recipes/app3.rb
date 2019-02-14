@@ -56,7 +56,7 @@ osl_app 'timesync-web-staging' do
     '-D --pid /home/timesync-web-staging/tmp/pids/gunicorn.pid wsgi:app'
   environment 'PATH' => '/home/timesync-web-staging/venv/bin'
   working_directory '/home/timesync-web-staging/timesync-web'
-  pid_file '/home/timesync-web-staging/tmp/pids/unicorn.pid'
+  pid_file '/home/timesync-web-staging/tmp/pids/gunicorn.pid'
 end
 
 osl_app 'timesync-web-production' do
@@ -66,7 +66,7 @@ osl_app 'timesync-web-production' do
     '-D --pid /home/timesync-web-production/tmp/pids/gunicorn.pid wsgi:app'
   environment 'PATH' => '/home/timesync-web-production/venv/bin'
   working_directory '/home/timesync-web-production/timesync-web'
-  pid_file '/home/timesync-web-production/tmp/pids/unicorn.pid'
+  pid_file '/home/timesync-web-production/tmp/pids/gunicorn.pid'
 end
 
 # Nginx
