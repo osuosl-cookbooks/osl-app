@@ -51,7 +51,7 @@ systemd_service 'openid-staging-unicorn' do
     environment 'RAILS_ENV' => 'staging'
     working_directory '/home/openid-staging/current'
     pid_file '/home/openid-staging/current/tmp/pids/unicorn.pid'
-    exec_start '/home/openid-staging/.rvm/bin/rvm 2.2.4 do bundle exec '\
+    exec_start '/home/openid-staging/.rvm/bin/rvm 2.5.3 do bundle exec '\
     'unicorn -c /home/openid-staging/current/config/unicorn/staging.rb -E '\
     'deployment -D'
     exec_reload '/bin/kill -USR2 $MAINPID'
@@ -71,9 +71,9 @@ systemd_service 'openid-staging-delayed-job' do
     user 'openid-staging'
     environment 'RAILS_ENV' => 'staging'
     working_directory '/home/openid-staging/current'
-    exec_start '/home/openid-staging/.rvm/bin/rvm 2.2.4 do bundle exec '\
+    exec_start '/home/openid-staging/.rvm/bin/rvm 2.5.3 do bundle exec '\
     'bin/delayed_job -n 2 start'
-    exec_reload '/home/openid-staging/.rvm/bin/rvm 2.2.4 do bundle exec '\
+    exec_reload '/home/openid-staging/.rvm/bin/rvm 2.5.3 do bundle exec '\
     'bin/delayed_job -n 2 restart'
   end
   action [:create, :enable]
