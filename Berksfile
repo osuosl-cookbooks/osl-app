@@ -1,5 +1,6 @@
 source 'https://supermarket.chef.io'
 
+cookbook 'apache2', '< 6.0.0'
 cookbook 'firewall', git: 'git@github.com:osuosl-cookbooks/firewall'
 cookbook 'munin', git: 'git@github.com:osuosl-cookbooks/munin.git'
 cookbook 'osl-munin', git: 'git@github.com:osuosl-cookbooks/osl-munin'
