@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+2.0.5 (2019-03-29)
+------------------
+- Update to ruby 2.5.3 for openid staging
+
 2.0.4 (2019-02-14)
 ------------------
 - Fix typo in timesync-web systemd configs

@@ -7,7 +7,7 @@ license          'Apache-2.0'
 chef_version     '>= 12.18' if respond_to?(:chef_version)
 description      'Installs/Configures osl-app'
 long_description 'Installs/Configures osl-app'
-version          '2.0.4'
+version          '2.0.5'
 
 supports         'centos', '~> 7.0'
 
