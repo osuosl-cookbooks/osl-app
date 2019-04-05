@@ -5,7 +5,7 @@ ChefSpec::Coverage.start! { add_filter 'osl-app' }
 
 CENTOS_7 = {
   platform: 'centos',
-  version: 'redhat 7.4',
+  version: '7.4.1708',
 }.freeze
 
 RSpec.configure do |config|
