@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+2.0.6 (2019-04-05)
+------------------
+- Update ChefSpec platforms
+
 2.0.5 (2019-03-29)
 ------------------
 - Update to ruby 2.5.3 for openid staging
