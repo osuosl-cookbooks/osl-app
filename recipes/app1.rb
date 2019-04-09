@@ -93,7 +93,7 @@ systemd_service 'openid-production-unicorn' do
                 BRAINTREE_ACCESS_TOKEN: openid_secrets['braintree_access_token'])
     working_directory '/home/openid-production/current'
     pid_file '/home/openid-production/current/tmp/pids/unicorn.pid'
-    exec_start '/home/openid-production/.rvm/bin/rvm 2.2.4 do bundle exec '\
+    exec_start '/home/openid-production/.rvm/bin/rvm 2.5.3 do bundle exec '\
     'unicorn -c /home/openid-production/current/config/unicorn/production.rb '\
     '-E deployment -D'
     exec_reload '/bin/kill -USR2 $MAINPID'
@@ -113,9 +113,9 @@ systemd_service 'openid-production-delayed-job' do
     user 'openid-production'
     environment 'RAILS_ENV' => 'production'
     working_directory '/home/openid-production/current'
-    exec_start '/home/openid-production/.rvm/bin/rvm 2.2.4 do bundle exec '\
+    exec_start '/home/openid-production/.rvm/bin/rvm 2.5.3 do bundle exec '\
     'bin/delayed_job -n 2 start'
-    exec_reload '/home/openid-production/.rvm/bin/rvm 2.2.4 do bundle exec '\
+    exec_reload '/home/openid-production/.rvm/bin/rvm 2.5.3 do bundle exec '\
     'bin/delayed_job -n 2 restart'
   end
   action [:create, :enable]
