@@ -1,7 +1,3 @@
-require 'serverspec'
-
-set :backend, :exec
-
 %w(fenestra
    openid-production-delayed-job
    openid-production-unicorn
