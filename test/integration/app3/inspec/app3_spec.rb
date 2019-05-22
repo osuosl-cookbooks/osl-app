@@ -1,6 +1,6 @@
 describe http(
   'http://127.0.0.1/streamwebs-production/media/index.html',
-  headers: {'Host' => 'streamwebs.org' },
+  headers: { 'Host' => 'streamwebs.org' },
   enable_remote_worker: true
 ) do
   its('body') { should match(/^streamwebs-production$/) }
