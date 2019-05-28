@@ -1,7 +1,3 @@
-require 'serverspec'
-
-set :backend, :exec
-
 %w(formsender-production-gunicorn
    formsender-staging-gunicorn
    iam-production
