@@ -55,55 +55,38 @@ describe 'osl-app::app1' do
     )
   end
 
-  it 'should create systemctl privs for fenestra' do
-    expect(chef_run).to create_sudo('fenestra').with(
-      commands: ['/usr/bin/systemctl enable fenestra',
-                 '/usr/bin/systemctl disable fenestra',
-                 '/usr/bin/systemctl stop fenestra',
-                 '/usr/bin/systemctl start fenestra',
-                 '/usr/bin/systemctl status fenestra',
-                 '/usr/bin/systemctl reload fenestra',
-                 '/usr/bin/systemctl restart fenestra'],
-      nopasswd: true
-    )
+  it do
+    expect(chef_run).to delete_sudo('fenestra')
   end
 
   it do
-    expect(chef_run).to create_osl_app('fenestra').with(
-      description: 'osuosl dashboard',
-      start_cmd: '/home/fenestra/.rvm/bin/rvm 2.2.5 do bundle exec unicorn -l 8082 -c config/unicorn.rb -E deployment -D',
-      working_directory: '/home/fenestra/fenestra',
-      pid_file: '/home/fenestra/pids/unicorn.pid'
-    )
+    expect(chef_run).to delete_osl_app('fenestra')
   end
 
   it do
-    expect(chef_run).to create_systemd_service('fenestra').with(
-      description: 'osuosl dashboard',
-      after: %w(network.target),
-      wanted_by: 'multi-user.target',
-      type: 'forking',
-      user: 'fenestra',
-      environment: {},
-      environment_file: nil,
-      working_directory: '/home/fenestra/fenestra',
-      pid_file: '/home/fenestra/pids/unicorn.pid',
-      exec_start: '/home/fenestra/.rvm/bin/rvm 2.2.5 do bundle exec unicorn -l 8082 -c config/unicorn.rb -E deployment -D',
-      exec_reload: '/bin/kill -USR2 $MAINPID'
-    )
+    expect(chef_run).to delete_systemd_service('fenestra')
   end
 
   %w(openid-staging-unicorn
      openid-staging-delayed-job
      openid-production-unicorn
-     openid-production-delayed-job
-     fenestra).each do |s|
+     openid-production-delayed-job).each do |s|
     it "should create system service #{s}" do
       expect(chef_run).to create_systemd_service(s)
     end
 
     it "should enable system service #{s}" do
       expect(chef_run).to enable_systemd_service(s)
+    end
+  end
+
+  %w(fenestra).each do |s|
+    it "should delete system service #{s}" do
+      expect(chef_run).to delete_systemd_service(s)
+    end
+
+    it "should stop system service #{s}" do
+      expect(chef_run).to stop_systemd_service(s)
     end
   end
 
