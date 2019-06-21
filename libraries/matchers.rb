@@ -7,10 +7,10 @@ if defined?(ChefSpec)
     )
   end
 
-  def delete_sudo(resource_name)
+  def remove_sudo(resource_name)
     ChefSpec::Matchers::ResourceMatcher.new(
       :sudo,
-      :delete,
+      :remove,
       resource_name
     )
   end

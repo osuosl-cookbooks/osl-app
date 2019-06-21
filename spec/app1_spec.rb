@@ -56,7 +56,7 @@ describe 'osl-app::app1' do
   end
 
   it do
-    expect(chef_run).to delete_sudo('fenestra')
+    expect(chef_run).to remove_sudo('fenestra')
   end
 
   it do

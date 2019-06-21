@@ -46,7 +46,7 @@ end
 
 action :delete do
   sudo new_resource.user do
-    action :delete
+    action :remove
   end
 
   systemd_service new_resource.service_name do
