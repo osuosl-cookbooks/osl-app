@@ -18,7 +18,7 @@
 
 include_recipe 'osl-app::default'
 
-node.normal['users'] = %w(openid-staging openid-production fenestra)
+node.normal['users'] = %w(openid-staging openid-production)
 
 openid_secrets = data_bag_item('osl-app', 'openid')
 
@@ -126,6 +126,7 @@ osl_app 'fenestra' do
   start_cmd '/home/fenestra/.rvm/bin/rvm 2.2.5 do bundle exec unicorn -l 8082 -c config/unicorn.rb -E deployment -D'
   working_directory '/home/fenestra/fenestra'
   pid_file '/home/fenestra/pids/unicorn.pid'
+  action :delete
 end
 
 # Setup logrotate, also make sure that unicorn releases the file handles
