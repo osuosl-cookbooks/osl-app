@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+2.0.8 (2019-06-21)
+------------------
+- Remove and disable fenestra app
+
 2.0.7 (2019-04-09)
 ------------------
 - Update openid production systemd service to use Ruby 2.5.3
