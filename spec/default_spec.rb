@@ -16,6 +16,10 @@ describe 'osl-app::default' do
   end
 
   it do
+    expect(chef_run).to include_recipe 'osl-mysql::client'
+  end
+
+  it do
     %w(
       automake
       freetype-devel
@@ -27,7 +31,6 @@ describe 'osl-app::default' do
       libpng-devel
       libtool
       libyaml-devel
-      mariadb-devel
       openssl-devel
       postgis
       postgresql-devel

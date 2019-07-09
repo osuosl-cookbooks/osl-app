@@ -18,6 +18,7 @@
 
 include_recipe 'osl-app::default'
 include_recipe 'osl-nginx'
+include_recipe 'osl-docker'
 
 node.normal['users'] = %w(streamwebs-production streamwebs-staging
                           timesync-web-staging timesync-web-production)
@@ -93,4 +94,27 @@ end
 nginx_app 'app3.osuosl.org' do
   template 'app-nginx.erb'
   cookbook 'osl-app'
+end
+
+# Docker containers
+node.default['osl-app']['mulgara']['db_hostname'] = node['ipaddress']
+node.default['osl-app']['mulgara']['db_user'] = 'redmine'
+node.default['osl-app']['mulgara']['db_db'] = 'mulgara_redmine'
+node.default['osl-app']['mulgara']['db_passwd'] = 'passwd'
+
+docker_image 'library/redmine' do
+  tag '4.0.4'
+  action :pull
+end
+
+docker_container 'code.mulgara.org' do
+  repo 'redmine'
+  tag '4.0.4'
+  port '8084:3000'
+  env [
+    "REDMINE_DB_MYSQL=#{node['osl-app']['mulgara']['db_hostname']}",
+    "REDMINE_DB_DATABASE=#{node['osl-app']['mulgara']['db_db']}",
+    "REDMINE_DB_USERNAME=#{node['osl-app']['mulgara']['db_user']}",
+    "REDMINE_DB_PASSWORD=#{node['osl-app']['mulgara']['db_passwd']}",
+  ]
 end

@@ -5,3 +5,5 @@ license          'Apache 2.0'
 description      'Installs/Configures app_test'
 long_description ''
 version          '0.1.0'
+
+depends          'osl-mysql'

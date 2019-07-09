@@ -2,7 +2,12 @@ require_relative 'spec_helper'
 
 describe 'osl-app::app3' do
   cached(:chef_run) do
-    ChefSpec::SoloRunner.new(CENTOS_7.dup.merge(step_into: %w(osl_app))).converge('sudo', described_recipe)
+    ChefSpec::SoloRunner.new(CENTOS_7.dup.merge(step_into: %w(osl_app))) do |node|
+      node.set['osl-app']['mulgara']['db_hostname'] = 'testdb.osuosl.org'
+      node.set['osl-app']['mulgara']['db_db'] = 'fakedb'
+      node.set['osl-app']['mulgara']['db_user'] = 'fakeuser'
+      node.set['osl-app']['mulgara']['db_passwd'] = 'fakepw'
+    end.converge('sudo', described_recipe)
   end
 
   include_context 'common_stubs'
@@ -125,6 +130,26 @@ describe 'osl-app::app3' do
     expect(chef_run).to create_nginx_app('app3.osuosl.org').with(
       template: 'app-nginx.erb',
       cookbook: 'osl-app'
+    )
+  end
+
+  it do
+    expect(chef_run).to pull_docker_image('library/redmine').with(
+      tag: '4.0.4'
+    )
+  end
+
+  it do
+    expect(chef_run).to run_docker_container('code.mulgara.org').with(
+      repo: 'redmine',
+      tag: '4.0.4',
+      port: '3000:3000',
+      env: [
+        'REDMINE_DB_MYSQL=testdb.osuosl.org',
+        'REDMINE_DB_DATABASE=fakedb',
+        'REDMINE_DB_USERNAME=fakeuser',
+        'REDMINE_DB_PASSWORD=fakepw',
+      ]
     )
   end
 end

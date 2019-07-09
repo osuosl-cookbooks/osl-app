@@ -16,6 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 include_recipe 'yum-epel'
+include_recipe 'osl-mysql::client'
 
 node.override['user']['home_dir_mode'] = '2750'
 node.default['poise-python']['provider'] = 'system'
@@ -31,8 +32,8 @@ node.override['nodejs']['binary']['checksum']['linux_x64'] =
 
 # rvm package depends
 %w(sqlite-devel libyaml-devel readline-devel zlib-devel libffi-devel
-   openssl-devel automake libtool mariadb-devel ImageMagick-devel
-   postgresql-devel).each do |p|
+   openssl-devel automake libtool ImageMagick-devel postgresql-devel
+).each do |p|
   package p
 end
 
