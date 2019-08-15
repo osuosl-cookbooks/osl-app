@@ -93,7 +93,7 @@ end
 osl_app 'replicant-redmine-unicorn' do
   user 'replicant'
   description 'Replicant Redmine'
-  start_cmd '/home/replicant/.rvm/bin/rvm 2.3.0 do bundle exec unicorn -l 8090 -c unicorn.rb -E production -D'
+  start_cmd '/home/replicant/.rvm/bin/rvm 2.6.3 do bundle exec unicorn -l 8090 -c unicorn.rb -E production -D'
   service_type 'simple'
   environment 'RAILS_ENV' => 'production'
   working_directory '/home/replicant/redmine'
