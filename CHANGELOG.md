@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+2.0.10 (2019-08-15)
+-------------------
+- Upgrade replicant redmine ruby
+
 2.0.9 (2019-06-21)
 ------------------
 - Use remove instead of delete for sudo resource
