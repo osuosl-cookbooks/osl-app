@@ -11,7 +11,7 @@ version          '2.2.0'
 
 supports         'centos', '~> 7.0'
 
-depends          'build-essential'
+depends          'build_essential'
 depends          'firewall'
 depends          'git'
 depends          'logrotate'

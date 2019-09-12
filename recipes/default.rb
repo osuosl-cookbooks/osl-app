@@ -58,7 +58,7 @@ temp = resources(template: '/etc/sudoers')
 temp.variables['include_sudoers_d'] = true
 
 include_recipe 'user::data_bag'
-include_recipe 'build-essential'
+include_recipe 'build_essential'
 include_recipe 'osl-nodejs'
 include_recipe 'firewall::unicorn'
 include_recipe 'git'
