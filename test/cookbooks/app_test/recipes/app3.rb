@@ -43,6 +43,4 @@ execute 'mysql mulgara_redmine < /tmp/mulgara_redmine.sql && touch /tmp/mulgara_
   creates '/tmp/mulgara_redmine.done'
 end
 
-mulgara_redmine_creds = data_bag_item('mulgara_redmine', 'mysql_creds')
-mulgara_redmine_creds['db_hostname'] = node['ipaddress']
-mulgara_redmine_creds.save
+node.default['osl-app']['mulgara_redmine_mysql_hostname'] = node['ipaddress']

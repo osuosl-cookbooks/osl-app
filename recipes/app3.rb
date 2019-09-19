@@ -104,13 +104,20 @@ docker_image 'library/redmine' do
   action :pull
 end
 
+# Check if attribute is set for testing
+mulgara_db_host = if node['osl-app'].attribute?('mulgara_redmine_mysql_hostname')
+                    node['osl-app']['mulgara_redmine_mysql_hostname']
+                  else
+                    mulgara_redmine_creds['db_hostname']
+                  end
+
 docker_container 'code.mulgara.org' do
   repo 'redmine'
   tag '4.0.4'
   port '8084:3000'
   restart_policy 'always'
   env [
-    "REDMINE_DB_MYSQL=#{mulgara_redmine_creds['db_hostname']}",
+    "REDMINE_DB_MYSQL=#{mulgara_db_host}",
     "REDMINE_DB_DATABASE=#{mulgara_redmine_creds['db_db']}",
     "REDMINE_DB_USERNAME=#{mulgara_redmine_creds['db_user']}",
     "REDMINE_DB_PASSWORD=#{mulgara_redmine_creds['db_passwd']}",
