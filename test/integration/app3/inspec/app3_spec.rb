@@ -20,7 +20,7 @@ describe http(
   enable_remote_worker: true
 ) do
   its('status') { should eq 200 }
-  its('body') { should match(%r{^<title>Mulgara Project<\/title>$}) }
+  its('body') { should match(%r{^<title>Mulgara Redmine<\/title>$}) }
 end
 
 %w(streamwebs-production-gunicorn

@@ -111,6 +111,7 @@ docker_container 'code.mulgara.org' do
   repo 'redmine'
   tag '4.0.4'
   port '8084:3000'
+  restart_policy 'always'
   env [
     "REDMINE_DB_MYSQL=#{node['osl-app']['mulgara']['db_hostname']}",
     "REDMINE_DB_DATABASE=#{node['osl-app']['mulgara']['db_db']}",
