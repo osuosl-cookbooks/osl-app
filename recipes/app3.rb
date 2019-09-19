@@ -97,10 +97,7 @@ nginx_app 'app3.osuosl.org' do
 end
 
 # Docker containers
-node.default['osl-app']['mulgara']['db_hostname'] = node['ipaddress']
-node.default['osl-app']['mulgara']['db_user'] = 'redmine'
-node.default['osl-app']['mulgara']['db_db'] = 'mulgara_redmine'
-node.default['osl-app']['mulgara']['db_passwd'] = 'passwd'
+mulgara_redmine_creds = data_bag_item('mulgara_redmine', 'mysql_creds')
 
 docker_image 'library/redmine' do
   tag '4.0.4'
@@ -113,9 +110,9 @@ docker_container 'code.mulgara.org' do
   port '8084:3000'
   restart_policy 'always'
   env [
-    "REDMINE_DB_MYSQL=#{node['osl-app']['mulgara']['db_hostname']}",
-    "REDMINE_DB_DATABASE=#{node['osl-app']['mulgara']['db_db']}",
-    "REDMINE_DB_USERNAME=#{node['osl-app']['mulgara']['db_user']}",
-    "REDMINE_DB_PASSWORD=#{node['osl-app']['mulgara']['db_passwd']}",
+    "REDMINE_DB_MYSQL=#{mulgara_redmine_creds['db_hostname']}",
+    "REDMINE_DB_DATABASE=#{mulgara_redmine_creds['db_db']}",
+    "REDMINE_DB_USERNAME=#{mulgara_redmine_creds['db_user']}",
+    "REDMINE_DB_PASSWORD=#{mulgara_redmine_creds['db_passwd']}",
   ]
 end
