@@ -16,6 +16,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Enable live-restore to keep containers running when docker restarts
+node.override['osl-docker']['service'] = { misc_opts: '--live-restore' }
+
+
 include_recipe 'osl-app::default'
 include_recipe 'osl-nginx'
 include_recipe 'osl-docker'
@@ -97,9 +101,6 @@ nginx_app 'app3.osuosl.org' do
 end
 
 # Docker containers
-# Enable live-restore to keep containers running when docker restarts
-node.override['osl-docker']['service'] = { misc_opts: '--live-restore' }
-
 mulgara_redmine_creds = data_bag_item('mulgara_redmine', 'mysql_creds')
 
 docker_image 'library/redmine' do
