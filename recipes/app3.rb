@@ -97,6 +97,9 @@ nginx_app 'app3.osuosl.org' do
 end
 
 # Docker containers
+# Enable live-restore to keep containers running when docker restarts
+node.override['osl-docker']['service'] = { misc_opts: '--live-restore' }
+
 mulgara_redmine_creds = data_bag_item('mulgara_redmine', 'mysql_creds')
 
 docker_image 'library/redmine' do
@@ -105,8 +108,8 @@ docker_image 'library/redmine' do
 end
 
 # Check if attribute is set for testing
-mulgara_db_host = if node['osl-app'].attribute?('mulgara_redmine_mysql_hostname')
-                    node['osl-app']['mulgara_redmine_mysql_hostname']
+mulgara_db_host = if node['osl-app'].attribute?('db_hostname')
+                    node['osl-app']['db_hostname']
                   else
                     mulgara_redmine_creds['db_hostname']
                   end

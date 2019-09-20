@@ -43,4 +43,4 @@ execute 'mysql mulgara_redmine < /tmp/mulgara_redmine.sql && touch /tmp/mulgara_
   creates '/tmp/mulgara_redmine.done'
 end
 
-node.default['osl-app']['mulgara_redmine_mysql_hostname'] = node['ipaddress']
+node.default['osl-app']['db_hostname'] = node['ipaddress']
