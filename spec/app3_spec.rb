@@ -148,6 +148,7 @@ describe 'osl-app::app3' do
       repo: 'redmine',
       tag: '4.0.4',
       port: '8084:3000',
+      restart_policy: 'always',
       volumes: '/data/docker/code.mulgara.org:/usr/src/redmine/files',
       env: [
         'REDMINE_DB_MYSQL=testdb.osuosl.bak',
