@@ -51,6 +51,7 @@ suites:
       - recipe[user::data_bag]
       - recipe[app_test::app3]
       - recipe[osl-app::app3]
+      - recipe[app_test::app3_postrun]
     driver:
       name: openstack
       flavor_ref: 'm1.medium'

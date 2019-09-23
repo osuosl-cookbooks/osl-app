@@ -67,7 +67,7 @@ CREATE TABLE `attachments` (
   KEY `index_attachments_on_created_on` (`created_on`),
   KEY `index_attachments_on_container_id_and_container_type` (`container_id`,`container_type`),
   KEY `index_attachments_on_disk_filename` (`disk_filename`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -76,6 +76,7 @@ CREATE TABLE `attachments` (
 
 LOCK TABLES `attachments` WRITE;
 /*!40000 ALTER TABLE `attachments` DISABLE KEYS */;
+INSERT INTO `attachments` VALUES (2,2,'Project','testfile.txt','190923192555_testfile.txt',21,'text/plain','cc4fafa4c90b4e4c08ade61acfa63add6a3fc31aa58d3f217eb199f557512e2a',0,1,'2019-09-23 19:25:55','','2019/09');
 /*!40000 ALTER TABLE `attachments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -530,7 +531,7 @@ CREATE TABLE `enabled_modules` (
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `enabled_modules_project_id` (`project_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -539,6 +540,7 @@ CREATE TABLE `enabled_modules` (
 
 LOCK TABLES `enabled_modules` WRITE;
 /*!40000 ALTER TABLE `enabled_modules` DISABLE KEYS */;
+INSERT INTO `enabled_modules` VALUES (11,2,'issue_tracking'),(12,2,'time_tracking'),(13,2,'news'),(14,2,'documents'),(15,2,'files'),(16,2,'wiki'),(17,2,'repository'),(18,2,'boards'),(19,2,'calendar'),(20,2,'gantt');
 /*!40000 ALTER TABLE `enabled_modules` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1059,7 +1061,7 @@ CREATE TABLE `projects` (
   PRIMARY KEY (`id`),
   KEY `index_projects_on_lft` (`lft`),
   KEY `index_projects_on_rgt` (`rgt`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1068,6 +1070,7 @@ CREATE TABLE `projects` (
 
 LOCK TABLES `projects` WRITE;
 /*!40000 ALTER TABLE `projects` DISABLE KEYS */;
+INSERT INTO `projects` VALUES (2,'mulgara test project','','',1,NULL,'2019-09-23 19:25:29','2019-09-23 19:25:29','mulgara-test-project',1,1,2,0,NULL,NULL);
 /*!40000 ALTER TABLE `projects` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1349,7 +1352,7 @@ CREATE TABLE `tokens` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `tokens_value` (`value`),
   KEY `index_tokens_on_user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1358,6 +1361,7 @@ CREATE TABLE `tokens` (
 
 LOCK TABLES `tokens` WRITE;
 /*!40000 ALTER TABLE `tokens` DISABLE KEYS */;
+INSERT INTO `tokens` VALUES (4,1,'session','97a3a6d36826c6e9d687ca5b82741fb877107eec','2019-09-23 19:22:51','2019-09-23 19:26:25'),(5,1,'feeds','3e5b7e1883d7e05ef3b2b6aacc482ca07df09e7a','2019-09-23 19:22:51','2019-09-23 19:22:51');
 /*!40000 ALTER TABLE `tokens` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1456,7 +1460,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'admin','0c7a03646bc86d8adf80300582380944b476c3b4','Redmine','Admin',1,1,'2019-09-19 21:05:14','',NULL,'2019-09-19 19:10:38','2019-09-19 21:05:34','User',NULL,'all','7b069c39ca5a1cb0a0fdb1d2511cfeae',0,'2019-09-19 21:05:34'),(2,'','','','Anonymous users',0,1,NULL,'',NULL,'2019-09-19 19:21:45','2019-09-19 19:21:45','GroupAnonymous',NULL,'',NULL,0,NULL),(3,'','','','Non member users',0,1,NULL,'',NULL,'2019-09-19 19:21:45','2019-09-19 19:21:45','GroupNonMember',NULL,'',NULL,0,NULL),(4,'','','','Anonymous',0,0,NULL,'',NULL,'2019-09-19 21:03:20','2019-09-19 21:03:20','AnonymousUser',NULL,'only_my_events',NULL,0,NULL);
+INSERT INTO `users` VALUES (1,'admin','0c7a03646bc86d8adf80300582380944b476c3b4','Redmine','Admin',1,1,'2019-09-23 19:22:51','',NULL,'2019-09-19 19:10:38','2019-09-19 21:05:34','User',NULL,'all','7b069c39ca5a1cb0a0fdb1d2511cfeae',0,'2019-09-19 21:05:34'),(2,'','','','Anonymous users',0,1,NULL,'',NULL,'2019-09-19 19:21:45','2019-09-19 19:21:45','GroupAnonymous',NULL,'',NULL,0,NULL),(3,'','','','Non member users',0,1,NULL,'',NULL,'2019-09-19 19:21:45','2019-09-19 19:21:45','GroupNonMember',NULL,'',NULL,0,NULL),(4,'','','','Anonymous',0,0,NULL,'',NULL,'2019-09-19 21:03:20','2019-09-19 21:03:20','AnonymousUser',NULL,'only_my_events',NULL,0,NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1656,7 +1660,7 @@ CREATE TABLE `wikis` (
   `status` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `wikis_project_id` (`project_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1665,6 +1669,7 @@ CREATE TABLE `wikis` (
 
 LOCK TABLES `wikis` WRITE;
 /*!40000 ALTER TABLE `wikis` DISABLE KEYS */;
+INSERT INTO `wikis` VALUES (2,2,'Wiki',1);
 /*!40000 ALTER TABLE `wikis` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1713,4 +1718,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-09-19 21:08:29
+-- Dump completed on 2019-09-23 19:27:01

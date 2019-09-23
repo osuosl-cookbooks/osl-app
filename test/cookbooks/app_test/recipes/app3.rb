@@ -43,4 +43,10 @@ execute 'mysql mulgara_redmine < /tmp/mulgara_redmine.sql && touch /tmp/mulgara_
   creates '/tmp/mulgara_redmine.done'
 end
 
+directory '/data/docker/code.mulgara.org/2019/09' do
+  recursive true
+end
+
+cookbook_file '/data/docker/code.mulgara.org/2019/09/190923192555_testfile.txt'
+
 node.default['osl-app']['db_hostname'] = node['ipaddress']
