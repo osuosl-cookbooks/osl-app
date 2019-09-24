@@ -35,20 +35,11 @@ e.g.
 
 Usage
 -----
-#### osl-app::default
-TODO: Write usage instructions for each cookbook.
+#### osl-app::app3
+Username and password for test mulgara redmine instance:
 
-e.g.
-Just include `osl-app` in your node's `run_list`:
-
-```json
-{
-  "name":"my_node",
-  "run_list": [
-    "recipe[osl-app]"
-  ]
-}
-```
+username: admin
+password: password
 
 Contributing
 ------------

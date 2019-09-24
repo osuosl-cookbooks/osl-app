@@ -26,7 +26,7 @@ describe 'osl-app::app2' do
     end
 
     it do
-      expect(chef_run).to create_sudo("formsender-#{env}").with(
+      expect(chef_run).to install_sudo("formsender-#{env}").with(
         commands: ["/usr/bin/systemctl enable formsender-#{env}-gunicorn",
                    "/usr/bin/systemctl disable formsender-#{env}-gunicorn",
                    "/usr/bin/systemctl stop formsender-#{env}-gunicorn",
@@ -116,7 +116,7 @@ describe 'osl-app::app2' do
 
     %w(iam timesync).each do |app|
       it do
-        expect(chef_run).to create_sudo("#{app}-#{env}").with(
+        expect(chef_run).to install_sudo("#{app}-#{env}").with(
           commands: ["/usr/bin/systemctl enable #{app}-#{env}",
                      "/usr/bin/systemctl disable #{app}-#{env}",
                      "/usr/bin/systemctl stop #{app}-#{env}",
@@ -143,7 +143,7 @@ describe 'osl-app::app2' do
   end
 
   it do
-    expect(chef_run).to create_sudo('replicant').with(
+    expect(chef_run).to install_sudo('replicant').with(
       commands: ['/usr/bin/systemctl enable replicant-redmine-unicorn',
                  '/usr/bin/systemctl disable replicant-redmine-unicorn',
                  '/usr/bin/systemctl stop replicant-redmine-unicorn',

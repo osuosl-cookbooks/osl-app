@@ -16,8 +16,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Enable live-restore to keep containers running when docker restarts
+node.override['osl-docker']['service'] = { misc_opts: '--live-restore' }
+
 include_recipe 'osl-app::default'
 include_recipe 'osl-nginx'
+include_recipe 'osl-docker'
 
 node.normal['users'] = %w(streamwebs-production streamwebs-staging
                           timesync-web-staging timesync-web-production)
@@ -93,4 +97,39 @@ end
 nginx_app 'app3.osuosl.org' do
   template 'app-nginx.erb'
   cookbook 'osl-app'
+end
+
+# Docker containers
+directory '/data/docker/code.mulgara.org' do
+  recursive true
+end
+
+mulgara_redmine_creds = data_bag_item('mulgara_redmine', 'mysql_creds')
+
+docker_image 'library/redmine' do
+  tag '4.0.4'
+  action :pull
+end
+
+# Check if attribute is set for testing
+mulgara_db_host = if node['osl-app'].attribute?('db_hostname')
+                    node['osl-app']['db_hostname']
+                  else
+                    mulgara_redmine_creds['db_hostname']
+                  end
+
+docker_container 'code.mulgara.org' do
+  repo 'redmine'
+  tag '4.0.4'
+  port '8084:3000'
+  restart_policy 'always'
+  volumes ['/data/docker/code.mulgara.org:/usr/src/redmine/files']
+  env [
+    "REDMINE_DB_MYSQL=#{mulgara_db_host}",
+    "REDMINE_DB_DATABASE=#{mulgara_redmine_creds['db_db']}",
+    "REDMINE_DB_USERNAME=#{mulgara_redmine_creds['db_user']}",
+    "REDMINE_DB_PASSWORD=#{mulgara_redmine_creds['db_passwd']}",
+    'REDMINE_PLUGINS_MIGRATE=1',
+  ]
+  sensitive true
 end

@@ -36,6 +36,11 @@ suites:
       - recipe[osl-app::app2]
   - name: app3
     attributes:
+      osl-mysql:
+        enable_percona_client: true
+      percona:
+        encrypted_data_bag: percona
+        encrypted_data_bag_secret_file: "/etc/chef/encrypted_data_bag_secret"
       users:
         - streamwebs-staging
         - streamwebs-production
@@ -44,5 +49,9 @@ suites:
     run_list:
       - recipe[sudo]
       - recipe[user::data_bag]
-      - recipe[osl-app::app3]
       - recipe[app_test::app3]
+      - recipe[osl-app::app3]
+      - recipe[app_test::app3_postrun]
+    driver:
+      name: openstack
+      flavor_ref: 'm1.large'

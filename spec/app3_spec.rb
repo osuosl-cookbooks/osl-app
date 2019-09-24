@@ -7,6 +7,15 @@ describe 'osl-app::app3' do
 
   include_context 'common_stubs'
 
+  before do
+    stub_data_bag_item('mulgara_redmine', 'mysql_creds').and_return(
+      db_db: 'fakedb',
+      db_hostname: 'testdb.osuosl.bak',
+      db_passwd: 'fakepw',
+      db_user: 'fakeuser'
+    )
+  end
+
   %w(staging production).each do |env|
     it do
       port = env == 'staging' ? 8081 : 8080
@@ -78,7 +87,7 @@ describe 'osl-app::app3' do
 
   %w(staging production).each do |env|
     it do
-      expect(chef_run).to create_sudo("streamwebs-#{env}").with(
+      expect(chef_run).to install_sudo("streamwebs-#{env}").with(
         commands: ["/usr/bin/systemctl enable streamwebs-#{env}-gunicorn",
                    "/usr/bin/systemctl disable streamwebs-#{env}-gunicorn",
                    "/usr/bin/systemctl stop streamwebs-#{env}-gunicorn",
@@ -91,7 +100,7 @@ describe 'osl-app::app3' do
     end
 
     it do
-      expect(chef_run).to create_sudo("timesync-web-#{env}").with(
+      expect(chef_run).to install_sudo("timesync-web-#{env}").with(
         commands: ["/usr/bin/systemctl enable timesync-web-#{env}",
                    "/usr/bin/systemctl disable timesync-web-#{env}",
                    "/usr/bin/systemctl stop timesync-web-#{env}",
@@ -125,6 +134,38 @@ describe 'osl-app::app3' do
     expect(chef_run).to create_nginx_app('app3.osuosl.org').with(
       template: 'app-nginx.erb',
       cookbook: 'osl-app'
+    )
+  end
+
+  it do
+    expect(chef_run).to create_directory('/data/docker/code.mulgara.org').with(
+      recursive: true
+    )
+  end
+
+  it do
+    expect(chef_run).to pull_docker_image('library/redmine').with(
+      tag: '4.0.4'
+    )
+  end
+
+  it do
+    expect(chef_run).to run_docker_container('code.mulgara.org').with(
+      repo: 'redmine',
+      tag: '4.0.4',
+      port: '8084:3000',
+      restart_policy: 'always',
+      # This needs to be volumes_binds, since the volumes property gets coerced into a volumes_binds property if it's
+      # passed an entry that specifies a bind mount
+      # https://github.com/chef-cookbooks/docker/blob/v4.9.3/libraries/docker_container.rb#L210
+      volumes_binds: ['/data/docker/code.mulgara.org:/usr/src/redmine/files'],
+      env: [
+        'REDMINE_DB_MYSQL=testdb.osuosl.bak',
+        'REDMINE_DB_DATABASE=fakedb',
+        'REDMINE_DB_USERNAME=fakeuser',
+        'REDMINE_DB_PASSWORD=fakepw',
+        'REDMINE_PLUGINS_MIGRATE=1',
+      ]
     )
   end
 end
