@@ -164,6 +164,7 @@ describe 'osl-app::app3' do
         'REDMINE_DB_DATABASE=fakedb',
         'REDMINE_DB_USERNAME=fakeuser',
         'REDMINE_DB_PASSWORD=fakepw',
+        'REDMINE_PLUGINS_MIGRATE=1',
       ]
     )
   end

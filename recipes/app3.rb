@@ -129,5 +129,6 @@ docker_container 'code.mulgara.org' do
     "REDMINE_DB_DATABASE=#{mulgara_redmine_creds['db_db']}",
     "REDMINE_DB_USERNAME=#{mulgara_redmine_creds['db_user']}",
     "REDMINE_DB_PASSWORD=#{mulgara_redmine_creds['db_passwd']}",
+    'REDMINE_PLUGINS_MIGRATE=1',
   ]
 end
