@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+2.1.0 (2019-09-24)
+------------------
+- Add code.mulgara.org container, add docker tests
+
 2.0.10 (2019-08-15)
 -------------------
 - Upgrade replicant redmine ruby
