@@ -131,4 +131,5 @@ docker_container 'code.mulgara.org' do
     "REDMINE_DB_PASSWORD=#{mulgara_redmine_creds['db_passwd']}",
     'REDMINE_PLUGINS_MIGRATE=1',
   ]
+  sensitive true
 end
