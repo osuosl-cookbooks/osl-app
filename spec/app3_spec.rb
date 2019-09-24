@@ -87,7 +87,7 @@ describe 'osl-app::app3' do
 
   %w(staging production).each do |env|
     it do
-      expect(chef_run).to create_sudo("streamwebs-#{env}").with(
+      expect(chef_run).to install_sudo("streamwebs-#{env}").with(
         commands: ["/usr/bin/systemctl enable streamwebs-#{env}-gunicorn",
                    "/usr/bin/systemctl disable streamwebs-#{env}-gunicorn",
                    "/usr/bin/systemctl stop streamwebs-#{env}-gunicorn",
@@ -100,7 +100,7 @@ describe 'osl-app::app3' do
     end
 
     it do
-      expect(chef_run).to create_sudo("timesync-web-#{env}").with(
+      expect(chef_run).to install_sudo("timesync-web-#{env}").with(
         commands: ["/usr/bin/systemctl enable timesync-web-#{env}",
                    "/usr/bin/systemctl disable timesync-web-#{env}",
                    "/usr/bin/systemctl stop timesync-web-#{env}",
@@ -138,6 +138,12 @@ describe 'osl-app::app3' do
   end
 
   it do
+    expect(chef_run).to create_directory('/data/docker/code.mulgara.org').with(
+      recursive: true
+    )
+  end
+
+  it do
     expect(chef_run).to pull_docker_image('library/redmine').with(
       tag: '4.0.4'
     )
@@ -149,7 +155,10 @@ describe 'osl-app::app3' do
       tag: '4.0.4',
       port: '8084:3000',
       restart_policy: 'always',
-      volumes: '/data/docker/code.mulgara.org:/usr/src/redmine/files',
+      # This needs to be volumes_binds, since the volumes property gets coerced into a volumes_binds property if it's
+      # passed an entry that specifies a bind mount
+      # https://github.com/chef-cookbooks/docker/blob/v4.9.3/libraries/docker_container.rb#L210
+      volumes_binds: ['/data/docker/code.mulgara.org:/usr/src/redmine/files'],
       env: [
         'REDMINE_DB_MYSQL=testdb.osuosl.bak',
         'REDMINE_DB_DATABASE=fakedb',

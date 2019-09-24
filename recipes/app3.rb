@@ -123,7 +123,7 @@ docker_container 'code.mulgara.org' do
   tag '4.0.4'
   port '8084:3000'
   restart_policy 'always'
-  volumes '/data/docker/code.mulgara.org:/usr/src/redmine/files'
+  volumes ['/data/docker/code.mulgara.org:/usr/src/redmine/files']
   env [
     "REDMINE_DB_MYSQL=#{mulgara_db_host}",
     "REDMINE_DB_DATABASE=#{mulgara_redmine_creds['db_db']}",
