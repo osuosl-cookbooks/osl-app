@@ -54,4 +54,4 @@ suites:
       - recipe[app_test::app3_postrun]
     driver:
       name: openstack
-      flavor_ref: 'm1.medium'
+      flavor_ref: 'm1.large'
