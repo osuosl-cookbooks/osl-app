@@ -137,10 +137,12 @@ describe 'osl-app::app3' do
     )
   end
 
-  it do
-    expect(chef_run).to create_directory('/data/docker/code.mulgara.org').with(
-      recursive: true
-    )
+  %w(/data/docker/code.mulgara.org /data/docker/code.mulgara.org-svn).each do |dir|
+    it do
+      expect(chef_run).to create_directory(dir).with(
+        recursive: true
+      )
+    end
   end
 
   it do
@@ -158,7 +160,10 @@ describe 'osl-app::app3' do
       # This needs to be volumes_binds, since the volumes property gets coerced into a volumes_binds property if it's
       # passed an entry that specifies a bind mount
       # https://github.com/chef-cookbooks/docker/blob/v4.9.3/libraries/docker_container.rb#L210
-      volumes_binds: ['/data/docker/code.mulgara.org:/usr/src/redmine/files'],
+      volumes_binds: [
+        '/data/docker/code.mulgara.org:/usr/src/redmine/files',
+        '/data/docker/code.mulgara.org-svn:/var/lib/svn/mulgara/mulgara',
+      ],
       env: [
         'REDMINE_DB_MYSQL=testdb.osuosl.bak',
         'REDMINE_DB_DATABASE=fakedb',

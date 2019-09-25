@@ -100,8 +100,10 @@ nginx_app 'app3.osuosl.org' do
 end
 
 # Docker containers
-directory '/data/docker/code.mulgara.org' do
-  recursive true
+%w(/data/docker/code.mulgara.org /data/docker/code.mulgara.org-svn).each do |dir|
+  directory dir do
+    recursive true
+  end
 end
 
 mulgara_redmine_creds = data_bag_item('mulgara_redmine', 'mysql_creds')
@@ -123,7 +125,10 @@ docker_container 'code.mulgara.org' do
   tag '4.0.4'
   port '8084:3000'
   restart_policy 'always'
-  volumes ['/data/docker/code.mulgara.org:/usr/src/redmine/files']
+  volumes [
+    '/data/docker/code.mulgara.org:/usr/src/redmine/files',
+    '/data/docker/code.mulgara.org-svn:/var/lib/svn/mulgara/mulgara',
+  ]
   env [
     "REDMINE_DB_MYSQL=#{mulgara_db_host}",
     "REDMINE_DB_DATABASE=#{mulgara_redmine_creds['db_db']}",
