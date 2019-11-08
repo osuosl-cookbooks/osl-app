@@ -41,22 +41,23 @@ describe 'osl-app::app2' do
     it do
       port = env == 'staging' ? 8086 : 8085
       expect(chef_run).to create_systemd_service("formsender-#{env}-gunicorn").with(
-        description: "formsender #{env} app",
-        after: %w(network.target),
-        wanted_by: 'multi-user.target',
-        type: 'forking',
-        user: "formsender-#{env}",
-        environment: { 'PATH' => "/home/formsender-#{env}/venv/bin" },
-        environment_file: nil,
-        working_directory: "/home/formsender-#{env}/formsender",
-        pid_file: "/home/formsender-#{env}/tmp/pids/gunicorn.pid",
-        exec_start: "/home/formsender-#{env}/venv/bin/gunicorn -b 0.0.0.0:#{port} "\
+        unit_description: "formsender #{env} app",
+        unit_after: %w(network.target),
+        install_wanted_by: 'multi-user.target',
+        service_type: 'forking',
+        service_user: "formsender-#{env}",
+        service_environment: { 'PATH' => "/home/formsender-#{env}/venv/bin" },
+        service_environment_file: nil,
+        service_working_directory: "/home/formsender-#{env}/formsender",
+        service_pid_file: "/home/formsender-#{env}/tmp/pids/gunicorn.pid",
+        service_exec_start: "/home/formsender-#{env}/venv/bin/gunicorn -b 0.0.0.0:#{port} "\
           "-D --pid /home/formsender-#{env}/tmp/pids/gunicorn.pid "\
           "--access-logfile /home/formsender-#{env}/logs/access.log "\
           "--error-logfile /home/formsender-#{env}/logs/error.log "\
           '--log-level debug '\
           'formsender.wsgi:application',
-        exec_reload: '/bin/kill -USR2 $MAINPID'
+        service_exec_reload: '/bin/kill -USR2 $MAINPID',
+        verify: false
       )
     end
 
@@ -73,17 +74,18 @@ describe 'osl-app::app2' do
     it do
       port = env == 'staging' ? 8084 : 8083
       expect(chef_run).to create_systemd_service("iam-#{env}").with(
-        description: 'osuosl metrics',
-        after: %w(network.target),
-        wanted_by: 'multi-user.target',
-        type: 'forking',
-        user: "iam-#{env}",
-        environment: {},
-        environment_file: nil,
-        working_directory: "/home/iam-#{env}/iam",
-        pid_file: "/home/iam-#{env}/pids/unicorn.pid",
-        exec_start: "/home/iam-#{env}/.rvm/bin/rvm 2.3.0 do bundle exec unicorn -l #{port} -c unicorn.rb -E deployment -D",
-        exec_reload: '/bin/kill -USR2 $MAINPID'
+        unit_description: 'osuosl metrics',
+        unit_after: %w(network.target),
+        install_wanted_by: 'multi-user.target',
+        service_type: 'forking',
+        service_user: "iam-#{env}",
+        service_environment: {},
+        service_environment_file: nil,
+        service_working_directory: "/home/iam-#{env}/iam",
+        service_pid_file: "/home/iam-#{env}/pids/unicorn.pid",
+        service_exec_start: "/home/iam-#{env}/.rvm/bin/rvm 2.3.0 do bundle exec unicorn -l #{port} -c unicorn.rb -E deployment -D",
+        service_exec_reload: '/bin/kill -USR2 $MAINPID',
+        verify: false
       )
     end
 
@@ -100,17 +102,18 @@ describe 'osl-app::app2' do
 
     it do
       expect(chef_run).to create_systemd_service("timesync-#{env}").with(
-        description: 'Time tracker',
-        after: %w(network.target),
-        wanted_by: 'multi-user.target',
-        type: 'simple',
-        user: "timesync-#{env}",
-        environment: {},
-        environment_file: "/home/timesync-#{env}/timesync.env",
-        working_directory: "/home/timesync-#{env}/timesync",
-        pid_file: "/home/timesync-#{env}/pids/timesync.pid",
-        exec_start: "/usr/local/bin/node /home/timesync-#{env}/timesync/src/app.js",
-        exec_reload: '/bin/kill -USR2 $MAINPID'
+        unit_description: 'Time tracker',
+        unit_after: %w(network.target),
+        install_wanted_by: 'multi-user.target',
+        service_type: 'simple',
+        service_user: "timesync-#{env}",
+        service_environment: {},
+        service_environment_file: "/home/timesync-#{env}/timesync.env",
+        service_working_directory: "/home/timesync-#{env}/timesync",
+        service_pid_file: "/home/timesync-#{env}/pids/timesync.pid",
+        service_exec_start: "/usr/local/bin/node /home/timesync-#{env}/timesync/src/app.js",
+        service_exec_reload: '/bin/kill -USR2 $MAINPID',
+        verify: false
       )
     end
 
@@ -157,17 +160,18 @@ describe 'osl-app::app2' do
 
   it do
     expect(chef_run).to create_systemd_service('replicant-redmine-unicorn').with(
-      description: 'Replicant Redmine',
-      after: %w(network.target),
-      wanted_by: 'multi-user.target',
-      type: 'simple',
-      user: 'replicant',
-      environment: { 'RAILS_ENV' => 'production' },
-      environment_file: nil,
-      working_directory: '/home/replicant/redmine',
-      pid_file: '/home/replicant/redmine/pids/unicorn.pid',
-      exec_start: '/home/replicant/.rvm/bin/rvm 2.6.3 do bundle exec unicorn -l 8090 -c unicorn.rb -E production -D',
-      exec_reload: '/bin/kill -USR2 $MAINPID'
+      unit_description: 'Replicant Redmine',
+      unit_after: %w(network.target),
+      install_wanted_by: 'multi-user.target',
+      service_type: 'simple',
+      service_user: 'replicant',
+      service_environment: { 'RAILS_ENV' => 'production' },
+      service_environment_file: nil,
+      service_working_directory: '/home/replicant/redmine',
+      service_pid_file: '/home/replicant/redmine/pids/unicorn.pid',
+      service_exec_start: '/home/replicant/.rvm/bin/rvm 2.6.3 do bundle exec unicorn -l 8090 -c unicorn.rb -E production -D',
+      service_exec_reload: '/bin/kill -USR2 $MAINPID',
+      verify: false
     )
   end
 

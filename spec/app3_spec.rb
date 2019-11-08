@@ -36,21 +36,22 @@ describe 'osl-app::app3' do
     it do
       port = env == 'staging' ? 8081 : 8080
       expect(chef_run).to create_systemd_service("streamwebs-#{env}-gunicorn").with(
-        description: "streamwebs #{env} app",
-        after: %w(network.target),
-        wanted_by: 'multi-user.target',
-        type: 'forking',
-        user: "streamwebs-#{env}",
-        environment: { 'PATH' => "/home/streamwebs-#{env}/venv/bin" },
-        environment_file: nil,
-        working_directory: "/home/streamwebs-#{env}/streamwebs/streamwebs_frontend",
-        pid_file: "/home/streamwebs-#{env}/tmp/pids/gunicorn.pid",
-        exec_start: "/home/streamwebs-#{env}/venv/bin/gunicorn -b 0.0.0.0:#{port} "\
+        unit_description: "streamwebs #{env} app",
+        unit_after: %w(network.target),
+        install_wanted_by: 'multi-user.target',
+        service_type: 'forking',
+        service_user: "streamwebs-#{env}",
+        service_environment: { 'PATH' => "/home/streamwebs-#{env}/venv/bin" },
+        service_environment_file: nil,
+        service_working_directory: "/home/streamwebs-#{env}/streamwebs/streamwebs_frontend",
+        service_pid_file: "/home/streamwebs-#{env}/tmp/pids/gunicorn.pid",
+        service_exec_start: "/home/streamwebs-#{env}/venv/bin/gunicorn -b 0.0.0.0:#{port} "\
           "-D --pid /home/streamwebs-#{env}/tmp/pids/gunicorn.pid "\
           "--access-logfile /home/streamwebs-#{env}/logs/access.log "\
           "--error-logfile /home/streamwebs-#{env}/logs/error.log "\
           'streamwebs_frontend.wsgi:application',
-        exec_reload: '/bin/kill -USR2 $MAINPID'
+        service_exec_reload: '/bin/kill -USR2 $MAINPID',
+        verify: false
       )
     end
 
@@ -69,18 +70,18 @@ describe 'osl-app::app3' do
     it do
       port = env == 'staging' ? 8082 : 8083
       expect(chef_run).to create_systemd_service("timesync-web-#{env}").with(
-        description: "timesync-web #{env} app",
-        after: %w(network.target),
-        wanted_by: 'multi-user.target',
-        type: 'forking',
-        user: "timesync-web-#{env}",
-        environment: { 'PATH' => "/home/timesync-web-#{env}/venv/bin" },
-        environment_file: nil,
-        working_directory: "/home/timesync-web-#{env}/timesync-web",
-        pid_file: "/home/timesync-web-#{env}/tmp/pids/gunicorn.pid",
-        exec_start: "/home/timesync-web-#{env}/venv/bin/gunicorn -b 0.0.0.0:#{port} "\
+        unit_description: "timesync-web #{env} app",
+        unit_after: %w(network.target),
+        install_wanted_by: 'multi-user.target',
+        service_type: 'forking',
+        service_user: "timesync-web-#{env}",
+        service_environment: { 'PATH' => "/home/timesync-web-#{env}/venv/bin" },
+        service_environment_file: nil,
+        service_working_directory: "/home/timesync-web-#{env}/timesync-web",
+        service_pid_file: "/home/timesync-web-#{env}/tmp/pids/gunicorn.pid",
+        service_exec_start: "/home/timesync-web-#{env}/venv/bin/gunicorn -b 0.0.0.0:#{port} "\
           "-D --pid /home/timesync-web-#{env}/tmp/pids/gunicorn.pid wsgi:app",
-        exec_reload: '/bin/kill -USR2 $MAINPID'
+        service_exec_reload: '/bin/kill -USR2 $MAINPID'
       )
     end
   end
