@@ -87,7 +87,7 @@ describe 'osl-app::app3' do
 
   %w(staging production).each do |env|
     it do
-      expect(chef_run).to install_sudo("streamwebs-#{env}").with(
+      expect(chef_run).to create_sudo("streamwebs-#{env}").with(
         commands: ["/usr/bin/systemctl enable streamwebs-#{env}-gunicorn",
                    "/usr/bin/systemctl disable streamwebs-#{env}-gunicorn",
                    "/usr/bin/systemctl stop streamwebs-#{env}-gunicorn",
@@ -100,7 +100,7 @@ describe 'osl-app::app3' do
     end
 
     it do
-      expect(chef_run).to install_sudo("timesync-web-#{env}").with(
+      expect(chef_run).to create_sudo("timesync-web-#{env}").with(
         commands: ["/usr/bin/systemctl enable timesync-web-#{env}",
                    "/usr/bin/systemctl disable timesync-web-#{env}",
                    "/usr/bin/systemctl stop timesync-web-#{env}",
