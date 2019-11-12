@@ -1,0 +1,7 @@
+{
+    "id": "openid-staging",
+    "username": "openid-staging",
+    "home": "/home/openid-staging",
+    "ssh_keygen": "false",
+    "password": "*"
+}

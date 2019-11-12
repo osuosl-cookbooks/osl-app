@@ -1,0 +1,7 @@
+{
+    "id": "openid-production",
+    "username": "openid-production",
+    "home": "/home/openid-production",
+    "ssh_keygen": "false",
+    "password": "*"
+}

@@ -23,23 +23,18 @@ action :create do
   end
 
   systemd_service new_resource.service_name do
-    description new_resource.description unless new_resource.description.nil?
-    after new_resource.service_after
-    install do
-      wanted_by new_resource.wanted_by
-    end
-
-    service do
-      type new_resource.service_type
-      user new_resource.user
-      environment new_resource.environment
-      environment_file new_resource.environment_file unless new_resource.environment_file.nil?
-      working_directory new_resource.working_directory unless new_resource.working_directory.nil?
-      pid_file new_resource.pid_file
-      exec_start new_resource.start_cmd
-      exec_reload new_resource.reload_cmd
-    end
-
+    unit_description new_resource.description unless new_resource.description.nil?
+    unit_after new_resource.service_after
+    install_wanted_by new_resource.wanted_by
+    service_type new_resource.service_type
+    service_user new_resource.user
+    service_environment new_resource.environment
+    service_environment_file new_resource.environment_file unless new_resource.environment_file.nil?
+    service_working_directory new_resource.working_directory unless new_resource.working_directory.nil?
+    service_pid_file new_resource.pid_file
+    service_exec_start new_resource.start_cmd
+    service_exec_reload new_resource.reload_cmd
+    verify false
     action [:create, :enable]
   end
 end

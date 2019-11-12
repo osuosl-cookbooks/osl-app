@@ -7,7 +7,7 @@
   end
 end
 
-describe command('node --version') do
+describe command('/usr/local/bin/node --version') do
   its('exit_status') { should eq 0 }
   its('stdout') { should match(/v6\.9\.1/) }
 end

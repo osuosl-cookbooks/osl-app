@@ -40,84 +40,66 @@ end
 #### Systemd Services ####
 
 systemd_service 'openid-staging-unicorn' do
-  description 'openid staging app'
-  after %w(network.target)
-  install do
-    wanted_by 'multi-user.target'
-  end
-  service do
-    type 'forking'
-    user 'openid-staging'
-    environment 'RAILS_ENV' => 'staging'
-    working_directory '/home/openid-staging/current'
-    pid_file '/home/openid-staging/current/tmp/pids/unicorn.pid'
-    exec_start '/home/openid-staging/.rvm/bin/rvm 2.5.3 do bundle exec '\
-    'unicorn -c /home/openid-staging/current/config/unicorn/staging.rb -E '\
-    'deployment -D'
-    exec_reload '/bin/kill -USR2 $MAINPID'
-  end
+  unit_description 'openid staging app'
+  unit_after %w(network.target)
+  install_wanted_by 'multi-user.target'
+  service_type 'forking'
+  service_user 'openid-staging'
+  service_environment 'RAILS_ENV' => 'staging'
+  service_working_directory '/home/openid-staging/current'
+  service_pid_file '/home/openid-staging/current/tmp/pids/unicorn.pid'
+  service_exec_start '/home/openid-staging/.rvm/bin/rvm 2.5.3 do bundle exec unicorn -c /home/openid-staging/current/config/unicorn/staging.rb -E deployment -D'
+  service_exec_reload '/bin/kill -USR2 $MAINPID'
+  verify false
   action [:create, :enable]
 end
 
 systemd_service 'openid-staging-delayed-job' do
-  description 'openid delayed job'
-  after %w(network.target openid-staging-unicorn.service)
-  wants %w(openid-staging-unicorn.service)
-  install do
-    wanted_by 'multi-user.target'
-  end
-  service do
-    type 'forking'
-    user 'openid-staging'
-    environment 'RAILS_ENV' => 'staging'
-    working_directory '/home/openid-staging/current'
-    exec_start '/home/openid-staging/.rvm/bin/rvm 2.5.3 do bundle exec '\
-    'bin/delayed_job -n 2 start'
-    exec_reload '/home/openid-staging/.rvm/bin/rvm 2.5.3 do bundle exec '\
-    'bin/delayed_job -n 2 restart'
-  end
+  unit_description 'openid delayed job'
+  unit_after %w(network.target openid-staging-unicorn.service)
+  unit_wants %w(openid-staging-unicorn.service)
+  install_wanted_by 'multi-user.target'
+  service_type 'forking'
+  service_user 'openid-staging'
+  service_environment 'RAILS_ENV' => 'staging'
+  service_working_directory '/home/openid-staging/current'
+  service_exec_start '/home/openid-staging/.rvm/bin/rvm 2.5.3 do bundle exec bin/delayed_job -n 2 start'
+  service_exec_reload '/home/openid-staging/.rvm/bin/rvm 2.5.3 do bundle exec bin/delayed_job -n 2 restart'
+  verify false
   action [:create, :enable]
 end
 
 systemd_service 'openid-production-unicorn' do
-  description 'openid production app'
-  after %w(network.target)
-  install do
-    wanted_by 'multi-user.target'
-  end
-  service do
-    type 'forking'
-    user 'openid-production'
-    environment(RAILS_ENV: 'production',
-                SECRET_KEY_BASE: openid_secrets['secret_key_base'],
-                BRAINTREE_ACCESS_TOKEN: openid_secrets['braintree_access_token'])
-    working_directory '/home/openid-production/current'
-    pid_file '/home/openid-production/current/tmp/pids/unicorn.pid'
-    exec_start '/home/openid-production/.rvm/bin/rvm 2.5.3 do bundle exec '\
-    'unicorn -c /home/openid-production/current/config/unicorn/production.rb '\
-    '-E deployment -D'
-    exec_reload '/bin/kill -USR2 $MAINPID'
-  end
+  unit_description 'openid production app'
+  unit_after %w(network.target)
+  install_wanted_by 'multi-user.target'
+  service_type 'forking'
+  service_user 'openid-production'
+  service_environment(
+    RAILS_ENV: 'production',
+    SECRET_KEY_BASE: openid_secrets['secret_key_base'],
+    BRAINTREE_ACCESS_TOKEN: openid_secrets['braintree_access_token']
+  )
+  service_working_directory '/home/openid-production/current'
+  service_pid_file '/home/openid-production/current/tmp/pids/unicorn.pid'
+  service_exec_start '/home/openid-production/.rvm/bin/rvm 2.5.3 do bundle exec unicorn -c /home/openid-production/current/config/unicorn/production.rb -E deployment -D'
+  service_exec_reload '/bin/kill -USR2 $MAINPID'
+  verify false
   action [:create, :enable]
 end
 
 systemd_service 'openid-production-delayed-job' do
-  description 'openid delayed job'
-  after %w(network.target openid-production-unicorn.service)
-  wants %w(openid-production-unicorn.service)
-  install do
-    wanted_by 'multi-user.target'
-  end
-  service do
-    type 'forking'
-    user 'openid-production'
-    environment 'RAILS_ENV' => 'production'
-    working_directory '/home/openid-production/current'
-    exec_start '/home/openid-production/.rvm/bin/rvm 2.5.3 do bundle exec '\
-    'bin/delayed_job -n 2 start'
-    exec_reload '/home/openid-production/.rvm/bin/rvm 2.5.3 do bundle exec '\
-    'bin/delayed_job -n 2 restart'
-  end
+  unit_description 'openid delayed job'
+  unit_after %w(network.target openid-production-unicorn.service)
+  unit_wants %w(openid-production-unicorn.service)
+  install_wanted_by 'multi-user.target'
+  service_type 'forking'
+  service_user 'openid-production'
+  service_environment 'RAILS_ENV' => 'production'
+  service_working_directory '/home/openid-production/current'
+  service_exec_start '/home/openid-production/.rvm/bin/rvm 2.5.3 do bundle exec bin/delayed_job -n 2 start'
+  service_exec_reload '/home/openid-production/.rvm/bin/rvm 2.5.3 do bundle exec bin/delayed_job -n 2 restart'
+  verify false
   action [:create, :enable]
 end
 
