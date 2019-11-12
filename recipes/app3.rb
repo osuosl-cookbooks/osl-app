@@ -107,7 +107,7 @@ end
 mulgara_redmine_creds = data_bag_item('mulgara_redmine', 'mysql_creds')
 
 docker_image 'library/redmine' do
-  tag '4.0.4'
+  tag '4.0.5'
   action :pull
 end
 
@@ -120,7 +120,7 @@ mulgara_db_host = if node['osl-app'].attribute?('db_hostname')
 
 docker_container 'code.mulgara.org' do
   repo 'redmine'
-  tag '4.0.4'
+  tag '4.0.5'
   port '8084:3000'
   restart_policy 'always'
   volumes ['/data/docker/code.mulgara.org:/usr/src/redmine/files']

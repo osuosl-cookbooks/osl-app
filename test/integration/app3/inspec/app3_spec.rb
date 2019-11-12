@@ -33,15 +33,15 @@ end
      end
    end
 
-describe docker.images.where { repository == 'redmine' && tag == '4.0.4' } do
+describe docker.images.where { repository == 'redmine' && tag == '4.0.5' } do
   it { should exist }
 end
 
 describe docker_container('code.mulgara.org') do
   it { should exist }
   it { should be_running }
-  its('image') { should eq 'redmine:4.0.4' }
+  its('image') { should eq 'redmine:4.0.5' }
   its('repo') { should eq 'redmine' }
-  its('tag') { should eq '4.0.4' }
+  its('tag') { should eq '4.0.5' }
   its('ports') { should eq '0.0.0.0:8084->3000/tcp' }
 end
