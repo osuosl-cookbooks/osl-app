@@ -87,7 +87,7 @@ describe 'osl-app::app3' do
 
   %w(staging production).each do |env|
     it do
-      expect(chef_run).to install_sudo("streamwebs-#{env}").with(
+      expect(chef_run).to create_sudo("streamwebs-#{env}").with(
         commands: ["/usr/bin/systemctl enable streamwebs-#{env}-gunicorn",
                    "/usr/bin/systemctl disable streamwebs-#{env}-gunicorn",
                    "/usr/bin/systemctl stop streamwebs-#{env}-gunicorn",
@@ -100,7 +100,7 @@ describe 'osl-app::app3' do
     end
 
     it do
-      expect(chef_run).to install_sudo("timesync-web-#{env}").with(
+      expect(chef_run).to create_sudo("timesync-web-#{env}").with(
         commands: ["/usr/bin/systemctl enable timesync-web-#{env}",
                    "/usr/bin/systemctl disable timesync-web-#{env}",
                    "/usr/bin/systemctl stop timesync-web-#{env}",
@@ -145,14 +145,14 @@ describe 'osl-app::app3' do
 
   it do
     expect(chef_run).to pull_docker_image('library/redmine').with(
-      tag: '4.0.4'
+      tag: '4.0.5'
     )
   end
 
   it do
     expect(chef_run).to run_docker_container('code.mulgara.org').with(
       repo: 'redmine',
-      tag: '4.0.4',
+      tag: '4.0.5',
       port: '8084:3000',
       restart_policy: 'always',
       # This needs to be volumes_binds, since the volumes property gets coerced into a volumes_binds property if it's
