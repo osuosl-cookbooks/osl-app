@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+2.1.1 (2019-11-12)
+------------------
+- Bump redmine to 4.0.5 to work around upstream issue
+
 2.1.0 (2019-09-24)
 ------------------
 - Add code.mulgara.org container, add docker tests
