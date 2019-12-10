@@ -12,15 +12,13 @@ describe 'osl-app::default' do
   end
 
   it do
-    expect(chef_run).to include_recipe 'yum-epel::default'
-  end
-
-  it do
-    expect(chef_run).to include_recipe 'osl-mysql::client'
-  end
-
-  it do
-    expect(chef_run).to include_recipe 'base::python'
+    %w(
+      yum-epel::default
+      osl-mysql::default
+      base::python
+    ).each do |p|
+      expect(chef_run).to include_recipe(p)
+    end
   end
 
   it do
