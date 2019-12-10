@@ -20,6 +20,10 @@ describe 'osl-app::default' do
   end
 
   it do
+    expect(chef_run).to include_recipe 'base::python'
+  end
+
+  it do
     %w(
       automake
       freetype-devel
@@ -43,10 +47,6 @@ describe 'osl-app::default' do
     ).each do |p|
       expect(chef_run).to install_package(p)
     end
-  end
-
-  it do
-    expect(chef_run).to install_python_runtime('2')
   end
 
   it do

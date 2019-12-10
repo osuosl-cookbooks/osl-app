@@ -17,6 +17,7 @@
 # limitations under the License.
 include_recipe 'yum-epel'
 include_recipe 'osl-mysql::client'
+include_recipe 'base::python'
 
 node.override['user']['home_dir_mode'] = '2750'
 node.default['poise-python']['provider'] = 'system'
@@ -42,10 +43,6 @@ end
    freetype-devel libpng-devel libjpeg-turbo-devel postgis
    python-psycopg2).each do |p|
   package p
-end
-
-python_runtime '2' do
-  pip_version '18.0' if node['platform_version'].to_i >= 7
 end
 
 # Keep systemd services private from non-root users
