@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+2.3.1 (2019-12-11)
+------------------
+- Migrate away from using poise-python
+
 2.3.0 (2019-12-03)
 ------------------
 - Chef 14
