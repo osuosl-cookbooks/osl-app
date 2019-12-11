@@ -20,7 +20,6 @@ include_recipe 'osl-mysql::client'
 include_recipe 'base::python'
 
 node.override['user']['home_dir_mode'] = '2750'
-node.default['poise-python']['provider'] = 'system'
 
 # WARNING!
 # If this gets updated, all NodeJS apps running will need to have their
