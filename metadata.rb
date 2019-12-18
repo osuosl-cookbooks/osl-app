@@ -4,7 +4,7 @@ maintainer_email 'chef@osuosl.org'
 issues_url       'https://github.com/osuosl-cookbooks/osl-app/issues'
 source_url       'https://github.com/osuosl-cookbooks/osl-app'
 license          'Apache-2.0'
-chef_version     '>= 12.18' if respond_to?(:chef_version)
+chef_version     '>= 14.0'
 description      'Installs/Configures osl-app'
 long_description 'Installs/Configures osl-app'
 version          '2.3.1'
