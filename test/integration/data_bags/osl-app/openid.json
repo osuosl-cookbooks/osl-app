@@ -1,16 +1,30 @@
 {
   "id": "openid",
   "secret_key_base": {
-    "encrypted_data": "HI8wmRswSKuYAHey9h3wk9qicabD1GjI2TkFkjzp6BsBjsvRPDh7gD/iKhuK\nt29zeQ4Ia+4+yjyD7Fq0Hk4D9SW+/XbHXOjbz0jmXJ91uMaqFfYbWcXhYL6D\n/JEHP2FV2QR/PlWDNKrf8n86JHlKWdDz3SIoAWyzPi1lgBSYw9T0Z2iupNGd\n8FVuMOfqpo+3u45hb2dySI8kp1Z4GrGKWw==\n",
-    "hmac": "aALe8OIYUCwm1i/H6gIJ0jGn6rcYN0QiojXmHdny3ro=\n",
-    "iv": "y+QGvrPX9yNgntif1RxdKQ==\n",
+    "encrypted_data": "4z6gQNulerYFNXVusSM4CtMOrcHOLfBc5FAso9SkSYINk4E02kgVPo1BW+9s\no1bkpGWMMeP/YAk0j4JutOFN7+OgVRKBqm1k6xVtVAFCMFrI/SDdKv8Ei0YT\ner9eo/R0qQKu/sxKVzm9jUtsaH0L7uD3r87ikYwJQJLUIaWN61XudtHw4j2Y\nDW06ziHhT+u9BQA1nbPPwYU09CfeGlf+Mw==\n",
+    "hmac": "nBdQfz3B/Ocyk1dYfEVv5pY+zdUNBIrzwGcjbT7th4Q=\n",
+    "iv": "2FM6a7vaq32M4mz3TYDthA==\n",
     "version": 2,
     "cipher": "aes-256-cbc"
   },
   "braintree_access_token": {
-    "encrypted_data": "zJtPlAud7EYFZZCBnCGUy2+r0vhcE1Mhlw9Ol9zO4t4N8KGm8vM+6kYq4tHO\nFqICBEtxzrJAcN15glMOUkq2dU7/yiTIzpXyzSabhQFRTSo=\n",
-    "hmac": "pq+U6VcFf6dhcbKD8vJsEsa/Cz4eUsJdIi4FFU/HxMs=\n",
-    "iv": "QU/3akDhdTjeRIapobCaGw==\n",
+    "encrypted_data": "Bmw4Wmu7BCPfKmGwmg8uHnVnnjkWxXgpATtjIXHnUZ2ENlYd9ArggppmezM1\nCQEW6RHnjPxypd4uW69drGQ86vfhBPfpZs5dZvf0Akm82bU=\n",
+    "hmac": "wZa5holyNLqvaiXQlxVPVa3CYB3miR33Y515AUpe7JY=\n",
+    "iv": "XyML5jcJlR/MjMI9NYZ9xQ==\n",
+    "version": 2,
+    "cipher": "aes-256-cbc"
+  },
+  "recaptcha_site_key": {
+    "encrypted_data": "eKG3WpnogrI3U+HdCfSEcoVyJAuDGoSDHgUyIfln643Yw7VGWVBj43b43nyE\n68POhjap4M27pWWYC0deR7JmNg==\n",
+    "hmac": "5JpbvOEbJcdLDS2oEkEV8CqX75iK+e47WV7gsMnajVE=\n",
+    "iv": "7DM9uT/b8NDN1G8hrMqaXw==\n",
+    "version": 2,
+    "cipher": "aes-256-cbc"
+  },
+  "recaptcha_secret_key": {
+    "encrypted_data": "X3ntz6aQQ3K0uPI/32hk9e8oKTZuUR0ft3Y79nuN92Roes1/FrCrF0lKWmUB\n7vP+zCjOexybA1P8Op1ZKit9jg==\n",
+    "hmac": "lxY8LQYA5DfdJab5kuqfirGWnI3Pc0uC9q4YOa5o1yE=\n",
+    "iv": "1Tv8XA09Ah1PKJ+GF5EhEg==\n",
     "version": 2,
     "cipher": "aes-256-cbc"
   }
