@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+2.4.1 (2020-03-10)
+------------------
+- Added recaptcha keys and stubbed them in test
+
 2.4.0 (2019-12-20)
 ------------------
 - Chef 14 post-migration fixes
