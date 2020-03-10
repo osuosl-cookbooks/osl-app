@@ -78,7 +78,9 @@ systemd_service 'openid-production-unicorn' do
   service_environment(
     RAILS_ENV: 'production',
     SECRET_KEY_BASE: openid_secrets['secret_key_base'],
-    BRAINTREE_ACCESS_TOKEN: openid_secrets['braintree_access_token']
+    BRAINTREE_ACCESS_TOKEN: openid_secrets['braintree_access_token'],
+    RECAPTCHA_SITE_KEY: openid_secrets['recaptcha_site_key'],
+    RECAPTCHA_SECRET_KEY: openid_secrets['recaptcha_secret_key']
   )
   service_working_directory '/home/openid-production/current'
   service_pid_file '/home/openid-production/current/tmp/pids/unicorn.pid'

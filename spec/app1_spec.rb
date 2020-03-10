@@ -11,7 +11,9 @@ describe 'osl-app::app1' do
       secret_key_base: '7eef5c70ecb083192f46e601144f9d77c9b66061b634963a507'\
         '0fb086ae78bc9353af2c6311edb168abbb9d0bd428f800a0b1713534cf4ad239e8d'\
         '07fdd16c34',
-      braintree_access_token: 'access_token$production$mnlc24xq7uGUqKczYhg5PpNGiVOkss'
+      braintree_access_token: 'access_token$production$mnlc24xq7uGUqKczYhg5PpNGiVOkss',
+      recaptcha_site_key: '4infjrcfj9e4mcerefa89cm8h4rvnmv9e4cu8anh',
+      recaptcha_secret_key: 'hxia4nvuirax4hfx8cem450tuw5uwvn74xgq783y'
     )
   end
 
