@@ -1,8 +1,8 @@
 #
-# Cookbook Name:: osl-app
+# Cookbook:: osl-app
 # Recipe:: app3
 #
-# Copyright 2016 Oregon State University
+# Copyright:: 2016-2020, Oregon State University
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ include_recipe 'osl-app::default'
 include_recipe 'osl-nginx'
 include_recipe 'osl-docker'
 
+# cookstyle: disable ChefCorrectness/NodeNormal
 node.normal['users'] = %w(streamwebs-production streamwebs-staging
                           timesync-web-staging timesync-web-production)
 
