@@ -48,6 +48,6 @@ describe 'osl-app::default' do
   end
 
   it do
-    expect(chef_run).to create_directory('/etc/systemd/system').with(mode: 0750)
+    expect(chef_run).to create_directory('/etc/systemd/system').with(mode: '750')
   end
 end
