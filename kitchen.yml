@@ -18,6 +18,9 @@ suites:
       - recipe[sudo]
       - recipe[osl-app::default]
   - name: app1
+    provisioner:
+      name: chef_zero
+      enforce_idempotency: false
     attributes:
       users:
         - test1-staging
@@ -26,6 +29,9 @@ suites:
       - recipe[user::data_bag]
       - recipe[osl-app::app1]
   - name: app2
+    provisioner:
+      name: chef_zero
+      enforce_idempotency: false
     attributes:
       users:
         - formsender-staging
@@ -39,6 +45,9 @@ suites:
       - recipe[user::data_bag]
       - recipe[osl-app::app2]
   - name: app3
+    provisioner:
+      name: chef_zero
+      enforce_idempotency: false
     attributes:
       osl-mysql:
         enable_percona_client: true
