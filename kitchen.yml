@@ -2,7 +2,7 @@
 verifier:
   name: inspec
 provisioner:
-  name: chef_zero
+  name: chef_solo
   data_bag_path: test/integration/data_bags
   encrypted_data_bag_secret_key_path: test/integration/encrypted_data_bag_secret
   enforce_idempotency: true
@@ -19,7 +19,7 @@ suites:
       - recipe[osl-app::default]
   - name: app1
     provisioner:
-      name: chef_zero
+      name: chef_solo
       enforce_idempotency: false # fails to converge with idempotency enforced
     attributes:
       users:
@@ -30,7 +30,7 @@ suites:
       - recipe[osl-app::app1]
   - name: app2
     provisioner:
-      name: chef_zero
+      name: chef_solo
       enforce_idempotency: false # fails to converge with idempotency enforced
     attributes:
       users:
@@ -46,7 +46,7 @@ suites:
       - recipe[osl-app::app2]
   - name: app3
     provisioner:
-      name: chef_zero
+      name: chef_solo
       enforce_idempotency: false # fails to converge with idempotency enforced
     attributes:
       osl-mysql:
