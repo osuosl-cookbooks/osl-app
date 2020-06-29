@@ -29,7 +29,7 @@ sudo 'openid-staging' do
   user 'openid-staging'
   commands sudo_commands('openid-staging-unicorn', 'openid-staging-delayed-job')
   nopasswd true
-  not_if "getent passwd openid-staging"
+  not_if 'getent passwd openid-staging'
 end
 
 # fails idempotency
@@ -38,7 +38,7 @@ sudo 'openid-production' do
   commands sudo_commands('openid-production-unicorn',
                          'openid-production-delayed-job')
   nopasswd true
-  not_if "getent passwd openid-production"
+  not_if 'getent passwd openid-production'
 end
 
 #### Systemd Services ####
