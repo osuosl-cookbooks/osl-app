@@ -2,7 +2,7 @@
 verifier:
   name: inspec
 provisioner:
-  name: chef_solo
+  name: chef_zero
   data_bag_path: test/integration/data_bags
   encrypted_data_bag_secret_key_path: test/integration/encrypted_data_bag_secret
   enforce_idempotency: true
@@ -20,7 +20,7 @@ suites:
   - name: app1
     provisioner:
       name: chef_zero
-      enforce_idempotency: false
+      enforce_idempotency: false # fails to converge with idempotency enforced
     attributes:
       users:
         - test1-staging
@@ -31,7 +31,7 @@ suites:
   - name: app2
     provisioner:
       name: chef_zero
-      enforce_idempotency: false
+      enforce_idempotency: false # fails to converge with idempotency enforced
     attributes:
       users:
         - formsender-staging
@@ -47,7 +47,7 @@ suites:
   - name: app3
     provisioner:
       name: chef_zero
-      enforce_idempotency: false
+      enforce_idempotency: false # fails to converge with idempotency enforced
     attributes:
       osl-mysql:
         enable_percona_client: true

@@ -24,17 +24,21 @@ openid_secrets = data_bag_item('osl-app', 'openid')
 
 #### Sudo Privs ####
 
+# fails idempotency
 sudo 'openid-staging' do
   user 'openid-staging'
   commands sudo_commands('openid-staging-unicorn', 'openid-staging-delayed-job')
   nopasswd true
+  not_if "getent passwd openid-staging"
 end
 
+# fails idempotency
 sudo 'openid-production' do
   user 'openid-production'
   commands sudo_commands('openid-production-unicorn',
                          'openid-production-delayed-job')
   nopasswd true
+  not_if "getent passwd openid-production"
 end
 
 #### Systemd Services ####
