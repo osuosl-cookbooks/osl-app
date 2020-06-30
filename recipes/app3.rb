@@ -23,9 +23,8 @@ include_recipe 'osl-app::default'
 include_recipe 'osl-nginx'
 include_recipe 'osl-docker'
 
-# cookstyle: disable ChefCorrectness/NodeNormal
-node.normal['users'] = %w(streamwebs-production streamwebs-staging
-                          timesync-web-staging timesync-web-production)
+node.default['users'] = %w(streamwebs-production streamwebs-staging
+                           timesync-web-staging timesync-web-production)
 
 #### Apps ####
 

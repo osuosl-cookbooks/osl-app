@@ -18,7 +18,7 @@
 
 include_recipe 'osl-app::default'
 
-node.normal['users'] = %w(openid-staging openid-production) # cookstyle: disable ChefCorrectness/NodeNormal
+node.default['users'] = %w(openid-staging openid-production)
 
 openid_secrets = data_bag_item('osl-app', 'openid')
 

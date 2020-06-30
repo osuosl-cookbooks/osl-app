@@ -18,10 +18,9 @@
 
 include_recipe 'osl-app::default'
 
-# cookstyle: disable ChefCorrectness/NodeNormal
-node.normal['users'] = %w(formsender-production formsender-staging
-                          iam-staging iam-production
-                          timesync-staging timesync-production replicant)
+node.default['users'] = %w(formsender-production formsender-staging
+                           iam-staging iam-production
+                           timesync-staging timesync-production replicant)
 
 #### Apps ####
 
