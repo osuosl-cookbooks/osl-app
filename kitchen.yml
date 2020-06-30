@@ -18,9 +18,6 @@ suites:
       - recipe[sudo]
       - recipe[osl-app::default]
   - name: app1
-    provisioner:
-      name: chef_solo
-      enforce_idempotency: false # fails to converge with idempotency enforced
     attributes:
       users:
         - test1-staging
@@ -29,9 +26,6 @@ suites:
       - recipe[user::data_bag]
       - recipe[osl-app::app1]
   - name: app2
-    provisioner:
-      name: chef_solo
-      enforce_idempotency: false # fails to converge with idempotency enforced
     attributes:
       users:
         - formsender-staging
