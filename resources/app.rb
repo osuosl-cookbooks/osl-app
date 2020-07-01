@@ -8,12 +8,12 @@ property :service_name, String, default: lazy { name }
 property :service_type, String, default: 'forking'
 property :start_cmd, String, required: true
 property :reload_cmd, String, default: '/bin/kill -USR2 $MAINPID'
-property :description, [String, nil], default: nil
+property :description, [String, nil]
 property :environment, Hash, default: {}
 property :pid_file, String, required: true
 property :wanted_by, String, default: 'multi-user.target'
-property :working_directory, [String, nil], default: nil
-property :environment_file, [String, nil], default: nil
+property :working_directory, [String, nil]
+property :environment_file, [String, nil]
 
 action :create do
   sudo new_resource.user do

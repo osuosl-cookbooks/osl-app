@@ -15,7 +15,7 @@ ruby_block 'wait_for_mulgara' do
         sleep 5
         print "\nStill waiting for code.mulgara.org to start.. #{times * 5} seconds"
       end
-      Chef::Application.fatal!('Failed to start code.mulgara.org') if times > 30
+      raise('Failed to start code.mulgara.org') if times > 30
       break if client && client.code == 200
     end
   end

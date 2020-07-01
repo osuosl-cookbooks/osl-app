@@ -2,8 +2,12 @@
 verifier:
   name: inspec
 provisioner:
+  name: chef_solo
   data_bag_path: test/integration/data_bags
   encrypted_data_bag_secret_key_path: test/integration/encrypted_data_bag_secret
+  enforce_idempotency: true
+  multiple_converge: 2
+  deprecations_as_errors: true
 
 suites:
   - name: default
@@ -35,6 +39,9 @@ suites:
       - recipe[user::data_bag]
       - recipe[osl-app::app2]
   - name: app3
+    provisioner:
+      name: chef_solo
+      enforce_idempotency: false # fails to converge with idempotency enforced
     attributes:
       osl-mysql:
         enable_percona_client: true
