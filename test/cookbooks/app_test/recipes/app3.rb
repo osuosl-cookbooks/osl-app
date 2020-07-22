@@ -9,7 +9,7 @@
 end
 
 include_recipe 'osl-mysql::server'
-include_recipe 'build-essential'
+build_essential 'install compilation tools'
 
 mysql2_chef_gem 'default' do
   provider Chef::Provider::Mysql2ChefGem::Percona

@@ -1,8 +1,8 @@
 #
-# Cookbook Name:: osl-app
+# Cookbook:: osl-app
 # Recipe:: default
 #
-# Copyright 2016 Oregon State University
+# Copyright:: 2016-2020, Oregon State University
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -46,7 +46,7 @@ end
 
 # Keep systemd services private from non-root users
 directory '/etc/systemd/system' do
-  mode 0750
+  mode '750'
 end
 
 # rewind the sudoers template to support sudoers_d
