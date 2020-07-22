@@ -146,14 +146,14 @@ describe 'osl-app::app3' do
 
   it do
     expect(chef_run).to pull_docker_image('library/redmine').with(
-      tag: '4.0.5'
+      tag: '4.1.1'
     )
   end
 
   it do
     expect(chef_run).to run_docker_container('code.mulgara.org').with(
       repo: 'redmine',
-      tag: '4.0.5',
+      tag: '4.1.1',
       port: '8084:3000',
       restart_policy: 'always',
       # This needs to be volumes_binds, since the volumes property gets coerced into a volumes_binds property if it's
