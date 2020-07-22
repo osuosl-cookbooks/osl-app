@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+2.5.1 (2020-07-22)
+------------------
+- Update Redmine to 4.1.1
+
 2.5.0 (2020-07-01)
 ------------------
 - Chef 15 Fixes
