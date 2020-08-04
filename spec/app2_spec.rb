@@ -7,6 +7,15 @@ describe 'osl-app::app2' do
 
   include_context 'common_stubs'
 
+  before do
+    stub_data_bag_item('replicant_redmine', 'mysql_creds').and_return(
+      db_db: 'fakedb',
+      db_hostname: 'testdb.osuosl.bak',
+      db_passwd: 'fakepw',
+      db_user: 'fakeuser'
+    )
+  end
+
   %w(staging production).each do |env|
     it do
       port = env == 'staging' ? 8086 : 8085
@@ -134,7 +143,7 @@ describe 'osl-app::app2' do
   end
 
   it do
-    expect(chef_run).to create_osl_app('replicant-redmine-unicorn').with(
+    expect(chef_run).to stop_osl_app('replicant-redmine-unicorn').with(
       user: 'replicant',
       description: 'Replicant Redmine',
       start_cmd: '/home/replicant/.rvm/bin/rvm 2.6.3 do bundle exec unicorn -l 8090 -c unicorn.rb -E production -D',
@@ -146,44 +155,49 @@ describe 'osl-app::app2' do
   end
 
   it do
-    expect(chef_run).to create_sudo('replicant').with(
-      commands: ['/usr/bin/systemctl enable replicant-redmine-unicorn',
-                 '/usr/bin/systemctl disable replicant-redmine-unicorn',
-                 '/usr/bin/systemctl stop replicant-redmine-unicorn',
-                 '/usr/bin/systemctl start replicant-redmine-unicorn',
-                 '/usr/bin/systemctl status replicant-redmine-unicorn',
-                 '/usr/bin/systemctl reload replicant-redmine-unicorn',
-                 '/usr/bin/systemctl restart replicant-redmine-unicorn'],
-      nopasswd: true
-    )
-  end
-
-  it do
-    expect(chef_run).to create_systemd_service('replicant-redmine-unicorn').with(
-      unit_description: 'Replicant Redmine',
-      unit_after: %w(network.target),
-      install_wanted_by: 'multi-user.target',
-      service_type: 'simple',
-      service_user: 'replicant',
-      service_environment: { 'RAILS_ENV' => 'production' },
-      service_environment_file: nil,
-      service_working_directory: '/home/replicant/redmine',
-      service_pid_file: '/home/replicant/redmine/pids/unicorn.pid',
-      service_exec_start: '/home/replicant/.rvm/bin/rvm 2.6.3 do bundle exec unicorn -l 8090 -c unicorn.rb -E production -D',
-      service_exec_reload: '/bin/kill -USR2 $MAINPID',
-      verify: false
-    )
+    expect(chef_run).to stop_systemd_service('replicant-redmine-unicorn')
   end
 
   %w(formsender-production-gunicorn
      formsender-staging-gunicorn
      iam-production
      iam-staging
-     replicant-redmine-unicorn
      timesync-production
      timesync-staging).each do |s|
     it do
       expect(chef_run).to enable_systemd_service(s)
     end
+  end
+
+  it do
+    expect(chef_run).to create_directory('/data/docker/redmine.replicant.us').with(
+      recursive: true
+    )
+  end
+
+  it do
+    expect(chef_run).to pull_docker_image('library/redmine').with(
+      tag: '4.1.1'
+    )
+  end
+
+  it do
+    expect(chef_run).to run_docker_container('redmine.replicant.us').with(
+      repo: 'redmine',
+      tag: '4.1.1',
+      port: '8090:3000',
+      restart_policy: 'always',
+      # This needs to be volumes_binds, since the volumes property gets coerced into a volumes_binds property if it's
+      # passed an entry that specifies a bind mount
+      # https://github.com/chef-cookbooks/docker/blob/v4.9.3/libraries/docker_container.rb#L210
+      volumes_binds: ['/data/docker/redmine.replicant.us:/usr/src/redmine/files'],
+      env: [
+        'REDMINE_DB_MYSQL=testdb.osuosl.bak',
+        'REDMINE_DB_DATABASE=fakedb',
+        'REDMINE_DB_USERNAME=fakeuser',
+        'REDMINE_DB_PASSWORD=fakepw',
+        'REDMINE_PLUGINS_MIGRATE=1',
+      ]
+    )
   end
 end
