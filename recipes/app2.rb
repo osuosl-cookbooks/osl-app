@@ -102,7 +102,7 @@ osl_app 'replicant-redmine-unicorn' do
   environment 'RAILS_ENV' => 'production'
   working_directory '/home/replicant/redmine'
   pid_file '/home/replicant/redmine/pids/unicorn.pid'
-  action :stop
+  action [:stop, :disable] # TODO: remove this resource block after migration to docker complete
 end
 
 # Docker containers

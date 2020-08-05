@@ -51,6 +51,12 @@ end
 
 action :stop do
   systemd_service new_resource.service_name do
-    action [:stop, :disable]
+    action :stop
+  end
+end
+
+action :disable do
+  systemd_service new_resource.service_name do
+    action :disable
   end
 end
