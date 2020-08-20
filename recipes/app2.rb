@@ -16,7 +16,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Enable live-restore to keep containers running when docker restarts
+node.override['osl-docker']['service'] = { misc_opts: '--live-restore' }
+
 include_recipe 'osl-app::default'
+include_recipe 'osl-docker'
 
 node.default['users'] = %w(formsender-production formsender-staging
                            iam-staging iam-production
@@ -98,4 +102,40 @@ osl_app 'replicant-redmine-unicorn' do
   environment 'RAILS_ENV' => 'production'
   working_directory '/home/replicant/redmine'
   pid_file '/home/replicant/redmine/pids/unicorn.pid'
+  action [:stop, :disable] # TODO: remove this resource block after migration to docker complete
+end
+
+# Docker containers
+directory '/data/docker/redmine.replicant.us' do
+  recursive true
+end
+
+replicant_redmine_creds = data_bag_item('replicant_redmine', 'mysql_creds')
+
+docker_image 'library/redmine' do
+  tag '4.1.1'
+  action :pull
+end
+
+# Check if attribute is set for testing
+replicant_db_host = if node['osl-app'].attribute?('db_hostname')
+                      node['osl-app']['db_hostname']
+                    else
+                      replicant_redmine_creds['db_hostname']
+                    end
+
+docker_container 'redmine.replicant.us' do
+  repo 'redmine'
+  tag '4.1.1'
+  port '8090:3000'
+  restart_policy 'always'
+  volumes ['/data/docker/redmine.replicant.us:/usr/src/redmine/files']
+  env [
+    "REDMINE_DB_MYSQL=#{replicant_db_host}",
+    "REDMINE_DB_DATABASE=#{replicant_redmine_creds['db_db']}",
+    "REDMINE_DB_USERNAME=#{replicant_redmine_creds['db_user']}",
+    "REDMINE_DB_PASSWORD=#{replicant_redmine_creds['db_passwd']}",
+    'REDMINE_PLUGINS_MIGRATE=1',
+  ]
+  sensitive true
 end
