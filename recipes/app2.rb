@@ -112,7 +112,7 @@ end
 
 replicant_redmine_creds = data_bag_item('replicant_redmine', 'mysql_creds')
 
-docker_image 'library/redmine' do
+docker_image 'osuosl/redmine-replicant' do
   tag '4.1.1'
   action :pull
 end
@@ -125,7 +125,7 @@ replicant_db_host = if node['osl-app'].attribute?('db_hostname')
                     end
 
 docker_container 'redmine.replicant.us' do
-  repo 'redmine'
+  repo 'osuosl/redmine-replicant'
   tag '4.1.1'
   port '8090:3000'
   restart_policy 'always'

@@ -184,14 +184,14 @@ describe 'osl-app::app2' do
   end
 
   it do
-    expect(chef_run).to pull_docker_image('library/redmine').with(
+    expect(chef_run).to pull_docker_image('osuosl/redmine-replicant').with(
       tag: '4.1.1'
     )
   end
 
   it do
     expect(chef_run).to run_docker_container('redmine.replicant.us').with(
-      repo: 'redmine',
+      repo: 'osuosl/redmine-replicant',
       tag: '4.1.1',
       port: '8090:3000',
       restart_policy: 'always',
