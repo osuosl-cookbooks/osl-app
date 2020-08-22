@@ -1070,7 +1070,7 @@ CREATE TABLE `projects` (
 
 LOCK TABLES `projects` WRITE;
 /*!40000 ALTER TABLE `projects` DISABLE KEYS */;
-INSERT INTO `projects` VALUES (2,'replicant test project','','',1,NULL,'2019-09-23 19:25:29','2019-09-23 19:25:29','replicant-test-project',1,1,2,0,NULL,NULL);
+INSERT INTO `projects` VALUES (2,'replicant','','',1,NULL,'2019-09-23 19:25:29','2019-09-23 19:25:29','replicant',1,1,2,0,NULL,NULL);
 /*!40000 ALTER TABLE `projects` ENABLE KEYS */;
 UNLOCK TABLES;
 

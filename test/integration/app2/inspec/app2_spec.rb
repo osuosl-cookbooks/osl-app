@@ -16,18 +16,18 @@ describe http(
   enable_remote_worker: true
 ) do
   its('status') { should eq 200 }
-  its('body') { should match(%r{^<title>Replicant Redmine<\/title>$}) }
+  its('body') { should match(%r{<h1><span class="current-project">replicant<\/span><\/h1>}) }
 end
 
-describe docker.images.where { repository == 'redmine' && tag == '4.1.1' } do
+describe docker.images.where { repository == 'osuosl/redmine-replicant' && tag == '4.1.1' } do
   it { should exist }
 end
 
 describe docker_container('redmine.replicant.us') do
   it { should exist }
   it { should be_running }
-  its('image') { should eq 'redmine:4.1.1' }
-  its('repo') { should eq 'redmine' }
+  its('image') { should eq 'osuosl/redmine-replicant:4.1.1' }
+  its('repo') { should eq 'osuosl/redmine-replicant' }
   its('tag') { should eq '4.1.1' }
   its('ports') { should eq '0.0.0.0:8090->3000/tcp' }
 end
