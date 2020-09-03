@@ -4,7 +4,7 @@ describe 'osl-app::app3' do
   ALL_PLATFORMS.each do |plat|
     context "#{plat[:platform]} #{plat[:version]}" do
       cached(:chef_run) do
-        ChefSpec::SoloRunner.new(plat) do |_node, server|
+        ChefSpec::SoloRunner.new(plat.dup.merge(step_into: %w(osl_app))) do |_node, server|
         end.converge('sudo', described_recipe)
       end
 
@@ -149,14 +149,14 @@ describe 'osl-app::app3' do
 
       it do
         expect(chef_run).to pull_docker_image('library/redmine').with(
-          tag: '4.0.5'
+          tag: '4.1.1'
         )
       end
 
       it do
         expect(chef_run).to run_docker_container('code.mulgara.org').with(
           repo: 'redmine',
-          tag: '4.0.5',
+          tag: '4.1.1',
           port: '8084:3000',
           restart_policy: 'always',
           # This needs to be volumes_binds, since the volumes property gets coerced into a volumes_binds property if it's
@@ -173,61 +173,5 @@ describe 'osl-app::app3' do
         )
       end
     end
-  end
-
-  %w(streamwebs-production-gunicorn
-     streamwebs-staging-gunicorn
-     timesync-web-production
-     timesync-web-staging).each do |s|
-    it do
-      expect(chef_run).to enable_systemd_service(s)
-    end
-  end
-
-  it do
-    expect(chef_run).to modify_group('streamwebs-production').with(members: %w(streamwebs-production nginx))
-  end
-
-  it do
-    expect(chef_run).to modify_group('streamwebs-staging').with(members: %w(streamwebs-staging nginx))
-  end
-
-  it do
-    expect(chef_run).to create_nginx_app('app3.osuosl.org').with(
-      template: 'app-nginx.erb',
-      cookbook: 'osl-app'
-    )
-  end
-
-  it do
-    expect(chef_run).to create_directory('/data/docker/code.mulgara.org').with(
-      recursive: true
-    )
-  end
-
-  it do
-    expect(chef_run).to pull_docker_image('library/redmine').with(
-      tag: '4.1.1'
-    )
-  end
-
-  it do
-    expect(chef_run).to run_docker_container('code.mulgara.org').with(
-      repo: 'redmine',
-      tag: '4.1.1',
-      port: '8084:3000',
-      restart_policy: 'always',
-      # This needs to be volumes_binds, since the volumes property gets coerced into a volumes_binds property if it's
-      # passed an entry that specifies a bind mount
-      # https://github.com/chef-cookbooks/docker/blob/v4.9.3/libraries/docker_container.rb#L210
-      volumes_binds: ['/data/docker/code.mulgara.org:/usr/src/redmine/files'],
-      env: [
-        'REDMINE_DB_MYSQL=testdb.osuosl.bak',
-        'REDMINE_DB_DATABASE=fakedb',
-        'REDMINE_DB_USERNAME=fakeuser',
-        'REDMINE_DB_PASSWORD=fakepw',
-        'REDMINE_PLUGINS_MIGRATE=1',
-      ]
-    )
   end
 end
