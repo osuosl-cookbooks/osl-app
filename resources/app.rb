@@ -49,3 +49,15 @@ action :delete do
     action [:stop, :delete]
   end
 end
+
+action :stop do
+  systemd_service new_resource.service_name do
+    action :stop
+  end
+end
+
+action :disable do
+  systemd_service new_resource.service_name do
+    action :disable
+  end
+end
