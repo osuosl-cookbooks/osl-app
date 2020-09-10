@@ -1,4 +1,5 @@
 resource_name :osl_app
+provides :osl_app
 
 default_action :create
 
