@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+2.7.0 (2020-09-10)
+------------------
+- Chef 16 Fixes
+
 2.6.1 (2020-08-22)
 ------------------
 - Move to replicant to our custom docker image
