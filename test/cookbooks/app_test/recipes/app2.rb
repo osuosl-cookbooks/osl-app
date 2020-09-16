@@ -1,29 +1,16 @@
 include_recipe 'osl-mysql::server'
-build_essential 'install compilation tools'
 
-mysql2_chef_gem 'default' do
-  provider Chef::Provider::Mysql2ChefGem::Percona
-  action :install
+mariadb_database 'replicant_redmine' do
+  password 'password'
+  sql 'CREATE DATABASE replicant_redmine'
+  action :query
 end
 
-mysql_database 'replicant_redmine' do
-  connection(
-    host: '127.0.0.1',
-    user: 'root',
-    password: 'password'
-  )
-  action :create
-end
-
-mysql_database_user 'redmine' do
+mariadb_user 'redmine' do
   database_name 'replicant_redmine'
   password 'passwd'
   host '172.17.%'
-  connection(
-    host: '127.0.0.1',
-    user: 'root',
-    password: 'password'
-  )
+  ctrl_password 'password'
   action [:create, :grant]
 end
 
