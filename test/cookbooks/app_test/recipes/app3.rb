@@ -8,6 +8,7 @@
   end
 end
 
+node.override['percona']['version'] = '5.7'
 include_recipe 'osl-mysql::server'
 
 mariadb_database 'mulgara_redmine' do
@@ -18,6 +19,7 @@ end
 
 mariadb_user 'redmine' do
   database_name 'mulgara_redmine'
+  privileges [:all]
   password 'passwd'
   host '172.17.%'
   ctrl_password 'password'

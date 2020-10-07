@@ -15,6 +15,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+node.default['yum']['powertools']['enabled'] = true
+node.default['yum']['powertools']['managed'] = true
+include_recipe 'yum-centos'
 include_recipe 'yum-epel'
 include_recipe 'osl-mysql::client'
 include_recipe 'base::python'
@@ -31,17 +34,23 @@ node.override['nodejs']['binary']['checksum']['linux_x64'] =
   'a9d9e6308931fa2a2b0cada070516d45b76d752430c31c9198933c78f8d54b17'
 
 # rvm package depends
-%w(sqlite-devel libyaml-devel readline-devel zlib-devel libffi-devel
+%w(sqlite-devel libyaml readline-devel zlib-devel libffi-devel
    openssl-devel automake libtool ImageMagick-devel postgresql-devel
 ).each do |p|
   package p
 end
 
 # geo-django depends
-%w(gdal-python geos-python proj proj-nad postgresql-devel
-   freetype-devel libpng-devel libjpeg-turbo-devel postgis
-   python-psycopg2).each do |p|
+%w(geos-devel proj
+   freetype-devel libpng-devel libjpeg-turbo-devel
+  ).each do |p|
   package p
+end
+
+if node['platform_version'].to_i < 8
+  package 'python-psycopg2'
+else
+  package 'python2-psycopg2'
 end
 
 # Keep systemd services private from non-root users
