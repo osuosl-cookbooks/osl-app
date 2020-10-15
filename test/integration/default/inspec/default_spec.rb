@@ -1,21 +1,33 @@
-%w(
-  automake
-  freetype-devel
-  geos-devel
-  ImageMagick-devel
-  libffi-devel
-  libjpeg-turbo-devel
-  libpng-devel
-  libtool
-  libyaml
-  openssl-devel
-  proj
-  readline-devel
-  sqlite-devel
-  zlib-devel
-).each do |p|
-  describe package(p) do
-    it { should be_installed }
+case os.release.to_i
+when 7
+  %w(
+    freetype-devel
+    gdal-python
+    geos-python
+    libjpeg-turbo-devel
+    libpng-devel
+    postgis
+    postgresql-devel
+    proj
+    proj-nad
+    python-psycopg2
+  ).each do |p|
+    describe package(p) do
+      it { should be_installed }
+    end
+  end
+when 8
+  %w(
+    freetype-devel
+    python3-gdal
+    libjpeg-turbo-devel
+    libpng-devel
+    proj
+    python3-psycopg2
+  ).each do |p|
+    describe package(p) do
+      it { should be_installed }
+    end
   end
 end
 

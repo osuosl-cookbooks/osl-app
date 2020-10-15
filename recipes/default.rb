@@ -34,23 +34,26 @@ node.override['nodejs']['binary']['checksum']['linux_x64'] =
   'a9d9e6308931fa2a2b0cada070516d45b76d752430c31c9198933c78f8d54b17'
 
 # rvm package depends
-%w(sqlite-devel libyaml readline-devel zlib-devel libffi-devel
-   openssl-devel automake libtool ImageMagick-devel postgresql-devel
+%w(
+  sqlite-devel
+  libyaml-devel
+  readline-devel
+  zlib-devel
+  libffi-devel
+  openssl-devel
+  automake
+  libtool
+  ImageMagick-devel
+  postgresql-devel
 ).each do |p|
   package p
 end
 
-# geo-django depends
-%w(geos-devel proj
-   freetype-devel libpng-devel libjpeg-turbo-devel
-  ).each do |p|
-  package p
+package 'Dependency packages' do
+  package_name osl_app_packages()
 end
-
-if node['platform_version'].to_i < 8
-  package 'python-psycopg2'
-else
-  package 'python2-psycopg2'
+package 'python-psycopg2' do
+  package_name 'python2-psycopg2' if node['platform_version'].to_i >= 8
 end
 
 # Keep systemd services private from non-root users

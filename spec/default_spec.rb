@@ -24,49 +24,33 @@ describe 'osl-app::default' do
         end
       end
 
-      it do
-        if plat[:version].to_i < 8
-          %w(
-            automake
+      case plat
+      when CENTOS_7
+        it do
+          expect(chef_run).to install_package(%w(
             freetype-devel
-            geos-devel
-            ImageMagick-devel
-            libffi-devel
+            gdal-python
+            geos-python
             libjpeg-turbo-devel
             libpng-devel
-            libtool
-            libyaml
-            openssl-devel
+            postgis
             postgresql-devel
             proj
+            proj-nad
             python-psycopg2
-            readline-devel
-            sqlite-devel
-            zlib-devel
-          ).each do |p|
-            expect(chef_run).to install_package(p)
-          end
-        else
-          %w(
-            automake
+          ))
+        end
+      when CENTOS_8
+        it do
+          expect(chef_run).to install_package(%w(
             freetype-devel
-            geos-devel
-            ImageMagick-devel
-            libffi-devel
             libjpeg-turbo-devel
             libpng-devel
-            libtool
-            libyaml
-            openssl-devel
             postgresql-devel
             proj
-            python2-psycopg2
-            readline-devel
-            sqlite-devel
-            zlib-devel
-          ).each do |p|
-            expect(chef_run).to install_package(p)
-          end
+            python3-gdal
+            python3-psycopg2
+          ))
         end
       end
 

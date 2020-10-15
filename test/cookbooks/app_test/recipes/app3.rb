@@ -8,7 +8,6 @@
   end
 end
 
-node.override['percona']['version'] = '5.7'
 include_recipe 'osl-mysql::server'
 
 mariadb_database 'mulgara_redmine' do

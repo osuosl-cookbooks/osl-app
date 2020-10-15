@@ -14,5 +14,4 @@ cookbook 'osl-nrpe', git: 'git@github.com:osuosl-cookbooks/osl-nrpe'
 cookbook 'osl-postfix', git: 'git@github.com:osuosl-cookbooks/osl-postfix'
 cookbook 'osl-postgresql', git: 'git@github.com:osuosl-cookbooks/osl-postgresql'
 cookbook 'osl-selinux', git: 'git@github.com:osuosl-cookbooks/osl-selinux'
-cookbook 'percona', git: 'git@github.com:sous-chefs/percona.git'
 metadata
