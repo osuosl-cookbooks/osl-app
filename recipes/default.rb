@@ -49,8 +49,8 @@ node.override['nodejs']['binary']['checksum']['linux_x64'] =
   package p
 end
 
-package 'Dependency packages' do
-  package_name osl_app_packages()
+package 'osl-app packages' do
+  package_name osl_app_packages
 end
 package 'python-psycopg2' do
   package_name 'python2-psycopg2' if node['platform_version'].to_i >= 8
