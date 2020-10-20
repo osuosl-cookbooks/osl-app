@@ -19,26 +19,12 @@ when 7
 when 8
   %w(
     freetype-devel
-    python3-gdal
     libjpeg-turbo-devel
     libpng-devel
     proj
+    python3-gdal
     python3-psycopg2
   ).each do |p|
-    describe package(p) do
-      it { should be_installed }
-    end
-  end
-end
-
-if os.release.to_i < 8
-  %w(postgresql-devel python-psycopg2).each do |p|
-    describe package(p) do
-      it { should be_installed }
-    end
-  end
-else
-  %w(libpq-devel python2-psycopg2).each do |p|
     describe package(p) do
       it { should be_installed }
     end
