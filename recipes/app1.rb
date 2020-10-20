@@ -32,8 +32,7 @@ end
 
 sudo 'openid-production' do
   user 'openid-production'
-  commands osl_sudo_commands('openid-production-unicorn',
-                         'openid-production-delayed-job')
+  commands osl_sudo_commands('openid-production-unicorn', 'openid-production-delayed-job')
   nopasswd true
 end
 
