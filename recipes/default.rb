@@ -35,16 +35,16 @@ node.override['nodejs']['binary']['checksum']['linux_x64'] =
 
 # rvm package depends
 %w(
-  sqlite-devel
-  libyaml-devel
-  readline-devel
-  zlib-devel
-  libffi-devel
-  openssl-devel
   automake
-  libtool
   ImageMagick-devel
+  libffi-devel
+  libtool
+  libyaml-devel
+  openssl-devel
   postgresql-devel
+  readline-devel
+  sqlite-devel
+  zlib-devel
 ).each do |p|
   package p
 end
