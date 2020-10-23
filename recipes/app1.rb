@@ -26,14 +26,13 @@ openid_secrets = data_bag_item('osl-app', 'openid')
 
 sudo 'openid-staging' do
   user 'openid-staging'
-  commands sudo_commands('openid-staging-unicorn', 'openid-staging-delayed-job')
+  commands osl_sudo_commands('openid-staging-unicorn', 'openid-staging-delayed-job')
   nopasswd true
 end
 
 sudo 'openid-production' do
   user 'openid-production'
-  commands sudo_commands('openid-production-unicorn',
-                         'openid-production-delayed-job')
+  commands osl_sudo_commands('openid-production-unicorn', 'openid-production-delayed-job')
   nopasswd true
 end
 

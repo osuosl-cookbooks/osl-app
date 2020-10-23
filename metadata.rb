@@ -9,6 +9,7 @@ description      'Installs/Configures osl-app'
 version          '2.7.0'
 
 supports         'centos', '~> 7.0'
+supports         'centos', '~> 8.0'
 
 depends          'base'
 depends          'firewall'

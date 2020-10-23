@@ -18,6 +18,7 @@ end
 
 mariadb_user 'redmine' do
   database_name 'mulgara_redmine'
+  privileges [:all]
   password 'passwd'
   host '172.17.%'
   ctrl_password 'password'

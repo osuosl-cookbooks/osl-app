@@ -8,6 +8,8 @@ provisioner:
   enforce_idempotency: true
   multiple_converge: 2
   deprecations_as_errors: true
+driver:
+  flavor_ref: 'm1.medium'
 
 suites:
   - name: default

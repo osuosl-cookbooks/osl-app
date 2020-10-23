@@ -1,4 +1,3 @@
-resource_name :osl_app
 provides :osl_app
 
 default_action :create
@@ -19,7 +18,7 @@ property :environment_file, [String, nil]
 action :create do
   sudo new_resource.user do
     user new_resource.user
-    commands sudo_commands(new_resource.service_name)
+    commands osl_sudo_commands(new_resource.service_name)
     nopasswd true
   end
 

@@ -1,7 +1,6 @@
 solver :ruby, :required
 source 'https://supermarket.chef.io'
 
-cookbook 'apache2', '< 6.0.0'
 cookbook 'app_test', path: 'test/cookbooks/app_test'
 cookbook 'base', git: 'git@github.com:osuosl-cookbooks/base'
 cookbook 'firewall', git: 'git@github.com:osuosl-cookbooks/firewall'
@@ -15,5 +14,4 @@ cookbook 'osl-nrpe', git: 'git@github.com:osuosl-cookbooks/osl-nrpe'
 cookbook 'osl-postfix', git: 'git@github.com:osuosl-cookbooks/osl-postfix'
 cookbook 'osl-postgresql', git: 'git@github.com:osuosl-cookbooks/osl-postgresql'
 cookbook 'osl-selinux', git: 'git@github.com:osuosl-cookbooks/osl-selinux'
-
 metadata
