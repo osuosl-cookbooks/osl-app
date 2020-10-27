@@ -1,12 +1,12 @@
 include_recipe 'osl-mysql::server'
 
-mariadb_database 'replicant_redmine' do
+percona_mysql_database 'replicant_redmine' do
   password 'password'
   sql 'CREATE DATABASE replicant_redmine'
   action :query
 end
 
-mariadb_user 'redmine' do
+percona_mysql_user 'redmine' do
   database_name 'replicant_redmine'
   password 'passwd'
   host '172.17.%'
