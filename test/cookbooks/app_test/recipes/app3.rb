@@ -10,13 +10,13 @@ end
 
 include_recipe 'osl-mysql::server'
 
-mariadb_database 'mulgara_redmine' do
+percona_mysql_database 'mulgara_redmine' do
   password 'password'
   database_name 'mulgara_redmine'
   action :create
 end
 
-mariadb_user 'redmine' do
+percona_mysql_user 'redmine' do
   database_name 'mulgara_redmine'
   privileges [:all]
   password 'passwd'
