@@ -10,19 +10,27 @@ end
 
 include_recipe 'osl-mysql::server'
 
-percona_mysql_database 'mulgara_redmine' do
-  password 'password'
-  database_name 'mulgara_redmine'
-  action :create
+%w(mulgara_redmine etherpad_osl etherpad_sd).each do |db|
+  percona_mysql_database db do
+    password 'password'
+    database_name db
+    action :create
+  end
 end
 
-percona_mysql_user 'redmine' do
-  database_name 'mulgara_redmine'
-  privileges [:all]
-  password 'passwd'
-  host '172.17.%'
-  ctrl_password 'password'
-  action [:create, :grant]
+[
+  %w(redmine mulgara_redmine),
+  %w(etherpad_osl etherpad_osl),
+  %w(etherpad_sd etherpad_sd),
+].each do |user, db|
+  percona_mysql_user user do
+    database_name db
+    privileges [:all]
+    password 'passwd'
+    host '172.17.%'
+    ctrl_password 'password'
+    action [:create, :grant]
+  end
 end
 
 cookbook_file '/tmp/mulgara_redmine.sql'

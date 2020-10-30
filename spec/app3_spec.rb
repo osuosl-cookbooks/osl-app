@@ -17,6 +17,15 @@ describe 'osl-app::app3' do
           db_passwd: 'fakepw',
           db_user: 'fakeuser'
         )
+
+        %w(osl snowdrift).each do |type|
+          stub_data_bag_item('etherpad', "mysql_creds_#{type}").and_return(
+            db_db: 'fakedb',
+            db_hostname: 'testdb.osuosl.bak',
+            db_passwd: 'fakepw',
+            db_user: 'fakeuser'
+          )
+        end
       end
 
       %w(staging production).each do |env|
@@ -171,6 +180,33 @@ describe 'osl-app::app3' do
             'REDMINE_PLUGINS_MIGRATE=1',
           ]
         )
+      end
+
+      [
+        %w(etherpad-lite.osuosl.org 8085 osuosl/etherpad),
+        %w(etherpad-snowdrift.osuosl.org 8086 osuosl/etherpad-snowdrift),
+      ].each do |hostname, port, image|
+        it do
+          expect(chef_run).to pull_docker_image(image).with(
+            tag: 'latest'
+          )
+        end
+
+        it do
+          expect(chef_run).to run_docker_container(hostname).with(
+            repo: image,
+            tag: 'latest',
+            port: "#{port}:9001",
+            restart_policy: 'always',
+            env: [
+              'DB_TYPE=mysql',
+              'DB_HOST=testdb.osuosl.bak',
+              'DB_NAME=fakedb',
+              'DB_USER=fakeuser',
+              'DB_PASS=fakepw',
+            ]
+          )
+        end
       end
     end
   end

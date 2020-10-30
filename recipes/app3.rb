@@ -138,3 +138,35 @@ docker_container 'code.mulgara.org' do
   ]
   sensitive true
 end
+
+[
+  ['etherpad-lite.osuosl.org', 8085, 'osuosl/etherpad', data_bag_item('etherpad', 'mysql_creds_osl')],
+  ['etherpad-snowdrift.osuosl.org', 8086, 'osuosl/etherpad-snowdrift', data_bag_item('etherpad', 'mysql_creds_snowdrift')],
+].each do |hostname, port, image, creds|
+  # Check if attribute is set for testing
+  db_host = if node['osl-app'].attribute?('db_hostname')
+              node['osl-app']['db_hostname']
+            else
+              creds['db_hostname']
+            end
+
+  docker_image image do
+    tag 'latest'
+    action :pull
+  end
+
+  docker_container hostname do
+    repo image
+    tag 'latest'
+    port "#{port}:9001"
+    restart_policy 'always'
+    env [
+      'DB_TYPE=mysql',
+      "DB_HOST=#{db_host}",
+      "DB_NAME=#{creds['db_db']}",
+      "DB_USER=#{creds['db_user']}",
+      "DB_PASS=#{creds['db_passwd']}",
+    ]
+    sensitive true
+  end
+end
