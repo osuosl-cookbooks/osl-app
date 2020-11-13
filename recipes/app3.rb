@@ -117,11 +117,7 @@ docker_image 'library/redmine' do
 end
 
 # Check if attribute is set for testing
-mulgara_db_host = if node['osl-app'].attribute?('db_hostname')
-                    node['osl-app']['db_hostname']
-                  else
-                    mulgara_redmine_creds['db_hostname']
-                  end
+mulgara_db_host = node['osl-app'].attribute?('db_hostname') ? node['osl-app']['db_hostname'] : mulgara_redmine_creds['db_hostname']
 
 docker_container 'code.mulgara.org' do
   repo 'redmine'
@@ -144,11 +140,7 @@ end
   ['etherpad-snowdrift.osuosl.org', 8086, 'osuosl/etherpad-snowdrift', data_bag_item('etherpad', 'mysql_creds_snowdrift')],
 ].each do |hostname, port, image, creds|
   # Check if attribute is set for testing
-  db_host = if node['osl-app'].attribute?('db_hostname')
-              node['osl-app']['db_hostname']
-            else
-              creds['db_hostname']
-            end
+  db_host = node['osl-app'].attribute?('db_hostname') ? node['osl-app']['db_hostname'] : creds['db_hostname']
 
   docker_image image do
     tag 'latest'
