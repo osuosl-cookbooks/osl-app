@@ -135,30 +135,51 @@ docker_container 'code.mulgara.org' do
   sensitive true
 end
 
-[
-  ['etherpad-lite.osuosl.org', 8085, 'osuosl/etherpad', data_bag_item('etherpad', 'mysql_creds_osl')],
-  ['etherpad-snowdrift.osuosl.org', 8086, 'osuosl/etherpad-snowdrift', data_bag_item('etherpad', 'mysql_creds_snowdrift')],
-].each do |hostname, port, image, creds|
-  # Check if attribute is set for testing
-  db_host = node['osl-app'].attribute?('db_hostname') ? node['osl-app']['db_hostname'] : creds['db_hostname']
+# Check if attribute is set for testing
+db_host = node['osl-app'].attribute?('db_hostname') ? node['osl-app']['db_hostname'] : creds['db_hostname']
 
-  docker_image image do
-    tag 'latest'
-    action :pull
-  end
+etherpad_tag = '1.8.6-2020.11.13.2015'
+etherpad_sd_tag = '1.8.6-2020.11.13.2015'
 
-  docker_container hostname do
-    repo image
-    tag 'latest'
-    port "#{port}:9001"
-    restart_policy 'always'
-    env [
-      'DB_TYPE=mysql',
-      "DB_HOST=#{db_host}",
-      "DB_NAME=#{creds['db_db']}",
-      "DB_USER=#{creds['db_user']}",
-      "DB_PASS=#{creds['db_passwd']}",
-    ]
-    sensitive true
-  end
+etherpad_creds = data_bag_item('etherpad', 'mysql_creds_osl')
+etherpad_sd_creds = data_bag_item('etherpad', 'mysql_creds_snowdrift')
+
+docker_image 'osuosl/etherpad' do
+  tag etherpad_tag
+  action :pull
+end
+
+docker_container 'etherpad-lite.osuosl.org' do
+  repo 'osuosl/etherpad'
+  tag etherpad_tag
+  port '8085:9001'
+  restart_policy 'always'
+  env [
+    'DB_TYPE=mysql',
+    "DB_HOST=#{db_host}",
+    "DB_NAME=#{etherpad_creds['db_db']}",
+    "DB_USER=#{etherpad_creds['db_user']}",
+    "DB_PASS=#{etherpad_creds['db_passwd']}",
+  ]
+  sensitive true
+end
+
+docker_image 'osuosl/etherpad-snowdrift' do
+  tag etherpad_sd_tag
+  action :pull
+end
+
+docker_container 'etherpad-snowdrift.osuosl.org' do
+  repo 'osuosl/etherpad-snowdrift'
+  tag etherpad_sd_tag
+  port '8086:9001'
+  restart_policy 'always'
+  env [
+    'DB_TYPE=mysql',
+    "DB_HOST=#{db_host}",
+    "DB_NAME=#{etherpad_sd_creds['db_db']}",
+    "DB_USER=#{etherpad_sd_creds['db_user']}",
+    "DB_PASS=#{etherpad_sd_creds['db_passwd']}",
+  ]
+  sensitive true
 end
