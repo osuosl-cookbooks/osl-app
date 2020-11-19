@@ -136,13 +136,15 @@ docker_container 'code.mulgara.org' do
 end
 
 # Check if attribute is set for testing
-db_host = node['osl-app'].attribute?('db_hostname') ? node['osl-app']['db_hostname'] : creds['db_hostname']
 
 etherpad_tag = '1.8.6-2020.11.13.2015'
-etherpad_sd_tag = '1.8.6-2020.11.13.2015'
+etherpad_snowdrift_tag = '1.8.6-2020.11.13.2015'
 
 etherpad_creds = data_bag_item('etherpad', 'mysql_creds_osl')
-etherpad_sd_creds = data_bag_item('etherpad', 'mysql_creds_snowdrift')
+etherpad_snowdrift_creds = data_bag_item('etherpad', 'mysql_creds_snowdrift')
+
+etherpad_db_host = node['osl-app'].attribute?('db_hostname') ? node['osl-app']['db_hostname'] : etherpad_creds['db_hostname']
+etherpad_snowdrift_db_host = node['osl-app'].attribute?('db_hostname') ? node['osl-app']['db_hostname'] : etherpad_snowdrift_creds['db_hostname']
 
 docker_image 'osuosl/etherpad' do
   tag etherpad_tag
@@ -156,7 +158,7 @@ docker_container 'etherpad-lite.osuosl.org' do
   restart_policy 'always'
   env [
     'DB_TYPE=mysql',
-    "DB_HOST=#{db_host}",
+    "DB_HOST=#{etherpad_db_host}",
     "DB_NAME=#{etherpad_creds['db_db']}",
     "DB_USER=#{etherpad_creds['db_user']}",
     "DB_PASS=#{etherpad_creds['db_passwd']}",
@@ -165,21 +167,21 @@ docker_container 'etherpad-lite.osuosl.org' do
 end
 
 docker_image 'osuosl/etherpad-snowdrift' do
-  tag etherpad_sd_tag
+  tag etherpad_snowdrift_tag
   action :pull
 end
 
 docker_container 'etherpad-snowdrift.osuosl.org' do
   repo 'osuosl/etherpad-snowdrift'
-  tag etherpad_sd_tag
+  tag etherpad_snowdrift_tag
   port '8086:9001'
   restart_policy 'always'
   env [
     'DB_TYPE=mysql',
-    "DB_HOST=#{db_host}",
-    "DB_NAME=#{etherpad_sd_creds['db_db']}",
-    "DB_USER=#{etherpad_sd_creds['db_user']}",
-    "DB_PASS=#{etherpad_sd_creds['db_passwd']}",
+    "DB_HOST=#{etherpad_snowdrift_db_host}",
+    "DB_NAME=#{etherpad_snowdrift_creds['db_db']}",
+    "DB_USER=#{etherpad_snowdrift_creds['db_user']}",
+    "DB_PASS=#{etherpad_snowdrift_creds['db_passwd']}",
   ]
   sensitive true
 end

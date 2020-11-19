@@ -182,31 +182,48 @@ describe 'osl-app::app3' do
         )
       end
 
-      [
-        %w(etherpad-lite.osuosl.org 8085 osuosl/etherpad),
-        %w(etherpad-snowdrift.osuosl.org 8086 osuosl/etherpad-snowdrift),
-      ].each do |hostname, port, image|
-        it do
-          expect(chef_run).to pull_docker_image(image).with(
-            tag: 'latest'
-          )
-        end
+      it do
+        expect(chef_run).to pull_docker_image('osuosl/etherpad').with(
+          tag: '1.8.6-2020.11.13.2015'
+        )
+      end
 
-        it do
-          expect(chef_run).to run_docker_container(hostname).with(
-            repo: image,
-            tag: 'latest',
-            port: "#{port}:9001",
-            restart_policy: 'always',
-            env: [
-              'DB_TYPE=mysql',
-              'DB_HOST=testdb.osuosl.bak',
-              'DB_NAME=fakedb',
-              'DB_USER=fakeuser',
-              'DB_PASS=fakepw',
-            ]
-          )
-        end
+      it do
+        expect(chef_run).to run_docker_container('etherpad-lite.osuosl.org').with(
+          repo: 'osuosl/etherpad',
+          tag: '1.8.6-2020.11.13.2015',
+          port: '8085:9001',
+          restart_policy: 'always',
+          env: [
+            'DB_TYPE=mysql',
+            'DB_HOST=testdb.osuosl.bak',
+            'DB_NAME=fakedb',
+            'DB_USER=fakeuser',
+            'DB_PASS=fakepw',
+          ]
+        )
+      end
+
+      it do
+        expect(chef_run).to pull_docker_image('osuosl/etherpad-snowdrift').with(
+          tag: '1.8.6-2020.11.13.2015'
+        )
+      end
+
+      it do
+        expect(chef_run).to run_docker_container('etherpad-snowdrift.osuosl.org').with(
+          repo: 'osuosl/etherpad-snowdrift',
+          tag: '1.8.6-2020.11.13.2015',
+          port: '8086:9001',
+          restart_policy: 'always',
+          env: [
+            'DB_TYPE=mysql',
+            'DB_HOST=testdb.osuosl.bak',
+            'DB_NAME=fakedb',
+            'DB_USER=fakeuser',
+            'DB_PASS=fakepw',
+          ]
+        )
       end
     end
   end
