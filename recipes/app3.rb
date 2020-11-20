@@ -135,8 +135,6 @@ docker_container 'code.mulgara.org' do
   sensitive true
 end
 
-# Check if attribute is set for testing
-
 etherpad_tag = '1.8.6-2020.11.13.2015'
 etherpad_snowdrift_tag = '1.8.6-2020.11.13.2015'
 
