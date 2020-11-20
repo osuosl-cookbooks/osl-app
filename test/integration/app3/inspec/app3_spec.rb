@@ -1,26 +1,33 @@
 describe http(
   'http://127.0.0.1/streamwebs-production/media/index.html',
-  headers: { 'Host' => 'streamwebs.org' },
-  enable_remote_worker: true
+  headers: { 'Host' => 'streamwebs.org' }
 ) do
-  its('body') { should match(/^streamwebs-production$/) }
+  its('body') { should match 'streamwebs-production' }
 end
 
 describe http(
   'http://127.0.0.1/streamwebs-staging/media/index.html',
-  headers: { 'Host' => 'streamwebs-staging.osuosl.org' },
-  enable_remote_worker: true
+  headers: { 'Host' => 'streamwebs-staging.osuosl.org' }
 ) do
-  its('body') { should match(/^streamwebs-staging$/) }
+  its('body') { should match 'streamwebs-staging' }
 end
 
 describe http(
   'http://127.0.0.1:8084/',
-  headers: { 'Host' => 'code.mulgara.org' },
-  enable_remote_worker: true
+  headers: { 'Host' => 'code.mulgara.org' }
 ) do
   its('status') { should eq 200 }
-  its('body') { should match(%r{^<title>Mulgara Redmine<\/title>$}) }
+  its('body') { should match '<title>Mulgara Redmine</title>' }
+end
+
+%w(8085 8086).each do |port|
+  describe http(
+    "http://127.0.0.1:#{port}/",
+    headers: { 'Host' => 'etherpad-lite.osuosl.org' }
+  ) do
+    its('status') { should eq 200 }
+    its('body') { should match '<title>Etherpad</title>' }
+  end
 end
 
 %w(streamwebs-production-gunicorn

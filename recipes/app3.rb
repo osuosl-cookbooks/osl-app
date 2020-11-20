@@ -117,11 +117,7 @@ docker_image 'library/redmine' do
 end
 
 # Check if attribute is set for testing
-mulgara_db_host = if node['osl-app'].attribute?('db_hostname')
-                    node['osl-app']['db_hostname']
-                  else
-                    mulgara_redmine_creds['db_hostname']
-                  end
+mulgara_db_host = node['osl-app'].attribute?('db_hostname') ? node['osl-app']['db_hostname'] : mulgara_redmine_creds['db_hostname']
 
 docker_container 'code.mulgara.org' do
   repo 'redmine'
@@ -135,6 +131,55 @@ docker_container 'code.mulgara.org' do
     "REDMINE_DB_USERNAME=#{mulgara_redmine_creds['db_user']}",
     "REDMINE_DB_PASSWORD=#{mulgara_redmine_creds['db_passwd']}",
     'REDMINE_PLUGINS_MIGRATE=1',
+  ]
+  sensitive true
+end
+
+etherpad_tag = '1.8.6-2020.11.13.2015'
+etherpad_snowdrift_tag = '1.8.6-2020.11.13.2015'
+
+etherpad_creds = data_bag_item('etherpad', 'mysql_creds_osl')
+etherpad_snowdrift_creds = data_bag_item('etherpad', 'mysql_creds_snowdrift')
+
+etherpad_db_host = node['osl-app'].attribute?('db_hostname') ? node['osl-app']['db_hostname'] : etherpad_creds['db_hostname']
+etherpad_snowdrift_db_host = node['osl-app'].attribute?('db_hostname') ? node['osl-app']['db_hostname'] : etherpad_snowdrift_creds['db_hostname']
+
+docker_image 'osuosl/etherpad' do
+  tag etherpad_tag
+  action :pull
+end
+
+docker_container 'etherpad-lite.osuosl.org' do
+  repo 'osuosl/etherpad'
+  tag etherpad_tag
+  port '8085:9001'
+  restart_policy 'always'
+  env [
+    'DB_TYPE=mysql',
+    "DB_HOST=#{etherpad_db_host}",
+    "DB_NAME=#{etherpad_creds['db_db']}",
+    "DB_USER=#{etherpad_creds['db_user']}",
+    "DB_PASS=#{etherpad_creds['db_passwd']}",
+  ]
+  sensitive true
+end
+
+docker_image 'osuosl/etherpad-snowdrift' do
+  tag etherpad_snowdrift_tag
+  action :pull
+end
+
+docker_container 'etherpad-snowdrift.osuosl.org' do
+  repo 'osuosl/etherpad-snowdrift'
+  tag etherpad_snowdrift_tag
+  port '8086:9001'
+  restart_policy 'always'
+  env [
+    'DB_TYPE=mysql',
+    "DB_HOST=#{etherpad_snowdrift_db_host}",
+    "DB_NAME=#{etherpad_snowdrift_creds['db_db']}",
+    "DB_USER=#{etherpad_snowdrift_creds['db_user']}",
+    "DB_PASS=#{etherpad_snowdrift_creds['db_passwd']}",
   ]
   sensitive true
 end
