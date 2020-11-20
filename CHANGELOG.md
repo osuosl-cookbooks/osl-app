@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+2.8.1 (2020-11-19)
+------------------
+- Add Etherpad Docker containers
+
 2.8.0 (2020-10-23)
 ------------------
 - CentOS 8 support
