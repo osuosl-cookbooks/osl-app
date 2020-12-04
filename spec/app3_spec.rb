@@ -19,11 +19,12 @@ describe 'osl-app::app3' do
         )
 
         %w(osl snowdrift).each do |type|
-          stub_data_bag_item('etherpad', "mysql_creds_#{type}").and_return(
+          stub_data_bag_item('etherpad', "creds_#{type}").and_return(
             db_db: 'fakedb',
             db_hostname: 'testdb.osuosl.bak',
             db_passwd: 'fakepw',
-            db_user: 'fakeuser'
+            db_user: 'fakeuser',
+            admin_passwd: 'fakeadmin'
           )
         end
       end
@@ -200,6 +201,7 @@ describe 'osl-app::app3' do
             'DB_NAME=fakedb',
             'DB_USER=fakeuser',
             'DB_PASS=fakepw',
+            'ADMIN_PASSWORD=fakeadmin',
           ]
         )
       end
@@ -222,6 +224,7 @@ describe 'osl-app::app3' do
             'DB_NAME=fakedb',
             'DB_USER=fakeuser',
             'DB_PASS=fakepw',
+            'ADMIN_PASSWORD=fakeadmin',
           ]
         )
       end
