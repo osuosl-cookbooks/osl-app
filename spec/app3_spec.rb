@@ -19,7 +19,7 @@ describe 'osl-app::app3' do
         )
 
         %w(osl snowdrift).each do |type|
-          stub_data_bag_item('etherpad', "creds_#{type}").and_return(
+          stub_data_bag_item('etherpad', type).and_return(
             db_db: 'fakedb',
             db_hostname: 'testdb.osuosl.bak',
             db_passwd: 'fakepw',
