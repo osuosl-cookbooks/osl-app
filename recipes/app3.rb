@@ -138,8 +138,8 @@ end
 etherpad_tag = '1.8.6-2020.11.13.2015'
 etherpad_snowdrift_tag = '1.8.6-2020.11.13.2015'
 
-etherpad_creds = data_bag_item('etherpad', 'mysql_creds_osl')
-etherpad_snowdrift_creds = data_bag_item('etherpad', 'mysql_creds_snowdrift')
+etherpad_creds = data_bag_item('etherpad', 'creds_osl')
+etherpad_snowdrift_creds = data_bag_item('etherpad', 'creds_snowdrift')
 
 etherpad_db_host = node['osl-app'].attribute?('db_hostname') ? node['osl-app']['db_hostname'] : etherpad_creds['db_hostname']
 etherpad_snowdrift_db_host = node['osl-app'].attribute?('db_hostname') ? node['osl-app']['db_hostname'] : etherpad_snowdrift_creds['db_hostname']
@@ -160,6 +160,7 @@ docker_container 'etherpad-lite.osuosl.org' do
     "DB_NAME=#{etherpad_creds['db_db']}",
     "DB_USER=#{etherpad_creds['db_user']}",
     "DB_PASS=#{etherpad_creds['db_passwd']}",
+    "ADMIN_PASSWORD=#{etherpad_creds['admin_passwd']}",
   ]
   sensitive true
 end
@@ -180,6 +181,7 @@ docker_container 'etherpad-snowdrift.osuosl.org' do
     "DB_NAME=#{etherpad_snowdrift_creds['db_db']}",
     "DB_USER=#{etherpad_snowdrift_creds['db_user']}",
     "DB_PASS=#{etherpad_snowdrift_creds['db_passwd']}",
+    "ADMIN_PASSWORD=#{etherpad_snowdrift_creds['admin_passwd']}",
   ]
   sensitive true
 end
