@@ -1,0 +1,38 @@
+{
+  "id": "snowdrift",
+  "db_db": {
+    "encrypted_data": "7PJEvgZk2kLTL9CuvaeOfJJjVC8G6n6sYGPusFHsMRs=\n",
+    "hmac": "sW6kCN6Z3gYoR0VH8649K4jfbdJZDCq3K1tGInERKgQ=\n",
+    "iv": "GvjZSR48pdzIrRKA8Vajig==\n",
+    "version": 2,
+    "cipher": "aes-256-cbc"
+  },
+  "db_hostname": {
+    "encrypted_data": "c16nNTH81ioPWY1AvWqbwXkIBFxLGAr6d7aekXXI5613jQoGf+Aix/lWsDY0\nGBJp\n",
+    "hmac": "0s/WFtjePQgEqytF7VP9UiyHa+v0ovNyFNJ8xT57IoI=\n",
+    "iv": "1+XGeNs1gdNZ9hftxoFYmw==\n",
+    "version": 2,
+    "cipher": "aes-256-cbc"
+  },
+  "db_user": {
+    "encrypted_data": "0wASUL5qYPvdjyNWgWcRJ/YlPj8lSPXNX01fWmAVQsA=\n",
+    "hmac": "fiNmfGqLcJa+JoWlIvHi6gCcQsZXi0er6DDmqreCFvk=\n",
+    "iv": "CEEqr9pnv2SDMdUBQY+DdA==\n",
+    "version": 2,
+    "cipher": "aes-256-cbc"
+  },
+  "db_passwd": {
+    "encrypted_data": "An4ARCG/wezeJGSBE5Yr6SiBENe0Nb6NQfTzPrvC3aE=\n",
+    "hmac": "VffMEfkMACwNMTl3vJ7GGDyB+ForzgbfGCbWckkI4fQ=\n",
+    "iv": "ig56gvoRL7r0yL2GHbMjmg==\n",
+    "version": 2,
+    "cipher": "aes-256-cbc"
+  },
+  "admin_passwd": {
+    "encrypted_data": "tbw5AWSve1dcGemfbM/BqRZCBudfizz7jBffoqxzj24=\n",
+    "hmac": "dg+ye9e8Z7bfzP49N3GPeUVppIiSisCLL/AUxIrhBC0=\n",
+    "iv": "b2FicKF4HG72wN/CQd3czw==\n",
+    "version": 2,
+    "cipher": "aes-256-cbc"
+  }
+}

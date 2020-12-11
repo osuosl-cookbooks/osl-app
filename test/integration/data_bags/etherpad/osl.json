@@ -1,0 +1,38 @@
+{
+  "id": "osl",
+  "db_db": {
+    "encrypted_data": "iHTLgcO1qn0eWxYPpX2Be8cV1GP2LG8iu9eww9s5RvM=\n",
+    "hmac": "JxADWYte/qC+1PxLZRGafGjmLaMF8kPA3ND4rvnTVCw=\n",
+    "iv": "h833IxGHlR55c7Q9VfNINg==\n",
+    "version": 2,
+    "cipher": "aes-256-cbc"
+  },
+  "db_hostname": {
+    "encrypted_data": "wi+iu3auTsLwgYCeT5KkKBZ8uFwqdn5fGsbvnCWG2Sr3wsahqtUJh1OTv5WQ\n/8Ao\n",
+    "hmac": "TSkAH0mWWx7oJ6zl4h7W45rxIo51FZ5QF934gCAYs70=\n",
+    "iv": "DbLe5yhar6NMVg+bRSUsmg==\n",
+    "version": 2,
+    "cipher": "aes-256-cbc"
+  },
+  "db_user": {
+    "encrypted_data": "mjZzAT8t1Jame86ORqnfiuZNspDwgGw4DecZm3rEUQE=\n",
+    "hmac": "51ieUhmLfWxif9/xU27POdKkQ3TqU+CdPzVXLskh41E=\n",
+    "iv": "0Zkjh7Vwr61znZLKSMljcQ==\n",
+    "version": 2,
+    "cipher": "aes-256-cbc"
+  },
+  "db_passwd": {
+    "encrypted_data": "54Y7qc2M7k25yX4Y716hddsbxtKQqDVTTFjCVGHxBmk=\n",
+    "hmac": "bW009RygVZ5EvE2CGVV1PFJJvTVTrtBnOIFTN7rFaO0=\n",
+    "iv": "aPN/Mm0vAUtHM9i2u8sNdw==\n",
+    "version": 2,
+    "cipher": "aes-256-cbc"
+  },
+  "admin_passwd": {
+    "encrypted_data": "llUMPXE9MUMSeOqC+haEVtP1e8ZwhEcpsrvBlYlOKmA=\n",
+    "hmac": "btPaSSu9nRyY27MkIOTD3CjZ1Tpe2cubMsIfIDGRz3I=\n",
+    "iv": "Hg7Wq91WihOrCmM9crpoBQ==\n",
+    "version": 2,
+    "cipher": "aes-256-cbc"
+  }
+}

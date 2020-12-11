@@ -21,13 +21,20 @@ describe http(
 end
 
 %w(8085 8086).each do |port|
-  describe http(
-    "http://127.0.0.1:#{port}/",
-    headers: { 'Host' => 'etherpad-lite.osuosl.org' }
-  ) do
+  describe http("http://127.0.0.1:#{port}/") do
     its('status') { should eq 200 }
     its('body') { should match '<title>Etherpad</title>' }
   end
+end
+
+# Ensure ep_small_list plugin is not installed on etherpad-lite
+describe http('http://127.0.0.1:8085/small_list') do
+  its('status') { should eq 404 }
+end
+
+# Ensure ep_small_list plugin is installed on etherpad-snowdrift
+describe http('http://127.0.0.1:8086/small_list') do
+  its('status') { should eq 200 }
 end
 
 %w(streamwebs-production-gunicorn
