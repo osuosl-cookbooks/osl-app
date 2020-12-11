@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+2.8.2 (2020-12-11)
+------------------
+- Add admin password to etherpad
+
 2.8.1 (2020-11-19)
 ------------------
 - Add Etherpad Docker containers
