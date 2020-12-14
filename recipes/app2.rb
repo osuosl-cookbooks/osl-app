@@ -94,35 +94,18 @@ osl_app 'timesync-production' do
   service_type 'simple'
 end
 
-osl_app 'replicant-redmine-unicorn' do
-  user 'replicant'
-  description 'Replicant Redmine'
-  start_cmd '/home/replicant/.rvm/bin/rvm 2.6.3 do bundle exec unicorn -l 8090 -c unicorn.rb -E production -D'
-  service_type 'simple'
-  environment 'RAILS_ENV' => 'production'
-  working_directory '/home/replicant/redmine'
-  pid_file '/home/replicant/redmine/pids/unicorn.pid'
-  action [:stop, :disable] # TODO: remove this resource block after migration to docker complete
-end
-
 # Docker containers
 directory '/data/docker/redmine.replicant.us' do
   recursive true
 end
-
-replicant_redmine_creds = data_bag_item('replicant_redmine', 'mysql_creds')
 
 docker_image 'osuosl/redmine-replicant' do
   tag '4.1.1'
   action :pull
 end
 
-# Check if attribute is set for testing
-replicant_db_host = if node['osl-app'].attribute?('db_hostname')
-                      node['osl-app']['db_hostname']
-                    else
-                      replicant_redmine_creds['db_hostname']
-                    end
+replicant_dbcreds = data_bag_item('replicant_redmine', 'mysql_creds')
+replicant_dbcreds['db_hostname'] = node['ipaddress'] if node['kitchen']
 
 docker_container 'redmine.replicant.us' do
   repo 'osuosl/redmine-replicant'
@@ -131,10 +114,10 @@ docker_container 'redmine.replicant.us' do
   restart_policy 'always'
   volumes ['/data/docker/redmine.replicant.us:/usr/src/redmine/files']
   env [
-    "REDMINE_DB_MYSQL=#{replicant_db_host}",
-    "REDMINE_DB_DATABASE=#{replicant_redmine_creds['db_db']}",
-    "REDMINE_DB_USERNAME=#{replicant_redmine_creds['db_user']}",
-    "REDMINE_DB_PASSWORD=#{replicant_redmine_creds['db_passwd']}",
+    "REDMINE_DB_MYSQL=#{replicant_dbcreds['db_hostname']}",
+    "REDMINE_DB_DATABASE=#{replicant_dbcreds['db_db']}",
+    "REDMINE_DB_USERNAME=#{replicant_dbcreds['db_user']}",
+    "REDMINE_DB_PASSWORD=#{replicant_dbcreds['db_passwd']}",
     'REDMINE_PLUGINS_MIGRATE=1',
   ]
   sensitive true

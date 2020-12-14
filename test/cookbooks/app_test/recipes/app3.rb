@@ -10,30 +10,40 @@ end
 
 include_recipe 'osl-mysql::server'
 
-%w(mulgara_redmine etherpad_osl etherpad_sd).each do |db|
-  percona_mysql_database db do
-    password 'password'
-    database_name db
+[
+  %w(etherpad mysql_creds_osl),
+  %w(etherpad mysql_creds_snowdrift),
+  %w(mulgara_redmine mysql_creds),
+].each do |bag, item|
+  dbcreds = data_bag_item(bag, item)
+  dbcreds['db_hostname'] = '172.%'
+
+  percona_mysql_user dbcreds['db_user'] do
+    host dbcreds['db_hostname']
+    password dbcreds['db_passwd']
+    ctrl_password ''
     action :create
   end
-end
 
-[
-  %w(redmine mulgara_redmine),
-  %w(etherpad_osl etherpad_osl),
-  %w(etherpad_sd etherpad_sd),
-].each do |user, db|
-  percona_mysql_user user do
-    database_name db
-    privileges [:all]
-    password 'passwd'
-    host '172.17.%'
-    ctrl_password 'password'
-    action [:create, :grant]
+  percona_mysql_database dbcreds['db_db'] do
+    password ''
+  end
+
+  percona_mysql_user dbcreds['db_user'] do
+    host dbcreds['db_hostname']
+    database_name dbcreds['db_db']
+    privileges ['ALL PRIVILEGES']
+    table '*'
+    password dbcreds['db_passwd']
+    ctrl_password ''
+    action :grant
   end
 end
 
-cookbook_file '/tmp/mulgara_redmine.sql'
+cookbook_file '/tmp/mulgara_redmine.sql' do
+  source 'mulgara_redmine.sql'
+  sensitive true # just to supress wall of text
+end
 
 execute 'mysql mulgara_redmine < /tmp/mulgara_redmine.sql && touch /tmp/mulgara_redmine.done' do
   creates '/tmp/mulgara_redmine.done'
@@ -43,6 +53,6 @@ directory '/data/docker/code.mulgara.org/2019/09' do
   recursive true
 end
 
-cookbook_file '/data/docker/code.mulgara.org/2019/09/190923192555_testfile.txt'
-
-node.default['osl-app']['db_hostname'] = node['ipaddress']
+cookbook_file '/data/docker/code.mulgara.org/2019/09/190923192555_testfile.txt' do
+  source '190923192555_testfile.txt'
+end

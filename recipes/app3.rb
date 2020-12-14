@@ -110,23 +110,22 @@ directory '/data/docker/code.mulgara.org' do
 end
 
 mulgara_redmine_creds = data_bag_item('mulgara_redmine', 'mysql_creds')
+mulgara_redmine_creds['db_hostname'] = node['ipaddress'] if node['kitchen']
+mulgara_redmine_tag = '4.1.1'
 
 docker_image 'library/redmine' do
-  tag '4.1.1'
+  tag mulgara_redmine_tag
   action :pull
 end
 
-# Check if attribute is set for testing
-mulgara_db_host = node['osl-app'].attribute?('db_hostname') ? node['osl-app']['db_hostname'] : mulgara_redmine_creds['db_hostname']
-
 docker_container 'code.mulgara.org' do
   repo 'redmine'
-  tag '4.1.1'
+  tag mulgara_redmine_tag
   port '8084:3000'
   restart_policy 'always'
   volumes ['/data/docker/code.mulgara.org:/usr/src/redmine/files']
   env [
-    "REDMINE_DB_MYSQL=#{mulgara_db_host}",
+    "REDMINE_DB_MYSQL=#{mulgara_redmine_creds['db_hostname']}",
     "REDMINE_DB_DATABASE=#{mulgara_redmine_creds['db_db']}",
     "REDMINE_DB_USERNAME=#{mulgara_redmine_creds['db_user']}",
     "REDMINE_DB_PASSWORD=#{mulgara_redmine_creds['db_passwd']}",
@@ -164,6 +163,10 @@ docker_container 'etherpad-lite.osuosl.org' do
   ]
   sensitive true
 end
+
+etherpad_snowdrift_creds = data_bag_item('etherpad', 'mysql_creds_snowdrift')
+etherpad_snowdrift_creds['db_hostname'] = node['ipaddress'] if node['kitchen']
+etherpad_snowdrift_tag = '1.8.6-2020.11.13.2015'
 
 docker_image 'osuosl/etherpad-snowdrift' do
   tag etherpad_tag_snowdrift

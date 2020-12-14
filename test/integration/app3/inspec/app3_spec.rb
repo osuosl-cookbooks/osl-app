@@ -55,7 +55,5 @@ describe docker_container('code.mulgara.org') do
   it { should exist }
   it { should be_running }
   its('image') { should eq 'redmine:4.1.1' }
-  its('repo') { should eq 'redmine' }
-  its('tag') { should eq '4.1.1' }
   its('ports') { should eq '0.0.0.0:8084->3000/tcp' }
 end

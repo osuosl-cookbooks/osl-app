@@ -145,36 +145,14 @@ describe 'osl-app::app2' do
         end
       end
 
-      it do
-        expect(chef_run).to stop_osl_app('replicant-redmine-unicorn').with(
-          user: 'replicant',
-          description: 'Replicant Redmine',
-          start_cmd: '/home/replicant/.rvm/bin/rvm 2.6.3 do bundle exec unicorn -l 8090 -c unicorn.rb -E production -D',
-          service_type: 'simple',
-          environment: { 'RAILS_ENV' => 'production' },
-          working_directory: '/home/replicant/redmine',
-          pid_file: '/home/replicant/redmine/pids/unicorn.pid'
-        )
-      end
-
-      it do
-        expect(chef_run).to disable_osl_app('replicant-redmine-unicorn')
-      end
-
-      it do
-        expect(chef_run).to stop_systemd_service('replicant-redmine-unicorn')
-      end
-
-      it do
-        expect(chef_run).to disable_systemd_service('replicant-redmine-unicorn')
-      end
-
-      %w(formsender-production-gunicorn
+      %w(
+        formsender-production-gunicorn
         formsender-staging-gunicorn
         iam-production
         iam-staging
         timesync-production
-        timesync-staging).each do |s|
+        timesync-staging
+      ).each do |s|
         it do
           expect(chef_run).to enable_systemd_service(s)
         end
