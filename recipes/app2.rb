@@ -100,7 +100,7 @@ directory '/data/docker/redmine.replicant.us' do
 end
 
 docker_image 'osuosl/redmine-replicant' do
-  tag '4.1.1'
+  tag '4.1.1-2020.12.12.0022'
   action :pull
 end
 
@@ -109,7 +109,7 @@ replicant_dbcreds['db_hostname'] = node['ipaddress'] if node['kitchen']
 
 docker_container 'redmine.replicant.us' do
   repo 'osuosl/redmine-replicant'
-  tag '4.1.1'
+  tag '4.1.1-2020.12.12.0022'
   port '8090:3000'
   restart_policy 'always'
   volumes ['/data/docker/redmine.replicant.us:/usr/src/redmine/files']
