@@ -134,57 +134,52 @@ docker_container 'code.mulgara.org' do
   sensitive true
 end
 
-etherpad_tag_osl = '1.8.6-2020.11.13.2015'
-etherpad_tag_snowdrift = '1.8.6-2020.11.13.2015'
-
-etherpad_secrets_osl = data_bag_item('etherpad', 'osl')
-etherpad_secrets_snowdrift = data_bag_item('etherpad', 'snowdrift')
-
-etherpad_db_host_osl = node['osl-app'].attribute?('db_hostname') ? node['osl-app']['db_hostname'] : etherpad_secrets_osl['db_hostname']
-etherpad_db_host_snowdrift = node['osl-app'].attribute?('db_hostname') ? node['osl-app']['db_hostname'] : etherpad_secrets_snowdrift['db_hostname']
+etherpad_osl_secrets = data_bag_item('etherpad', 'osl')
+etherpad_osl_secrets['db_hostname'] = node['ipaddress'] if node['kitchen']
+etherpad_osl_tag = '1.8.6-2020.11.13.2015'
 
 docker_image 'osuosl/etherpad' do
-  tag etherpad_tag_osl
+  tag etherpad_osl_tag
   action :pull
 end
 
 docker_container 'etherpad-lite.osuosl.org' do
   repo 'osuosl/etherpad'
-  tag etherpad_tag_osl
+  tag etherpad_osl_tag
   port '8085:9001'
   restart_policy 'always'
   env [
     'DB_TYPE=mysql',
-    "DB_HOST=#{etherpad_db_host_osl}",
-    "DB_NAME=#{etherpad_secrets_osl['db_db']}",
-    "DB_USER=#{etherpad_secrets_osl['db_user']}",
-    "DB_PASS=#{etherpad_secrets_osl['db_passwd']}",
-    "ADMIN_PASSWORD=#{etherpad_secrets_osl['admin_passwd']}",
+    "DB_HOST=#{etherpad_osl_secrets['db_hostname']}",
+    "DB_NAME=#{etherpad_osl_secrets['db_db']}",
+    "DB_USER=#{etherpad_osl_secrets['db_user']}",
+    "DB_PASS=#{etherpad_osl_secrets['db_passwd']}",
+    "ADMIN_PASSWORD=#{etherpad_osl_secrets['admin_passwd']}",
   ]
   sensitive true
 end
 
-etherpad_snowdrift_creds = data_bag_item('etherpad', 'mysql_creds_snowdrift')
-etherpad_snowdrift_creds['db_hostname'] = node['ipaddress'] if node['kitchen']
+etherpad_snowdrift_secrets = data_bag_item('etherpad', 'snowdrift')
+etherpad_snowdrift_secrets['db_hostname'] = node['ipaddress'] if node['kitchen']
 etherpad_snowdrift_tag = '1.8.6-2020.11.13.2015'
 
 docker_image 'osuosl/etherpad-snowdrift' do
-  tag etherpad_tag_snowdrift
+  tag etherpad_snowdrift_tag
   action :pull
 end
 
 docker_container 'etherpad-snowdrift.osuosl.org' do
   repo 'osuosl/etherpad-snowdrift'
-  tag etherpad_tag_snowdrift
+  tag etherpad_snowdrift_tag
   port '8086:9001'
   restart_policy 'always'
   env [
     'DB_TYPE=mysql',
-    "DB_HOST=#{etherpad_db_host_snowdrift}",
-    "DB_NAME=#{etherpad_secrets_snowdrift['db_db']}",
-    "DB_USER=#{etherpad_secrets_snowdrift['db_user']}",
-    "DB_PASS=#{etherpad_secrets_snowdrift['db_passwd']}",
-    "ADMIN_PASSWORD=#{etherpad_secrets_snowdrift['admin_passwd']}",
+    "DB_HOST=#{etherpad_snowdrift_secrets['db_hostname']}",
+    "DB_NAME=#{etherpad_snowdrift_secrets['db_db']}",
+    "DB_USER=#{etherpad_snowdrift_secrets['db_user']}",
+    "DB_PASS=#{etherpad_snowdrift_secrets['db_passwd']}",
+    "ADMIN_PASSWORD=#{etherpad_snowdrift_secrets['admin_passwd']}",
   ]
   sensitive true
 end

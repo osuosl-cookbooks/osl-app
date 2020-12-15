@@ -1,7 +1,0 @@
-{
-  "id": "mysql_creds_snowdrift",
-  "db_db": "etherpad_sd",
-  "db_hostname": "127.0.0.1",
-  "db_user": "etherpad_sd",
-  "db_passwd": "super_safe"
-}

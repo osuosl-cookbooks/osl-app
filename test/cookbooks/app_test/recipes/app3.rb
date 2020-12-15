@@ -11,8 +11,8 @@ end
 include_recipe 'osl-mysql::server'
 
 [
-  %w(etherpad mysql_creds_osl),
-  %w(etherpad mysql_creds_snowdrift),
+  %w(etherpad osl),
+  %w(etherpad snowdrift),
   %w(mulgara_redmine mysql_creds),
 ].each do |bag, item|
   dbcreds = data_bag_item(bag, item)

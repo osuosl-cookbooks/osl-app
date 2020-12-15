@@ -1,7 +1,0 @@
-{
-  "id": "mysql_creds_osl",
-  "db_db": "etherpad_osl",
-  "db_hostname": "127.0.0.1",
-  "db_user": "etherpad_osl",
-  "db_passwd": "super_safe"
-}
