@@ -145,36 +145,14 @@ describe 'osl-app::app2' do
         end
       end
 
-      it do
-        expect(chef_run).to stop_osl_app('replicant-redmine-unicorn').with(
-          user: 'replicant',
-          description: 'Replicant Redmine',
-          start_cmd: '/home/replicant/.rvm/bin/rvm 2.6.3 do bundle exec unicorn -l 8090 -c unicorn.rb -E production -D',
-          service_type: 'simple',
-          environment: { 'RAILS_ENV' => 'production' },
-          working_directory: '/home/replicant/redmine',
-          pid_file: '/home/replicant/redmine/pids/unicorn.pid'
-        )
-      end
-
-      it do
-        expect(chef_run).to disable_osl_app('replicant-redmine-unicorn')
-      end
-
-      it do
-        expect(chef_run).to stop_systemd_service('replicant-redmine-unicorn')
-      end
-
-      it do
-        expect(chef_run).to disable_systemd_service('replicant-redmine-unicorn')
-      end
-
-      %w(formsender-production-gunicorn
+      %w(
+        formsender-production-gunicorn
         formsender-staging-gunicorn
         iam-production
         iam-staging
         timesync-production
-        timesync-staging).each do |s|
+        timesync-staging
+      ).each do |s|
         it do
           expect(chef_run).to enable_systemd_service(s)
         end
@@ -188,14 +166,14 @@ describe 'osl-app::app2' do
 
       it do
         expect(chef_run).to pull_docker_image('osuosl/redmine-replicant').with(
-          tag: '4.1.1'
+          tag: '4.1.1-2020.12.12.0022'
         )
       end
 
       it do
         expect(chef_run).to run_docker_container('redmine.replicant.us').with(
           repo: 'osuosl/redmine-replicant',
-          tag: '4.1.1',
+          tag: '4.1.1-2020.12.12.0022',
           port: '8090:3000',
           restart_policy: 'always',
           # This needs to be volumes_binds, since the volumes property gets coerced into a volumes_binds property if it's

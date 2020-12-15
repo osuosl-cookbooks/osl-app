@@ -1,31 +1,7 @@
 {
   "id": "mysql_creds",
-  "db_db": {
-    "encrypted_data": "+/VD0JCnRkP0vmcgBzLBgcJGXO5+OQG21uLWrm3RsZjszkxYtO5hc+Naf/po\n5OKc\n",
-    "hmac": "IvhMFBQPrQjxOKD4JMFBGyoR9jiNKXGz4z9qRvKbXBQ=\n",
-    "iv": "ANjv2olF4Xe1N8Ph0c5pag==\n",
-    "version": 2,
-    "cipher": "aes-256-cbc"
-  },
-  "db_hostname": {
-    "encrypted_data": "HCl6U7jAchs9ScxDkfdUB52MuYiZsx38NHF6/Hrg5w8jImn8WqAMG7PVe+Kt\n83k8\n",
-    "hmac": "R08T0g7vGBervdWEu5vCx5RDFCVBkpPOopwfV5H2ch4=\n",
-    "iv": "TRr+HdZy8SAr7cxjLfCdVA==\n",
-    "version": 2,
-    "cipher": "aes-256-cbc"
-  },
-  "db_passwd": {
-    "encrypted_data": "W+Wgu9ACc7kc0vGuVBZiYbnbw69IR9nOukIgGTCohZs=\n",
-    "hmac": "sHRkQa78AyTd/vUihFlEdolBo/i8r69eEshtFgv+ZpY=\n",
-    "iv": "hJWbnKoux1dOOyzSplgUUA==\n",
-    "version": 2,
-    "cipher": "aes-256-cbc"
-  },
-  "db_user": {
-    "encrypted_data": "qFg38lboepRlgqAg8LtszsSkHeDQhWTtk1fcG0EExYc=\n",
-    "hmac": "WhEUDvZ+mrbDmG8oSRw5pofHN3TN+WMNb+EBuAG9GdE=\n",
-    "iv": "0g7SPUN4oXj7SNPzRva2Cw==\n",
-    "version": 2,
-    "cipher": "aes-256-cbc"
-  }
+  "db_db": "mulgara_redmine",
+  "db_hostname": "127.0.0.1",
+  "db_passwd": "super_safe",
+  "db_user": "redmine"
 }

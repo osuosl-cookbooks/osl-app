@@ -34,7 +34,7 @@ node.override['nodejs']['binary']['checksum']['linux_x64'] =
   'a9d9e6308931fa2a2b0cada070516d45b76d752430c31c9198933c78f8d54b17'
 
 # rvm package depends
-%w(
+package %w(
   automake
   ImageMagick-devel
   libffi-devel
@@ -45,9 +45,7 @@ node.override['nodejs']['binary']['checksum']['linux_x64'] =
   readline-devel
   sqlite-devel
   zlib-devel
-).each do |p|
-  package p
-end
+)
 
 package 'osl-app packages' do
   package_name osl_app_packages
@@ -65,8 +63,9 @@ end
 temp = resources(template: '/etc/sudoers')
 temp.variables['include_sudoers_d'] = true
 
-include_recipe 'user::data_bag'
 build_essential 'install tools'
-include_recipe 'osl-nodejs'
+
 include_recipe 'firewall::unicorn'
 include_recipe 'git'
+include_recipe 'osl-nodejs'
+include_recipe 'user::data_bag'

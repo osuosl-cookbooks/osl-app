@@ -2,12 +2,16 @@
 verifier:
   name: inspec
 provisioner:
-  name: chef_solo
+  name: chef_zero
   data_bag_path: test/integration/data_bags
   encrypted_data_bag_secret_key_path: test/integration/encrypted_data_bag_secret
   enforce_idempotency: true
   multiple_converge: 2
   deprecations_as_errors: true
+  attributes:
+    percona:
+      skip_passwords: true
+    kitchen: true
 driver:
   flavor_ref: 'm1.medium'
 
@@ -29,15 +33,11 @@ suites:
       - recipe[osl-app::app1]
   - name: app2
     provisioner:
-      name: chef_solo
       enforce_idempotency: false # fails because of yum_version_lock
       multiple_converge: 1
     attributes:
       osl-mysql:
         enable_percona_client: true
-      percona:
-        encrypted_data_bag: percona
-        encrypted_data_bag_secret_file: "/etc/chef/encrypted_data_bag_secret"
       users:
         - formsender-staging
         - formsender-production
@@ -56,14 +56,10 @@ suites:
       flavor_ref: 'm1.large'
   - name: app3
     provisioner:
-      name: chef_solo
       enforce_idempotency: false # fails to converge with idempotency enforced
     attributes:
       osl-mysql:
         enable_percona_client: true
-      percona:
-        encrypted_data_bag: percona
-        encrypted_data_bag_secret_file: "/etc/chef/encrypted_data_bag_secret"
       users:
         - streamwebs-staging
         - streamwebs-production
