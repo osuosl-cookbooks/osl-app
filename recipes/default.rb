@@ -17,8 +17,8 @@
 # limitations under the License.
 node.default['yum']['powertools']['enabled'] = true
 node.default['yum']['powertools']['managed'] = true
-include_recipe 'yum-centos'
-include_recipe 'yum-epel'
+include_recipe 'osl-repos::centos'
+include_recipe 'osl-repos::epel'
 include_recipe 'osl-mysql::client'
 include_recipe 'base::python'
 
