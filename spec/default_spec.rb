@@ -16,6 +16,7 @@ describe 'osl-app::default' do
 
       it do
         %w(
+          osl-repos::centos
           osl-repos::epel
           osl-mysql::default
           base::python
