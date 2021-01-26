@@ -195,6 +195,7 @@ describe 'osl-app::app3' do
           tag: '1.8.6-2020.11.13.2015',
           port: '8085:9001',
           restart_policy: 'always',
+          user: 'etherpad',
           env: [
             'DB_TYPE=mysql',
             'DB_HOST=testdb.osuosl.bak',
@@ -218,6 +219,7 @@ describe 'osl-app::app3' do
           tag: '1.8.6-2020.11.13.2015',
           port: '8086:9001',
           restart_policy: 'always',
+          user: 'etherpad',
           env: [
             'DB_TYPE=mysql',
             'DB_HOST=testdb.osuosl.bak',

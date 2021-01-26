@@ -148,6 +148,7 @@ docker_container 'etherpad-lite.osuosl.org' do
   tag etherpad_osl_tag
   port '8085:9001'
   restart_policy 'always'
+  user 'etherpad'
   env [
     'DB_TYPE=mysql',
     "DB_HOST=#{etherpad_osl_secrets['db_hostname']}",
@@ -173,6 +174,7 @@ docker_container 'etherpad-snowdrift.osuosl.org' do
   tag etherpad_snowdrift_tag
   port '8086:9001'
   restart_policy 'always'
+  user 'etherpad'
   env [
     'DB_TYPE=mysql',
     "DB_HOST=#{etherpad_snowdrift_secrets['db_hostname']}",
