@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+2.9.2 (2021-01-26)
+------------------
+- Set user to etherpad to fix idempotency issues
+
 2.9.1 (2021-01-20)
 ------------------
 - Cookstyle fixes
