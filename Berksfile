@@ -13,6 +13,6 @@ cookbook 'osl-nodejs', git: 'git@github.com:osuosl-cookbooks/osl-nodejs'
 cookbook 'osl-nrpe', git: 'git@github.com:osuosl-cookbooks/osl-nrpe'
 cookbook 'osl-postfix', git: 'git@github.com:osuosl-cookbooks/osl-postfix'
 cookbook 'osl-postgresql', git: 'git@github.com:osuosl-cookbooks/osl-postgresql'
-cookbook 'osl-repos', git: 'git@github.com:osuosl-cookbooks/osl-repos', branch: 'REK/Initial_PR'
+cookbook 'osl-repos', git: 'git@github.com:osuosl-cookbooks/osl-repos'
 cookbook 'osl-selinux', git: 'git@github.com:osuosl-cookbooks/osl-selinux'
 metadata
