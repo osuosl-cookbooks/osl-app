@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+2.10.0 (2021-02-03)
+-------------------
+- Replace any occurrence of yum-centos/yum-epel/yum-elrepo with osl-repos equivalents
+
 2.9.2 (2021-01-26)
 ------------------
 - Set user to etherpad to fix idempotency issues
