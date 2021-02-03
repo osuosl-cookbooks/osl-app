@@ -16,7 +16,8 @@ describe 'osl-app::default' do
 
       it do
         %w(
-          yum-epel::default
+          osl-repos::centos
+          osl-repos::epel
           osl-mysql::default
           base::python
         ).each do |p|
