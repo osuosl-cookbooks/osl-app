@@ -117,7 +117,7 @@ end
 %w(production staging).each do |type|
   logrotate_app "OpenID-#{type}" do
     path "/home/openid-#{type}/shared/log/*.log"
-    postrotate "/bin/kill -USR1 /home/openid-#{type}/current/tmp/pids/unicorn.pid"
+    postrotate "/bin/kill -USR1 $(cat /home/openid-#{type}/current/tmp/pids/unicorn.pid)"
     frequency 'daily'
     su "openid-#{type} openid-#{type}"
     rotate 30
