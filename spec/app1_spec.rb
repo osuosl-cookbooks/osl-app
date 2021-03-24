@@ -100,7 +100,7 @@ describe 'osl-app::app1' do
           expect(chef_run).to enable_logrotate_app("OpenID-#{type}").with(
             path: "/home/openid-#{type}/shared/log/*.log",
             frequency: 'daily',
-            postrotate: "/bin/kill -USR1 /home/openid-#{type}/current/tmp/pids/unicorn.pid",
+            postrotate: "/bin/kill -USR1 $(cat /home/openid-#{type}/current/tmp/pids/unicorn.pid)",
             su: "openid-#{type} openid-#{type}",
             rotate: 30
           )
