@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+2.10.1 (2021-03-24)
+-------------------
+- Fix logrotation for openid logs
+
 2.10.0 (2021-02-03)
 -------------------
 - Replace any occurrence of yum-centos/yum-epel/yum-elrepo with osl-repos equivalents
