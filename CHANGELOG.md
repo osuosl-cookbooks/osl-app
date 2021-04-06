@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+2.11.0 (2021-04-06)
+-------------------
+- Update Chef dependency to >= 16
+
 2.10.1 (2021-03-24)
 -------------------
 - Fix logrotation for openid logs
