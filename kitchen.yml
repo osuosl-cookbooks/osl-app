@@ -32,9 +32,6 @@ suites:
       - recipe[user::data_bag]
       - recipe[osl-app::app1]
   - name: app2
-    provisioner:
-      enforce_idempotency: false # fails because of yum_version_lock
-      multiple_converge: 1
     attributes:
       osl-mysql:
         enable_percona_client: true
@@ -52,11 +49,11 @@ suites:
       - recipe[osl-app::app2]
       - recipe[app_test::app2_postrun]
     driver:
-      name: openstack
       flavor_ref: 'm1.large'
-  - name: app3
     provisioner:
-      enforce_idempotency: false # fails to converge with idempotency enforced
+      # wait_for_replicant check is not idempotent
+      enforce_idempotency: false
+  - name: app3
     attributes:
       osl-mysql:
         enable_percona_client: true
@@ -72,5 +69,7 @@ suites:
       - recipe[osl-app::app3]
       - recipe[app_test::app3_postrun]
     driver:
-      name: openstack
       flavor_ref: 'm1.large'
+    provisioner:
+      # wait_for_mulgara check is not idempotent
+      enforce_idempotency: false
