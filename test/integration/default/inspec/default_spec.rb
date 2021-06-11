@@ -45,3 +45,11 @@ describe file('/etc/sudoers') do
   it { should be_file }
   its('content') { should match(%r{#includedir \/etc\/sudoers\.d}) }
 end
+
+describe iptables do
+  it { should have_rule '-A unicorn -p tcp -m tcp --dport 8080:9000 -j osl_only' }
+end
+
+describe ip6tables do
+  it { should have_rule '-A unicorn -p tcp -m tcp --dport 8080:9000 -j osl_only' }
+end

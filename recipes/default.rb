@@ -67,4 +67,6 @@ include_recipe 'git'
 include_recipe 'osl-nodejs'
 include_recipe 'user::data_bag'
 
-osl_firewall_port 'unicorn'
+osl_firewall_port 'unicorn' do
+  osl_only true
+end
