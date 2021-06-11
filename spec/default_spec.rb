@@ -25,7 +25,7 @@ describe 'osl-app::default' do
         end
       end
 
-      it { expect(chef_run).to accept_osl_firewall_port('unicorn') }
+      it { expect(chef_run).to accept_osl_firewall_port('unicorn').with(osl_only: true) }
 
       case plat
       when CENTOS_7
