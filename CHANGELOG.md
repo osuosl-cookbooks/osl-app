@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+3.0.1 (2021-06-11)
+------------------
+- Set "unicorn" ports to osl_only
+
 3.0.0 (2021-05-25)
 ------------------
 - Update to new osl-firewall resources
