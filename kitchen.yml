@@ -51,7 +51,7 @@ suites:
     driver:
       flavor_ref: 'm1.large'
     provisioner:
-      # wait_for_replicant check is not idempotent
+      # db grant is not idempotent
       enforce_idempotency: false
   - name: app3
     attributes:
@@ -71,5 +71,5 @@ suites:
     driver:
       flavor_ref: 'm1.large'
     provisioner:
-      # wait_for_mulgara check is not idempotent
+      # db grant is not idempotent
       enforce_idempotency: false
