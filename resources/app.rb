@@ -1,4 +1,5 @@
 provides :osl_app
+unified_mode true
 
 default_action :create
 
