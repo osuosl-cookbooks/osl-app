@@ -1,24 +1,17 @@
-chef_gem 'rest-client' do
-  action :install
-  compile_time false
-end
+chef_gem 'rest-client'
 
 ruby_block 'wait_for_replicant' do
+  extend OslAppTest::Cookbook::Helpers
   block do
-    require 'rest-client'
     times = 0
-    client = nil
-    until client && client.code == 200
+    until get_return_code('http://127.0.0.1:8090/') == 200
       times += 1
-      begin
-        client = RestClient.get 'http://127.0.0.1:8090/'
-      rescue
-        sleep 5
-        puts "Still waiting for redmine.replicant.us to start... #{times * 5} seconds"
-      end
+      sleep 5
+      puts "Still waiting for redmine.replicant.us to start... #{times * 5} seconds"
       raise('Failed to start redmine.replicant.us') if times > 30
     end
   end
+  not_if { get_return_code('http://127.0.0.1:8090/') == 200 }
 end
 
 # localhost / test kitchen ip is not in OSL ips
