@@ -3,5 +3,6 @@
     "username": "replicant",
     "home": "/home/replicant",
     "ssh_keygen": "false",
-    "password": "*"
+    "password": "*",
+    "groups": ["app2"]
 }

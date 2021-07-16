@@ -12,7 +12,7 @@ cookbook 'osl-postfix', git: 'git@github.com:osuosl-cookbooks/osl-postfix'
 cookbook 'osl-postgresql', git: 'git@github.com:osuosl-cookbooks/osl-postgresql'
 cookbook 'osl-repos', git: 'git@github.com:osuosl-cookbooks/osl-repos'
 cookbook 'osl-selinux', git: 'git@github.com:osuosl-cookbooks/osl-selinux'
-
+cookbook 'users', git: 'git@github.com:TheREK3R/users.git', branch: 'REK/fix_homedir_group'
 cookbook 'app_test', path: 'test/cookbooks/app_test'
 
 metadata
