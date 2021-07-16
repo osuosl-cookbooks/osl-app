@@ -3,5 +3,6 @@
     "username": "openid-staging",
     "home": "/home/openid-staging",
     "ssh_keygen": "false",
-    "password": "*"
+    "password": "*",
+    "groups": ["app1"]
 }

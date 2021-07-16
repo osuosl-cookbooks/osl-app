@@ -1,5 +1,6 @@
 {
   "id": "iam-production",
   "username": "iam-production",
-  "ssh_keygen": false
+  "ssh_keygen": false,
+  "groups": ["app2"]
 }
