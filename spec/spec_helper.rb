@@ -24,5 +24,6 @@ shared_context 'common_stubs' do
   before do
     stub_command('which sudo')
     stub_command('which nginx')
+    stub_search('users', '*:*').and_return([])
   end
 end

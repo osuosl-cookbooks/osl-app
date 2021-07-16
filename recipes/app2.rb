@@ -22,9 +22,17 @@ node.override['osl-docker']['service'] = { misc_opts: '--live-restore' }
 include_recipe 'osl-app::default'
 include_recipe 'osl-docker'
 
-node.default['users'] = %w(formsender-production formsender-staging
-                           iam-staging iam-production
-                           timesync-staging timesync-production replicant)
+users = search('users', '*:*')
+
+users_manage 'app2' do
+  users users
+end
+
+users.each do |u|
+  directory "/home/#{u[:username] || u[:id]}" do
+    mode '02750'
+  end
+end
 
 #### Apps ####
 

@@ -1,5 +1,6 @@
 {
   "id": "timesync-web-production",
   "username": "timesync-web-production",
-  "ssh_keygen": false
+  "ssh_keygen": false,
+  "groups": ["app3"]
 }

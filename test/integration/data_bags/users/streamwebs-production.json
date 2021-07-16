@@ -1,5 +1,6 @@
 {
   "id": "streamwebs-production",
   "username": "streamwebs-production",
-  "ssh_keygen": false
+  "ssh_keygen": false,
+  "groups": ["app3"]
 }

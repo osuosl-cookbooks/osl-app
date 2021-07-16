@@ -29,7 +29,6 @@ suites:
         - test1-staging
     run_list:
       - recipe[sudo]
-      - recipe[user::data_bag]
       - recipe[osl-app::app1]
   - name: app2
     attributes:
@@ -44,7 +43,6 @@ suites:
         - timesync-staging
     run_list:
       - recipe[sudo]
-      - recipe[user::data_bag]
       - recipe[app_test::app2]
       - recipe[osl-app::app2]
       - recipe[app_test::app2_postrun]
@@ -64,7 +62,6 @@ suites:
         - timesync-web-production
     run_list:
       - recipe[sudo]
-      - recipe[user::data_bag]
       - recipe[app_test::app3]
       - recipe[osl-app::app3]
       - recipe[app_test::app3_postrun]

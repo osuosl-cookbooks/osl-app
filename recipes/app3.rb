@@ -28,8 +28,17 @@ service 'nginx' do
   action :nothing
 end
 
-node.default['users'] = %w(streamwebs-production streamwebs-staging
-                           timesync-web-staging timesync-web-production)
+users = search('users', '*:*')
+
+users_manage 'app3' do
+  users users
+end
+
+users.each do |u|
+  directory "/home/#{u[:username] || u[:id]}" do
+    mode '02750'
+  end
+end
 
 #### Apps ####
 
@@ -90,14 +99,14 @@ node.default['osl-app']['nginx'] = {
   },
 }
 
-# Give nginx access to their homedirs
-%w(production staging).each do |env|
-  group "streamwebs-#{env}" do
-    members ["streamwebs-#{env}", 'nginx']
-    action :modify
-    notifies :restart, 'service[nginx]'
-  end
-end
+# # Give nginx access to their homedirs
+# %w(production staging).each do |env|
+#   group "streamwebs-#{env}" do
+#     members ["streamwebs-#{env}", 'nginx']
+#     action :modify
+#     notifies :restart, 'service[nginx]'
+#   end
+# end
 
 nginx_app 'app3.osuosl.org' do
   template 'app-nginx.erb'
