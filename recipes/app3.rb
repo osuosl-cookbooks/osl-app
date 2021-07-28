@@ -41,7 +41,7 @@ osl_app 'streamwebs-staging-gunicorn' do
     '--access-logfile /home/streamwebs-staging/logs/access.log '\
     '--error-logfile /home/streamwebs-staging/logs/error.log ' \
     'streamwebs_frontend.wsgi:application'
-  environment 'PATH' => '/home/streamwebs-staging/venv/bin'
+  environment 'PATH=/home/streamwebs-staging/venv/bin'
   working_directory '/home/streamwebs-staging/streamwebs/streamwebs_frontend'
   pid_file '/home/streamwebs-staging/tmp/pids/gunicorn.pid'
 end
@@ -54,7 +54,7 @@ osl_app 'streamwebs-production-gunicorn' do
     '--access-logfile /home/streamwebs-production/logs/access.log '\
     '--error-logfile /home/streamwebs-production/logs/error.log ' \
     'streamwebs_frontend.wsgi:application'
-  environment 'PATH' => '/home/streamwebs-production/venv/bin'
+  environment 'PATH=/home/streamwebs-production/venv/bin'
   working_directory '/home/streamwebs-production/streamwebs/streamwebs_frontend'
   pid_file '/home/streamwebs-production/tmp/pids/gunicorn.pid'
 end
@@ -63,7 +63,7 @@ osl_app 'timesync-web-staging' do
   description 'timesync-web staging app'
   start_cmd '/home/timesync-web-staging/venv/bin/gunicorn -b 0.0.0.0:8082 '\
     '-D --pid /home/timesync-web-staging/tmp/pids/gunicorn.pid wsgi:app'
-  environment 'PATH' => '/home/timesync-web-staging/venv/bin'
+  environment 'PATH=/home/timesync-web-staging/venv/bin'
   working_directory '/home/timesync-web-staging/timesync-web'
   pid_file '/home/timesync-web-staging/tmp/pids/gunicorn.pid'
 end
@@ -73,7 +73,7 @@ osl_app 'timesync-web-production' do
   start_cmd '/home/timesync-web-production/venv/bin/gunicorn '\
     '-b 0.0.0.0:8083 '\
     '-D --pid /home/timesync-web-production/tmp/pids/gunicorn.pid wsgi:app'
-  environment 'PATH' => '/home/timesync-web-production/venv/bin'
+  environment 'PATH=/home/timesync-web-production/venv/bin'
   working_directory '/home/timesync-web-production/timesync-web'
   pid_file '/home/timesync-web-production/tmp/pids/gunicorn.pid'
 end

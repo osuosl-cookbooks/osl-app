@@ -20,79 +20,66 @@ describe 'osl-app::app1' do
         )
       end
 
-      it 'should create systemctl privs for openid-staging' do
-        expect(chef_run).to create_sudo('openid-staging').with(
-          commands: ['/usr/bin/systemctl enable openid-staging-unicorn',
-                    '/usr/bin/systemctl disable openid-staging-unicorn',
-                    '/usr/bin/systemctl stop openid-staging-unicorn',
-                    '/usr/bin/systemctl start openid-staging-unicorn',
-                    '/usr/bin/systemctl status openid-staging-unicorn',
-                    '/usr/bin/systemctl reload openid-staging-unicorn',
-                    '/usr/bin/systemctl restart openid-staging-unicorn',
-                    '/usr/bin/systemctl enable openid-staging-delayed-job',
-                    '/usr/bin/systemctl disable openid-staging-delayed-job',
-                    '/usr/bin/systemctl stop openid-staging-delayed-job',
-                    '/usr/bin/systemctl start openid-staging-delayed-job',
-                    '/usr/bin/systemctl status openid-staging-delayed-job',
-                    '/usr/bin/systemctl reload openid-staging-delayed-job',
-                    '/usr/bin/systemctl restart openid-staging-delayed-job'],
-          nopasswd: true
-        )
-      end
-
-      it 'should create systemctl privs for openid-production' do
-        expect(chef_run).to create_sudo('openid-production').with(
-          commands: ['/usr/bin/systemctl enable openid-production-unicorn',
-                    '/usr/bin/systemctl disable openid-production-unicorn',
-                    '/usr/bin/systemctl stop openid-production-unicorn',
-                    '/usr/bin/systemctl start openid-production-unicorn',
-                    '/usr/bin/systemctl status openid-production-unicorn',
-                    '/usr/bin/systemctl reload openid-production-unicorn',
-                    '/usr/bin/systemctl restart openid-production-unicorn',
-                    '/usr/bin/systemctl enable openid-production-delayed-job',
-                    '/usr/bin/systemctl disable openid-production-delayed-job',
-                    '/usr/bin/systemctl stop openid-production-delayed-job',
-                    '/usr/bin/systemctl start openid-production-delayed-job',
-                    '/usr/bin/systemctl status openid-production-delayed-job',
-                    '/usr/bin/systemctl reload openid-production-delayed-job',
-                    '/usr/bin/systemctl restart openid-production-delayed-job'],
-          nopasswd: true
+      it do
+        is_expected.to create_osl_app('openid-staging-unicorn').with(
+          description: 'openid staging app',
+          service_after: 'network.target',
+          wanted_by: 'multi-user.target',
+          service_type: 'forking',
+          user: 'openid-staging',
+          environment: 'RAILS_ENV=staging',
+          working_directory: '/home/openid-staging/current',
+          pid_file: '/home/openid-staging/current/tmp/pids/unicorn.pid',
+          start_cmd: '/home/openid-staging/.rvm/bin/rvm 2.5.3 do bundle exec unicorn -c /home/openid-staging/current/config/unicorn/staging.rb -E deployment -D',
+          reload_cmd: '/bin/kill -USR2 $MAINPID'
         )
       end
 
       it do
-        expect(chef_run).to remove_sudo('fenestra')
+        is_expected.to create_osl_app('openid-staging-delayed-job').with(
+          description: 'openid delayed job',
+          service_after: 'network.target openid-staging-unicorn.service',
+          service_wants: 'openid-staging-unicorn.service',
+          wanted_by: 'multi-user.target',
+          service_type: 'forking',
+          user: 'openid-staging',
+          environment: 'RAILS_ENV=staging',
+          working_directory: '/home/openid-staging/current',
+          start_cmd: '/home/openid-staging/.rvm/bin/rvm 2.5.3 do bundle exec bin/delayed_job -n 2 start',
+          reload_cmd: '/home/openid-staging/.rvm/bin/rvm 2.5.3 do bundle exec bin/delayed_job -n 2 restart'
+        )
+      end
+      it do
+        is_expected.to create_osl_app('openid-production-unicorn').with(
+          description: 'openid production app',
+          service_after: 'network.target',
+          wanted_by: 'multi-user.target',
+          service_type: 'forking',
+          user: 'openid-production',
+          working_directory: '/home/openid-production/current',
+          pid_file: '/home/openid-production/current/tmp/pids/unicorn.pid',
+          start_cmd: '/home/openid-production/.rvm/bin/rvm 2.5.3 do bundle exec unicorn -c /home/openid-production/current/config/unicorn/production.rb -E deployment -D',
+          reload_cmd: '/bin/kill -USR2 $MAINPID'
+        )
+      end
+
+      it do
+        is_expected.to create_osl_app('openid-production-delayed-job').with(
+          description: 'openid delayed job',
+          service_after: 'network.target openid-production-unicorn.service',
+          service_wants: 'openid-production-unicorn.service',
+          wanted_by: 'multi-user.target',
+          service_type: 'forking',
+          user: 'openid-production',
+          environment: 'RAILS_ENV=production',
+          working_directory: '/home/openid-production/current',
+          start_cmd: '/home/openid-production/.rvm/bin/rvm 2.5.3 do bundle exec bin/delayed_job -n 2 start',
+          reload_cmd: '/home/openid-production/.rvm/bin/rvm 2.5.3 do bundle exec bin/delayed_job -n 2 restart'
+        )
       end
 
       it do
         expect(chef_run).to delete_osl_app('fenestra')
-      end
-
-      it do
-        expect(chef_run).to delete_systemd_service('fenestra')
-      end
-
-      %w(openid-staging-unicorn
-        openid-staging-delayed-job
-        openid-production-unicorn
-        openid-production-delayed-job).each do |s|
-        it "should create system service #{s}" do
-          expect(chef_run).to create_systemd_service(s)
-        end
-
-        it "should enable system service #{s}" do
-          expect(chef_run).to enable_systemd_service(s)
-        end
-      end
-
-      %w(fenestra).each do |s|
-        it "should delete system service #{s}" do
-          expect(chef_run).to delete_systemd_service(s)
-        end
-
-        it "should stop system service #{s}" do
-          expect(chef_run).to stop_systemd_service(s)
-        end
       end
 
       %w(production staging).each do |type|
