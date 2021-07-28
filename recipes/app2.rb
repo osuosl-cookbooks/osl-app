@@ -28,12 +28,6 @@ users_manage 'app2' do
   users users
 end
 
-users.each do |u|
-  directory "/home/#{u[:username] || u[:id]}" do
-    mode '02750'
-  end
-end
-
 #### Apps ####
 
 # this app's service depends on the logs/ directory being present inside

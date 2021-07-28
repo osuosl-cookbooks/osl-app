@@ -34,12 +34,6 @@ users_manage 'app3' do
   users users
 end
 
-users.each do |u|
-  directory "/home/#{u[:username] || u[:id]}" do
-    mode '02750'
-  end
-end
-
 #### Apps ####
 
 osl_app 'streamwebs-staging-gunicorn' do

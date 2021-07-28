@@ -24,12 +24,6 @@ users_manage 'app1' do
   users users
 end
 
-users.each do |u|
-  directory "/home/#{u[:username] || u[:id]}" do
-    mode '02750'
-  end
-end
-
 openid_secrets = data_bag_item('osl-app', 'openid')
 
 #### Systemd Services ####

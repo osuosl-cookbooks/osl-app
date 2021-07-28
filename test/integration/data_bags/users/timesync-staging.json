@@ -2,5 +2,6 @@
   "id": "timesync-staging",
   "username": "timesync-staging",
   "ssh_keygen": false,
+  "homedir_mode": "02750",
   "groups": ["app2"]
 }
