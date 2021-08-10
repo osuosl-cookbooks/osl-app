@@ -4,7 +4,7 @@ describe 'osl-app::app2' do
   ALL_PLATFORMS.each do |plat|
     context "#{plat[:platform]} #{plat[:version]}" do
       cached(:chef_run) do
-        ChefSpec::SoloRunner.new(plat.dup.merge(step_into: %w(osl_app))) do |_node, server|
+        ChefSpec::SoloRunner.new(plat) do |_node, server|
         end.converge('sudo', described_recipe)
       end
 

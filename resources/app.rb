@@ -26,51 +26,25 @@ action :create do
     action :nothing
   end
 
-  # systemd_unit "#{new_resource.service_name}.service" do
-  #   content(<<~EOU
-  #     [Unit]
-  #     #{"Description = #{new_resource.description}" unless new_resource.description.nil?}
-  #     After = #{new_resource.service_after}
-  #     #{"Wants = #{new_resource.service_wants}" unless new_resource.service_wants.nil?}
-
-  #     [Install]
-  #     WantedBy = #{new_resource.wanted_by}
-
-  #     [Service]
-  #     Type = #{new_resource.service_type}
-  #     User = #{new_resource.user}
-  #     #{"Environment = #{new_resource.environment}" unless new_resource.environment.nil?}
-  #     #{"EnvironmentFile = #{new_resource.environment_file}" unless new_resource.environment_file.nil?}
-  #     #{"WorkingDirectory = #{new_resource.working_directory}" unless new_resource.working_directory.nil?}
-  #     #{"PidFile = #{new_resource.pid_file}" unless new_resource.pid_file.nil?}
-  #     ExecStart = #{new_resource.start_cmd}
-  #     ExecReload = #{new_resource.reload_cmd}
-  #   EOU
-  #          )
-  #   action [:create, :enable]
-  #   verify new_resource.verify
-  #   notifies :create, "sudo[#{new_resource.user}]", :immediately
-  # end
-
   systemd_unit "#{new_resource.service_name}.service" do
     content({
       'Unit' => {
-        'Description' => new_resource.description.nil? ? nil : new_resource.description,
+        'Description' => new_resource.description,
         'After' => new_resource.service_after,
-        'Wants' => new_resource.service_wants.nil? ? nil : new_resource.service_wants,
-      },
-      'Install' => {
-        'WantedBy' => new_resource.wanted_by,
+        'Wants' => new_resource.service_wants,
       },
       'Service' => {
         'Type' => new_resource.service_type,
         'User' => new_resource.user,
-        'Environment' => new_resource.environment.nil? ? nil : new_resource.environment,
-        'EnvironmentFile' => new_resource.environment_file.nil? ? nil : new_resource.environment_file,
-        'WorkingDirectory' => new_resource.working_directory.nil? ? nil : new_resource.working_directory,
-        'PIDFile' => new_resource.pid_file.nil? ? nil : new_resource.pid_file,
+        'Environment' => new_resource.environment,
+        'EnvironmentFile' => new_resource.environment_file,
+        'WorkingDirectory' => new_resource.working_directory,
+        'PIDFile' => new_resource.pid_file,
         'ExecStart' => new_resource.start_cmd,
         'ExecReload' => new_resource.reload_cmd,
+      },
+      'Install' => {
+        'WantedBy' => new_resource.wanted_by,
       },
     })
     action [:create, :enable]
@@ -90,13 +64,13 @@ action :delete do
 end
 
 action :stop do
-  systemd_unit new_resource.service_name do
+  service new_resource.service_name do
     action :stop
   end
 end
 
 action :disable do
-  systemd_unit new_resource.service_name do
+  service new_resource.service_name do
     action :disable
   end
 end
