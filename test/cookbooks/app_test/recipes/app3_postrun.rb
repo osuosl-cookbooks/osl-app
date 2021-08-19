@@ -8,7 +8,7 @@ ruby_block 'wait_for_mulgara' do
       times += 1
       sleep 5
       puts "Still waiting for code.mulgara.org to start... #{times * 5} seconds"
-      if times > 30
+      if times > 6
         puts '! Failed to start code.mulgara.org, could just be first run !'
         break
       end
