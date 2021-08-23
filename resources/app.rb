@@ -59,7 +59,7 @@ action :delete do
   end
 
   systemd_unit "#{new_resource.service_name}.service" do
-    action [:stop, :delete]
+    action [:stop, :disable, :delete]
   end
 end
 

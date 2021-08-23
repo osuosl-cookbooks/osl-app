@@ -73,6 +73,14 @@ describe 'osl_app' do
     end
 
     it do
+      is_expected.to stop_systemd_unit('test_app.service')
+    end
+
+    it do
+      is_expected.to disable_systemd_unit('test_app.service')
+    end
+
+    it do
       is_expected.to delete_systemd_unit('test_app.service')
     end
 
