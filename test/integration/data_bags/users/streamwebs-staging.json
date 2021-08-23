@@ -3,5 +3,8 @@
   "username": "streamwebs-staging",
   "ssh_keygen": false,
   "homedir_mode": "02750",
-  "groups": ["app3"]
+  "groups": [
+    "app3"
+  ],
+  "shell": "/bin/bash"
 }

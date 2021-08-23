@@ -1,9 +1,12 @@
 {
-    "id": "openid-staging",
-    "username": "openid-staging",
-    "home": "/home/openid-staging",
-    "ssh_keygen": "false",
-    "password": "*",
-    "homedir_mode": "02750",
-    "groups": ["app1"]
+  "id": "openid-staging",
+  "username": "openid-staging",
+  "home": "/home/openid-staging",
+  "ssh_keygen": "false",
+  "password": "*",
+  "homedir_mode": "02750",
+  "groups": [
+    "app1"
+  ],
+  "shell": "/bin/bash"
 }

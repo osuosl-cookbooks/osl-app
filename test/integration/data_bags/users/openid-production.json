@@ -1,9 +1,12 @@
 {
-    "id": "openid-production",
-    "username": "openid-production",
-    "home": "/home/openid-production",
-    "ssh_keygen": "false",
-    "password": "*",
-    "homedir_mode": "02750",
-    "groups": ["app1"]
+  "id": "openid-production",
+  "username": "openid-production",
+  "home": "/home/openid-production",
+  "ssh_keygen": "false",
+  "password": "*",
+  "homedir_mode": "02750",
+  "groups": [
+    "app1"
+  ],
+  "shell": "/bin/bash"
 }

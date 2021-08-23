@@ -3,5 +3,6 @@
   "username": "test1-staging",
   "ssh_keygen": false,
   "homedir_mode": "02750",
-  "groups": []
+  "groups": [],
+  "shell": "/bin/bash"
 }
