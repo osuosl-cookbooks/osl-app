@@ -7,15 +7,15 @@ property :user, String, default: lazy { name }
 property :service_after, String, default: 'network.target'
 property :service_name, String, default: lazy { name }
 property :service_type, String, default: 'forking'
-property :service_wants, [String, nil]
+property :service_wants, String
 property :start_cmd, String, required: true
 property :reload_cmd, String, default: '/bin/kill -USR2 $MAINPID'
-property :description, [String, nil]
-property :environment, [String, nil]
-property :pid_file, [String, nil]
+property :description, String
+property :environment, String
+property :pid_file, String
 property :wanted_by, String, default: 'multi-user.target'
-property :working_directory, [String, nil]
-property :environment_file, [String, nil]
+property :working_directory, String
+property :environment_file, String
 property :verify, [true, false], default: false
 
 action :create do

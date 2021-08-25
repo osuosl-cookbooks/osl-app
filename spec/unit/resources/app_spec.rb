@@ -17,9 +17,7 @@ describe 'osl_app' do
       is_expected.to create_systemd_unit('test_app.service').with(
         content: {
           'Unit' => {
-            'Description' => nil,
             'After' => 'network.target',
-            'Wants' => nil,
           },
           'Install' => {
             'WantedBy' => 'multi-user.target',
@@ -27,10 +25,6 @@ describe 'osl_app' do
           'Service' => {
             'Type' => 'forking',
             'User' => 'test_app',
-            'Environment' => nil,
-            'EnvironmentFile' => nil,
-            'WorkingDirectory' => nil,
-            'PIDFile' => nil,
             'ExecStart' => '/opt/test/bin/test start',
             'ExecReload' => '/bin/kill -USR2 $MAINPID',
           },
@@ -112,7 +106,6 @@ describe 'osl_app' do
           'Unit' => {
             'Description' => 'test_app',
             'After' => 'default.target',
-            'Wants' => nil,
           },
           'Install' => {
             'WantedBy' => 'multi-user.target',
@@ -121,8 +114,6 @@ describe 'osl_app' do
             'Type' => 'simple',
             'User' => 'testuser',
             'Environment' => 'TEST_PATH=/opt/test',
-            'EnvironmentFile' => nil,
-            'PIDFile' => nil,
             'WorkingDirectory' => '/opt/test',
             'ExecStart' => '/opt/test/bin/test start',
             'ExecReload' => '/opt/test/bin/test restart',
