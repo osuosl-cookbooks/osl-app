@@ -46,7 +46,7 @@ action :create do
       'Install' => {
         'WantedBy' => new_resource.wanted_by,
       },
-    }.transform_values(&:compact))
+    }.transform_values(&:compact)) # Remove all keys from the hash that go to nil, these will cause a malformed ini
     action [:create, :enable]
     verify new_resource.verify
     notifies :create, "sudo[#{new_resource.user}]", :immediately
