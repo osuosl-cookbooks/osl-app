@@ -46,7 +46,7 @@ action :create do
       'Install' => {
         'WantedBy' => new_resource.wanted_by,
       },
-    })
+    }.transform_values(&:compact))
     action [:create, :enable]
     verify new_resource.verify
     notifies :create, "sudo[#{new_resource.user}]", :immediately
