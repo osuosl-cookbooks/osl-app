@@ -4,7 +4,7 @@ describe 'osl-app::app3' do
   ALL_PLATFORMS.each do |plat|
     context "#{plat[:platform]} #{plat[:version]}" do
       cached(:chef_run) do
-        ChefSpec::SoloRunner.new(plat.dup.merge(step_into: %w(osl_app))) do |_node, server|
+        ChefSpec::SoloRunner.new(plat) do |_node, server|
         end.converge('sudo', described_recipe)
       end
 
@@ -40,31 +40,9 @@ describe 'osl-app::app3' do
               "--access-logfile /home/streamwebs-#{env}/logs/access.log "\
               "--error-logfile /home/streamwebs-#{env}/logs/error.log "\
               'streamwebs_frontend.wsgi:application',
-            environment: { 'PATH' => "/home/streamwebs-#{env}/venv/bin" },
+            environment: "PATH=/home/streamwebs-#{env}/venv/bin",
             working_directory: "/home/streamwebs-#{env}/streamwebs/streamwebs_frontend",
             pid_file: "/home/streamwebs-#{env}/tmp/pids/gunicorn.pid"
-          )
-        end
-
-        it do
-          port = env == 'staging' ? 8081 : 8080
-          expect(chef_run).to create_systemd_service("streamwebs-#{env}-gunicorn").with(
-            unit_description: "streamwebs #{env} app",
-            unit_after: %w(network.target),
-            install_wanted_by: 'multi-user.target',
-            service_type: 'forking',
-            service_user: "streamwebs-#{env}",
-            service_environment: { 'PATH' => "/home/streamwebs-#{env}/venv/bin" },
-            service_environment_file: nil,
-            service_working_directory: "/home/streamwebs-#{env}/streamwebs/streamwebs_frontend",
-            service_pid_file: "/home/streamwebs-#{env}/tmp/pids/gunicorn.pid",
-            service_exec_start: "/home/streamwebs-#{env}/venv/bin/gunicorn -b 0.0.0.0:#{port} "\
-              "-D --pid /home/streamwebs-#{env}/tmp/pids/gunicorn.pid "\
-              "--access-logfile /home/streamwebs-#{env}/logs/access.log "\
-              "--error-logfile /home/streamwebs-#{env}/logs/error.log "\
-              'streamwebs_frontend.wsgi:application',
-            service_exec_reload: '/bin/kill -USR2 $MAINPID',
-            verify: false
           )
         end
 
@@ -74,65 +52,10 @@ describe 'osl-app::app3' do
             description: "timesync-web #{env} app",
             start_cmd: "/home/timesync-web-#{env}/venv/bin/gunicorn -b 0.0.0.0:#{port} "\
               "-D --pid /home/timesync-web-#{env}/tmp/pids/gunicorn.pid wsgi:app",
-            environment: { 'PATH' => "/home/timesync-web-#{env}/venv/bin" },
+            environment: "PATH=/home/timesync-web-#{env}/venv/bin",
             working_directory: "/home/timesync-web-#{env}/timesync-web",
             pid_file: "/home/timesync-web-#{env}/tmp/pids/gunicorn.pid"
           )
-        end
-
-        it do
-          port = env == 'staging' ? 8082 : 8083
-          expect(chef_run).to create_systemd_service("timesync-web-#{env}").with(
-            unit_description: "timesync-web #{env} app",
-            unit_after: %w(network.target),
-            install_wanted_by: 'multi-user.target',
-            service_type: 'forking',
-            service_user: "timesync-web-#{env}",
-            service_environment: { 'PATH' => "/home/timesync-web-#{env}/venv/bin" },
-            service_environment_file: nil,
-            service_working_directory: "/home/timesync-web-#{env}/timesync-web",
-            service_pid_file: "/home/timesync-web-#{env}/tmp/pids/gunicorn.pid",
-            service_exec_start: "/home/timesync-web-#{env}/venv/bin/gunicorn -b 0.0.0.0:#{port} "\
-              "-D --pid /home/timesync-web-#{env}/tmp/pids/gunicorn.pid wsgi:app",
-            service_exec_reload: '/bin/kill -USR2 $MAINPID'
-          )
-        end
-      end
-
-      %w(staging production).each do |env|
-        it do
-          expect(chef_run).to create_sudo("streamwebs-#{env}").with(
-            commands: ["/usr/bin/systemctl enable streamwebs-#{env}-gunicorn",
-                      "/usr/bin/systemctl disable streamwebs-#{env}-gunicorn",
-                      "/usr/bin/systemctl stop streamwebs-#{env}-gunicorn",
-                      "/usr/bin/systemctl start streamwebs-#{env}-gunicorn",
-                      "/usr/bin/systemctl status streamwebs-#{env}-gunicorn",
-                      "/usr/bin/systemctl reload streamwebs-#{env}-gunicorn",
-                      "/usr/bin/systemctl restart streamwebs-#{env}-gunicorn"],
-            nopasswd: true
-          )
-        end
-
-        it do
-          expect(chef_run).to create_sudo("timesync-web-#{env}").with(
-            commands: ["/usr/bin/systemctl enable timesync-web-#{env}",
-                      "/usr/bin/systemctl disable timesync-web-#{env}",
-                      "/usr/bin/systemctl stop timesync-web-#{env}",
-                      "/usr/bin/systemctl start timesync-web-#{env}",
-                      "/usr/bin/systemctl status timesync-web-#{env}",
-                      "/usr/bin/systemctl reload timesync-web-#{env}",
-                      "/usr/bin/systemctl restart timesync-web-#{env}"],
-            nopasswd: true
-          )
-        end
-      end
-
-      %w(streamwebs-production-gunicorn
-        streamwebs-staging-gunicorn
-        timesync-web-production
-        timesync-web-staging).each do |s|
-        it do
-          expect(chef_run).to enable_systemd_service(s)
         end
       end
 

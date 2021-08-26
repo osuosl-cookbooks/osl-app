@@ -39,7 +39,7 @@ osl_app 'formsender-staging-gunicorn' do
     '--error-logfile /home/formsender-staging/logs/error.log '\
     '--log-level debug '\
     'formsender.wsgi:application'
-  environment 'PATH' => '/home/formsender-staging/venv/bin'
+  environment 'PATH=/home/formsender-staging/venv/bin'
   working_directory '/home/formsender-staging/formsender'
   pid_file '/home/formsender-staging/tmp/pids/gunicorn.pid'
 end
@@ -55,7 +55,7 @@ osl_app 'formsender-production-gunicorn' do
     '--error-logfile /home/formsender-production/logs/error.log '\
     '--log-level debug '\
     'formsender.wsgi:application'
-  environment 'PATH' => '/home/formsender-production/venv/bin'
+  environment 'PATH=/home/formsender-production/venv/bin'
   working_directory '/home/formsender-production/formsender'
   pid_file '/home/formsender-production/tmp/pids/gunicorn.pid'
 end
