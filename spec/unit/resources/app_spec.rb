@@ -79,7 +79,7 @@ describe 'osl_app' do
     end
 
     it do
-      is_expected.to remove_sudo('test_app')
+      is_expected.to delete_sudo('test_app')
     end
   end
 
