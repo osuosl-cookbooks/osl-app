@@ -93,14 +93,15 @@ node.default['osl-app']['nginx'] = {
   },
 }
 
-# # Give nginx access to their homedirs
-# %w(production staging).each do |env|
-#   group "streamwebs-#{env}" do
-#     members ["streamwebs-#{env}", 'nginx']
-#     action :modify
-#     notifies :restart, 'service[nginx]'
-#   end
-# end
+# Give nginx access to their homedirs
+%w(production staging).each do |env|
+  group "streamwebs-#{env}" do
+    members 'nginx'
+    action :modify
+    append true
+    notifies :restart, 'service[nginx]'
+  end
+end
 
 nginx_app 'app3.osuosl.org' do
   template 'app-nginx.erb'
