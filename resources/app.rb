@@ -55,7 +55,7 @@ end
 
 action :delete do
   sudo new_resource.user do
-    action :remove
+    action :delete
   end
 
   systemd_unit "#{new_resource.service_name}.service" do

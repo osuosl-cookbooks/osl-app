@@ -18,7 +18,11 @@
 
 include_recipe 'osl-app::default'
 
-node.default['users'] = %w(openid-staging openid-production)
+users = search('users', '*:*')
+
+users_manage 'app1' do
+  users users
+end
 
 openid_secrets = data_bag_item('osl-app', 'openid')
 

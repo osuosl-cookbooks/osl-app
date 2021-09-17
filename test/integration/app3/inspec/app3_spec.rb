@@ -97,3 +97,15 @@ describe command('docker exec etherpad-snowdrift.osuosl.org env') do
     its('stdout') { should match line }
   end
 end
+
+%w(streamwebs-production nginx).each do |u|
+  describe user(u) do
+    its('groups') { should include 'streamwebs-production' }
+  end
+end
+
+%w(streamwebs-staging nginx).each do |u|
+  describe user(u) do
+    its('groups') { should include 'streamwebs-staging' }
+  end
+end

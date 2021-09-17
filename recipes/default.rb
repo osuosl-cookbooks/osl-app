@@ -20,8 +20,6 @@ include_recipe 'osl-repos::epel'
 include_recipe 'osl-mysql::client'
 include_recipe 'base::python'
 
-node.override['user']['home_dir_mode'] = '2750'
-
 # WARNING!
 # If this gets updated, all NodeJS apps running will need to have their
 # node_modules directories completely removed and `npm install` run again to
@@ -65,7 +63,6 @@ build_essential 'install tools'
 
 include_recipe 'git'
 include_recipe 'osl-nodejs'
-include_recipe 'user::data_bag'
 
 osl_firewall_port 'unicorn' do
   osl_only true

@@ -1,5 +1,10 @@
 {
   "id": "formsender-production",
   "username": "formsender-production",
-  "ssh_keygen": false
+  "ssh_keygen": false,
+  "homedir_mode": "02750",
+  "groups": [
+    "app2"
+  ],
+  "shell": "/bin/bash"
 }

@@ -1,7 +1,12 @@
 {
-    "id": "replicant",
-    "username": "replicant",
-    "home": "/home/replicant",
-    "ssh_keygen": "false",
-    "password": "*"
+  "id": "replicant",
+  "username": "replicant",
+  "home": "/home/replicant",
+  "ssh_keygen": "false",
+  "password": "*",
+  "homedir_mode": "02750",
+  "groups": [
+    "app2"
+  ],
+  "shell": "/bin/bash"
 }

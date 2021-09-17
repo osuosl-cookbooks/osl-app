@@ -1,5 +1,10 @@
 {
   "id": "iam-staging",
   "username": "iam-staging",
-  "ssh_keygen": false
+  "ssh_keygen": false,
+  "homedir_mode": "02750",
+  "groups": [
+    "app2"
+  ],
+  "shell": "/bin/bash"
 }

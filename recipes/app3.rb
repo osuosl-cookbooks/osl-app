@@ -28,8 +28,11 @@ service 'nginx' do
   action :nothing
 end
 
-node.default['users'] = %w(streamwebs-production streamwebs-staging
-                           timesync-web-staging timesync-web-production)
+users = search('users', '*:*')
+
+users_manage 'app3' do
+  users users
+end
 
 #### Apps ####
 
@@ -93,8 +96,9 @@ node.default['osl-app']['nginx'] = {
 # Give nginx access to their homedirs
 %w(production staging).each do |env|
   group "streamwebs-#{env}" do
-    members ["streamwebs-#{env}", 'nginx']
+    members 'nginx'
     action :modify
+    append true
     notifies :restart, 'service[nginx]'
   end
 end

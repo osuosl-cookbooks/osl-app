@@ -60,14 +60,6 @@ describe 'osl-app::app3' do
       end
 
       it do
-        expect(chef_run).to modify_group('streamwebs-production').with(members: %w(streamwebs-production nginx))
-      end
-
-      it do
-        expect(chef_run).to modify_group('streamwebs-staging').with(members: %w(streamwebs-staging nginx))
-      end
-
-      it do
         expect(chef_run).to create_nginx_app('app3.osuosl.org').with(
           template: 'app-nginx.erb',
           cookbook: 'osl-app'

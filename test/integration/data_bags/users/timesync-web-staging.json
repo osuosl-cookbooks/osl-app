@@ -1,5 +1,10 @@
 {
   "id": "timesync-web-staging",
   "username": "timesync-web-staging",
-  "ssh_keygen": false
+  "ssh_keygen": false,
+  "homedir_mode": "02750",
+  "groups": [
+    "app3"
+  ],
+  "shell": "/bin/bash"
 }
