@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.0.0 (2021-09-17)
+------------------
+- Convert app2 to use the users cookbook
+
 3.2.0 (2021-08-26)
 ------------------
 - Convert this cookbook to properly use systemd_unit
