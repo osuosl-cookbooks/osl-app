@@ -109,3 +109,20 @@ end
     its('groups') { should include 'streamwebs-staging' }
   end
 end
+
+describe command 'sudo -U streamwebs-staging -l' do
+  its('stdout') { should match %r{\(ALL\) NOPASSWD: /usr/bin/systemctl restart streamwebs-staging-gunicorn} }
+end
+
+describe command 'sudo -U streamwebs-production -l' do
+  its('stdout') { should match %r{\(ALL\) NOPASSWD: /usr/bin/systemctl restart streamwebs-production-gunicorn} }
+end
+
+%w(
+  timesync-web-staging
+  timesync-web-production
+).each do |app|
+  describe command "sudo -U #{app} -l" do
+    its('stdout') { should match %r{\(ALL\) NOPASSWD: /usr/bin/systemctl restart #{app}} }
+  end
+end

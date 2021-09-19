@@ -9,11 +9,12 @@
   end
 end
 
-%w(
-  fenestra
-).each do |s|
-  describe service(s) do
-    it { should_not be_enabled }
-    it { should_not be_running }
-  end
+describe command 'sudo -U openid-production -l' do
+  its('stdout') { should match %r{\(ALL\) NOPASSWD: /usr/bin/systemctl restart openid-production-delayed-job} }
+  its('stdout') { should match %r{\(ALL\) NOPASSWD: /usr/bin/systemctl restart openid-production-unicorn} }
+end
+
+describe command 'sudo -U openid-staging -l' do
+  its('stdout') { should match %r{\(ALL\) NOPASSWD: /usr/bin/systemctl restart openid-staging-delayed-job} }
+  its('stdout') { should match %r{\(ALL\) NOPASSWD: /usr/bin/systemctl restart openid-staging-unicorn} }
 end
