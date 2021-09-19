@@ -78,10 +78,6 @@ describe 'osl-app::app1' do
         )
       end
 
-      it do
-        expect(chef_run).to delete_osl_app('fenestra')
-      end
-
       %w(production staging).each do |type|
         it "should create LogRotate service for OpenID-#{type}" do
           expect(chef_run).to enable_logrotate_app("OpenID-#{type}").with(

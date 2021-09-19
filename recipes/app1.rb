@@ -86,14 +86,6 @@ osl_app 'openid-production-delayed-job' do
   reload_cmd '/home/openid-production/.rvm/bin/rvm 2.5.3 do bundle exec bin/delayed_job -n 2 restart'
 end
 
-osl_app 'fenestra' do
-  description 'osuosl dashboard'
-  start_cmd '/home/fenestra/.rvm/bin/rvm 2.2.5 do bundle exec unicorn -l 8082 -c config/unicorn.rb -E deployment -D'
-  working_directory '/home/fenestra/fenestra'
-  pid_file '/home/fenestra/pids/unicorn.pid'
-  action :delete
-end
-
 # Setup logrotate, also make sure that unicorn releases the file handles
 # by sending it a USR1 signal, which will cause it reopen its logs
 %w(production staging).each do |type|

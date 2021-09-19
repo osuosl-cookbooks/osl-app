@@ -19,11 +19,10 @@ property :environment_file, String
 property :verify, [true, false], default: false
 
 action :create do
-  sudo new_resource.user do
+  sudo new_resource.service_name do
     user new_resource.user
     commands osl_sudo_commands(new_resource.service_name)
     nopasswd true
-    action :nothing
   end
 
   systemd_unit "#{new_resource.service_name}.service" do
@@ -49,7 +48,6 @@ action :create do
     }.transform_values(&:compact)) # Remove all keys from the hash that go to nil, these will cause a malformed ini
     action [:create, :enable]
     verify new_resource.verify
-    notifies :create, "sudo[#{new_resource.user}]", :immediately
   end
 end
 

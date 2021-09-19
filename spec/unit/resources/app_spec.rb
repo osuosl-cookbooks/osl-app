@@ -37,7 +37,7 @@ describe 'osl_app' do
     end
 
     it do
-      is_expected.to nothing_sudo('test_app').with(
+      is_expected.to create_sudo('test_app').with(
         commands: [
           '/usr/bin/systemctl enable test_app',
           '/usr/bin/systemctl disable test_app',
@@ -49,10 +49,6 @@ describe 'osl_app' do
         ],
         nopasswd: true
       )
-    end
-
-    it do
-      expect(subject.systemd_unit('test_app.service')).to notify('sudo[test_app]').to(:create).immediately
     end
   end
 
@@ -127,7 +123,7 @@ describe 'osl_app' do
     end
 
     it do
-      is_expected.to nothing_sudo('testuser').with(
+      is_expected.to create_sudo('test_app').with(
         commands: [
           '/usr/bin/systemctl enable test_app',
           '/usr/bin/systemctl disable test_app',
@@ -139,10 +135,6 @@ describe 'osl_app' do
         ],
         nopasswd: true
       )
-    end
-
-    it do
-      expect(subject.systemd_unit('test_app.service')).to notify('sudo[testuser]').to(:create).immediately
     end
   end
 end

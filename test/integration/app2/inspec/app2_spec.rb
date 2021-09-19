@@ -50,3 +50,22 @@ describe command('docker exec redmine.replicant.us env') do
     its('stdout') { should match line }
   end
 end
+
+describe command 'sudo -U formsender-staging -l' do
+  its('stdout') { should match %r{\(ALL\) NOPASSWD: /usr/bin/systemctl restart formsender-staging-gunicorn} }
+end
+
+describe command 'sudo -U formsender-production -l' do
+  its('stdout') { should match %r{\(ALL\) NOPASSWD: /usr/bin/systemctl restart formsender-production-gunicorn} }
+end
+
+%w(
+  iam-production
+  iam-staging
+  timesync-production
+  timesync-staging
+).each do |app|
+  describe command "sudo -U #{app} -l" do
+    its('stdout') { should match %r{\(ALL\) NOPASSWD: /usr/bin/systemctl restart #{app}} }
+  end
+end
