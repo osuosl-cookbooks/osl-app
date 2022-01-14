@@ -28,14 +28,14 @@ describe http(
   its('body') { should match %r{<link rel="self" href="http://replicant.redmine.us/projects/replicant/activity.atom"/>} }
 end
 
-describe docker.images.where { repository == 'osuosl/redmine-replicant' && tag == '4.1.1-2020.12.12.0022' } do
+describe docker.images.where { repository == 'osuosl/redmine-replicant' && tag == '4.2.3-2022.01.14.1907' } do
   it { should exist }
 end
 
 describe docker_container('redmine.replicant.us') do
   it { should exist }
   it { should be_running }
-  its('image') { should eq 'osuosl/redmine-replicant:4.1.1-2020.12.12.0022' }
+  its('image') { should eq 'osuosl/redmine-replicant:4.2.3-2022.01.14.1907' }
   its('ports') { should eq '0.0.0.0:8090->3000/tcp' }
 end
 
