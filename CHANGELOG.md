@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.1.1 (2022-01-20)
+------------------
+- Upgrade redmine-replicant to 4.2.3
+
 4.1.0 (2021-09-19)
 ------------------
 - Create sudoers file based on service_name property

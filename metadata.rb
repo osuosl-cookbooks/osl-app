@@ -6,7 +6,7 @@ source_url       'https://github.com/osuosl-cookbooks/osl-app'
 license          'Apache-2.0'
 chef_version     '>= 16.0'
 description      'Installs/Configures osl-app'
-version          '4.1.0'
+version          '4.1.1'
 
 supports         'centos', '~> 7.0'
 supports         'centos_stream', '~> 8.0'
