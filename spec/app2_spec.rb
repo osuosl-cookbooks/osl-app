@@ -67,14 +67,14 @@ describe 'osl-app::app2' do
 
       it do
         expect(chef_run).to pull_docker_image('osuosl/redmine-replicant').with(
-          tag: '4.1.1-2020.12.12.0022'
+          tag: '4.2.3-2022.01.14.1907'
         )
       end
 
       it do
         expect(chef_run).to run_docker_container('redmine.replicant.us').with(
           repo: 'osuosl/redmine-replicant',
-          tag: '4.1.1-2020.12.12.0022',
+          tag: '4.2.3-2022.01.14.1907',
           port: '8090:3000',
           restart_policy: 'always',
           # This needs to be volumes_binds, since the volumes property gets coerced into a volumes_binds property if it's

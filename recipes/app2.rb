@@ -2,7 +2,7 @@
 # Cookbook:: osl-app
 # Recipe:: app2
 #
-# Copyright:: 2016-2021, Oregon State University
+# Copyright:: 2016-2022, Oregon State University
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -102,7 +102,7 @@ directory '/data/docker/redmine.replicant.us' do
 end
 
 docker_image 'osuosl/redmine-replicant' do
-  tag '4.1.1-2020.12.12.0022'
+  tag '4.2.3-2022.01.14.1907'
   action :pull
 end
 
@@ -111,7 +111,7 @@ replicant_dbcreds['db_hostname'] = node['ipaddress'] if node['kitchen']
 
 docker_container 'redmine.replicant.us' do
   repo 'osuosl/redmine-replicant'
-  tag '4.1.1-2020.12.12.0022'
+  tag '4.2.3-2022.01.14.1907'
   port '8090:3000'
   restart_policy 'always'
   volumes ['/data/docker/redmine.replicant.us:/usr/src/redmine/files']
