@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.2.0 (2022-03-04)
+------------------
+- updated ruby for openid-staging-unicorn
+
 4.1.1 (2022-01-20)
 ------------------
 - Upgrade redmine-replicant to 4.2.3
