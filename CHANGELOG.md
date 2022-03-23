@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.2.1 (2022-03-23)
+------------------
+- updated ruby in production
+
 4.2.0 (2022-03-04)
 ------------------
 - updated ruby for openid-staging-unicorn
