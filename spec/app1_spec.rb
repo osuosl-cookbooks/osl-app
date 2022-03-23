@@ -58,7 +58,7 @@ describe 'osl-app::app1' do
           user: 'openid-production',
           working_directory: '/home/openid-production/current',
           pid_file: '/home/openid-production/current/tmp/pids/unicorn.pid',
-          start_cmd: '/home/openid-production/.rvm/bin/rvm 2.5.3 do bundle exec unicorn -c /home/openid-production/current/config/unicorn/production.rb -E deployment -D',
+          start_cmd: '/home/openid-production/.rvm/bin/rvm 2.7.5 do bundle exec unicorn -c /home/openid-production/current/config/unicorn/production.rb -E deployment -D',
           reload_cmd: '/bin/kill -USR2 $MAINPID'
         )
       end
@@ -73,8 +73,8 @@ describe 'osl-app::app1' do
           user: 'openid-production',
           environment: 'RAILS_ENV=production',
           working_directory: '/home/openid-production/current',
-          start_cmd: '/home/openid-production/.rvm/bin/rvm 2.5.3 do bundle exec bin/delayed_job -n 2 start',
-          reload_cmd: '/home/openid-production/.rvm/bin/rvm 2.5.3 do bundle exec bin/delayed_job -n 2 restart'
+          start_cmd: '/home/openid-production/.rvm/bin/rvm 2.7.5 do bundle exec bin/delayed_job -n 2 start',
+          reload_cmd: '/home/openid-production/.rvm/bin/rvm 2.7.5 do bundle exec bin/delayed_job -n 2 restart'
         )
       end
 
