@@ -31,9 +31,9 @@ when 8
   end
 end
 
-describe command('/usr/local/bin/node --version') do
+describe command('node --version') do
   its('exit_status') { should eq 0 }
-  its('stdout') { should match(/v6\.9\.1/) }
+  its('stdout') { should match(/^v6\.*/) }
 end
 
 describe file('/etc/systemd/system') do
