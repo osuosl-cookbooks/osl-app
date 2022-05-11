@@ -24,10 +24,7 @@ include_recipe 'base::python'
 # If this gets updated, all NodeJS apps running will need to have their
 # node_modules directories completely removed and `npm install` run again to
 # update the modules to match the new Node version's ABI.
-node.override['nodejs']['version'] = '6.9.1'
-node.override['nodejs']['install_method'] = 'binary'
-node.override['nodejs']['binary']['checksum']['linux_x64'] =
-  'a9d9e6308931fa2a2b0cada070516d45b76d752430c31c9198933c78f8d54b17'
+node.override['nodejs']['repo'] = 'https://rpm.nodesource.com/pub_6.x/el/$releasever/$basearch'
 
 # rvm package depends
 package %w(
