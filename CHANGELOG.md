@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.2.2 (2022-05-11)
+------------------
+- Update to using latest nodejs cookbook
+
 4.2.1 (2022-03-23)
 ------------------
 - updated ruby in production
