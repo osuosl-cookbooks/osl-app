@@ -79,7 +79,7 @@ end
 osl_app 'timesync-staging' do
   description 'Time tracker'
   # Port 8089 (set in env file)
-  start_cmd '/usr/local/bin/node /home/timesync-staging/timesync/src/app.js'
+  start_cmd '/usr/bin/node /home/timesync-staging/timesync/src/app.js'
   environment_file '/home/timesync-staging/timesync.env'
   working_directory '/home/timesync-staging/timesync'
   pid_file '/home/timesync-staging/pids/timesync.pid'
@@ -89,7 +89,7 @@ end
 osl_app 'timesync-production' do
   description 'Time tracker'
   # Port 8088 (set in env file)
-  start_cmd '/usr/local/bin/node /home/timesync-production/timesync/src/app.js'
+  start_cmd '/usr/bin/node /home/timesync-production/timesync/src/app.js'
   environment_file '/home/timesync-production/timesync.env'
   working_directory '/home/timesync-production/timesync'
   pid_file '/home/timesync-production/pids/timesync.pid'
