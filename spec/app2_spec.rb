@@ -50,7 +50,7 @@ describe 'osl-app::app2' do
         it do
           expect(chef_run).to create_osl_app("timesync-#{env}").with(
             description: 'Time tracker',
-            start_cmd: "/usr/local/bin/node /home/timesync-#{env}/timesync/src/app.js",
+            start_cmd: "/usr/bin/node /home/timesync-#{env}/timesync/src/app.js",
             environment_file: "/home/timesync-#{env}/timesync.env",
             working_directory: "/home/timesync-#{env}/timesync",
             pid_file: "/home/timesync-#{env}/pids/timesync.pid",
