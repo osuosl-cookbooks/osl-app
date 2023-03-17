@@ -30,20 +30,29 @@ end
 
 #### Apps ####
 
-# this app's service depends on the logs/ directory being present inside
-# ~formsender-staging/
-osl_app 'formsender-staging-gunicorn' do
-  description 'formsender staging app'
-  user 'formsender-staging'
-  start_cmd '/home/formsender-staging/venv/bin/gunicorn -b 0.0.0.0:8086 '\
-    '-D --pid /home/formsender-staging/tmp/pids/gunicorn.pid '\
-    '--access-logfile /home/formsender-staging/logs/access.log '\
-    '--error-logfile /home/formsender-staging/logs/error.log '\
-    '--log-level debug '\
-    'formsender.wsgi:application'
-  environment 'PATH=/home/formsender-staging/venv/bin'
-  working_directory '/home/formsender-staging/formsender'
-  pid_file '/home/formsender-staging/tmp/pids/gunicorn.pid'
+directory '/formsender'
+
+git '/var/lib/formsender/' do
+  repository 'https://github.com/osuosl/formsender.git'
+  revision 'antoniagaete/RT_api'
+  action :sync
+end
+
+docker_image 'formsender' do
+  tag 'latest'
+  source '/var/lib/formsender'
+  action :build
+end
+
+docker_container 'support.osuosl.org' do
+  repo 'formsender'
+  tag 'latest'
+  port '8086:5000'
+  restart_policy 'always'
+  env [
+    "TOKEN={formsender_env['token']}",
+    "RECAPTCHA_SECRET={formsender_env['recaptcha_secret']}",
+  ]
 end
 
 # this service depends on the logs/ directory being present inside

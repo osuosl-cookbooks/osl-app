@@ -1,6 +1,5 @@
 %w(
   formsender-production-gunicorn
-  formsender-staging-gunicorn
   iam-production
   iam-staging
   timesync-production
@@ -51,10 +50,6 @@ describe command('docker exec redmine.replicant.us env') do
   end
 end
 
-describe command 'sudo -U formsender-staging -l' do
-  its('stdout') { should match %r{\(ALL\) NOPASSWD: /usr/bin/systemctl restart formsender-staging-gunicorn} }
-end
-
 describe command 'sudo -U formsender-production -l' do
   its('stdout') { should match %r{\(ALL\) NOPASSWD: /usr/bin/systemctl restart formsender-production-gunicorn} }
 end
@@ -68,4 +63,19 @@ end
   describe command "sudo -U #{app} -l" do
     its('stdout') { should match %r{\(ALL\) NOPASSWD: /usr/bin/systemctl restart #{app}} }
   end
+end
+
+describe file('/var/lib/formsender/Dockerfile') do
+  it { should exist }
+end
+
+describe docker.images.where { tag == 'latest' } do
+  it { should exist }
+end
+
+describe docker_container('support.osuosl.org') do
+  it { should exist }
+  it { should be_running }
+  its('image') { should eq 'formsender:latest' }
+  its('ports') { should eq '0.0.0.0:8086->5000/tcp' }
 end
