@@ -32,17 +32,23 @@ end
 
 directory '/formsender'
 
-git '/var/lib/formsender/' do
+git '/var/lib/formsender' do
   repository 'https://github.com/osuosl/formsender.git'
   revision 'antoniagaete/RT_api'
-  action :sync
 end
 
 docker_image 'formsender' do
   tag 'latest'
   source '/var/lib/formsender'
-  action :build
+  action :nothing
 end
+
+git '/var/lib/formsender' do
+  action :nothing
+  notifies :build, 'docker_image[formsender]', :immediately
+end
+
+formsender_env = data_bag_item('osl-app', 'formsender')
 
 docker_container 'support.osuosl.org' do
   repo 'formsender'
@@ -50,25 +56,9 @@ docker_container 'support.osuosl.org' do
   port '8086:5000'
   restart_policy 'always'
   env [
-    "TOKEN={formsender_env['token']}",
-    "RECAPTCHA_SECRET={formsender_env['recaptcha_secret']}",
+    "TOKEN=#{formsender_env['token']}",
+    "RECAPTCHA_SECRET=#{formsender_env['recaptcha_secret']}",
   ]
-end
-
-# this service depends on the logs/ directory being present inside
-# ~formsender-production/
-osl_app 'formsender-production-gunicorn' do
-  description 'formsender production app'
-  user 'formsender-production'
-  start_cmd '/home/formsender-production/venv/bin/gunicorn -b 0.0.0.0:8085 '\
-    '-D --pid /home/formsender-production/tmp/pids/gunicorn.pid '\
-    '--access-logfile /home/formsender-production/logs/access.log '\
-    '--error-logfile /home/formsender-production/logs/error.log '\
-    '--log-level debug '\
-    'formsender.wsgi:application'
-  environment 'PATH=/home/formsender-production/venv/bin'
-  working_directory '/home/formsender-production/formsender'
-  pid_file '/home/formsender-production/tmp/pids/gunicorn.pid'
 end
 
 osl_app 'iam-staging' do
