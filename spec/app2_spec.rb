@@ -19,24 +19,14 @@ describe 'osl-app::app2' do
         )
       end
 
-      %w(staging production).each do |env|
-        it do
-          port = env == 'staging' ? 8086 : 8085
-          expect(chef_run).to create_osl_app("formsender-#{env}-gunicorn").with(
-            description: "formsender #{env} app",
-            user: "formsender-#{env}",
-            start_cmd: "/home/formsender-#{env}/venv/bin/gunicorn -b 0.0.0.0:#{port} "\
-              "-D --pid /home/formsender-#{env}/tmp/pids/gunicorn.pid "\
-              "--access-logfile /home/formsender-#{env}/logs/access.log "\
-              "--error-logfile /home/formsender-#{env}/logs/error.log "\
-              '--log-level debug '\
-              'formsender.wsgi:application',
-            environment: "PATH=/home/formsender-#{env}/venv/bin",
-            working_directory: "/home/formsender-#{env}/formsender",
-            pid_file: "/home/formsender-#{env}/tmp/pids/gunicorn.pid"
-          )
-        end
+      before do
+        stub_data_bag_item('osl-app', 'formsender').and_return(
+          token: 'faketoken',
+          recaptcha_secret: 'fakerecaptcha'
+        )
+      end
 
+      %w(staging production).each do |env|
         it do
           port = env == 'staging' ? 8084 : 8083
           expect(chef_run).to create_osl_app("iam-#{env}").with(
@@ -87,6 +77,41 @@ describe 'osl-app::app2' do
             'REDMINE_DB_USERNAME=fakeuser',
             'REDMINE_DB_PASSWORD=fakepw',
             'REDMINE_PLUGINS_MIGRATE=1',
+          ]
+        )
+      end
+
+      it do
+        expect(chef_run).to create_directory('/formsender')
+      end
+
+      it do
+        expect(chef_run).to sync_git('/var/lib/formsender').with(
+          repository: 'https://github.com/osuosl/formsender.git',
+          revision: 'antoniagaete/RT_api'
+        )
+      end
+
+      it do
+        expect(chef_run).to_not pull_docker_image('/var/lib/formsender').with(
+          tag: 'latest',
+          source: '/var/lib/formsender'
+        )
+      end
+
+      it do
+        expect(chef_run.git('var/lib/formsender')).to_not notify('docker_image[formsender]').to(:build)
+      end
+
+      it do
+        expect(chef_run).to run_docker_container('support.osuosl.org').with(
+          repo: 'formsender',
+          tag: 'latest',
+          port: '8086:5000',
+          restart_policy: 'always',
+          env: [
+            'TOKEN=faketoken',
+            'RECAPTCHA_SECRET=fakerecaptcha',
           ]
         )
       end

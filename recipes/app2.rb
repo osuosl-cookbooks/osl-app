@@ -30,37 +30,6 @@ end
 
 #### Apps ####
 
-directory '/formsender'
-
-git '/var/lib/formsender' do
-  repository 'https://github.com/osuosl/formsender.git'
-  revision 'antoniagaete/RT_api'
-end
-
-docker_image 'formsender' do
-  tag 'latest'
-  source '/var/lib/formsender'
-  action :nothing
-end
-
-git '/var/lib/formsender' do
-  action :nothing
-  notifies :build, 'docker_image[formsender]', :immediately
-end
-
-formsender_env = data_bag_item('osl-app', 'formsender')
-
-docker_container 'support.osuosl.org' do
-  repo 'formsender'
-  tag 'latest'
-  port '8086:5000'
-  restart_policy 'always'
-  env [
-    "TOKEN=#{formsender_env['token']}",
-    "RECAPTCHA_SECRET=#{formsender_env['recaptcha_secret']}",
-  ]
-end
-
 osl_app 'iam-staging' do
   description 'osuosl metrics'
   start_cmd '/home/iam-staging/.rvm/bin/rvm 2.3.0 do bundle exec unicorn -l 8084 -c unicorn.rb -E deployment -D'
@@ -122,4 +91,35 @@ docker_container 'redmine.replicant.us' do
     'REDMINE_PLUGINS_MIGRATE=1',
   ]
   sensitive true
+end
+
+directory '/formsender'
+
+git '/var/lib/formsender' do
+  repository 'https://github.com/osuosl/formsender.git'
+  revision 'antoniagaete/RT_api'
+end
+
+docker_image 'formsender' do
+  tag 'latest'
+  source '/var/lib/formsender'
+  action :nothing
+end
+
+git '/var/lib/formsender' do
+  action :nothing
+  notifies :build, 'docker_image[formsender]', :immediately
+end
+
+formsender_env = data_bag_item('osl-app', 'formsender')
+
+docker_container 'support.osuosl.org' do
+  repo 'formsender'
+  tag 'latest'
+  port '8086:5000'
+  restart_policy 'always'
+  env [
+    "TOKEN=#{formsender_env['token']}",
+    "RECAPTCHA_SECRET=#{formsender_env['recaptcha_secret']}",
+  ]
 end
