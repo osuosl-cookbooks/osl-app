@@ -98,17 +98,13 @@ directory '/formsender'
 git '/var/lib/formsender' do
   repository 'https://github.com/osuosl/formsender.git'
   revision 'antoniagaete/RT_api'
+  notifies :build, 'docker_image[formsender]', :immediately
 end
 
 docker_image 'formsender' do
   tag 'latest'
   source '/var/lib/formsender'
   action :nothing
-end
-
-git '/var/lib/formsender' do
-  action :nothing
-  notifies :build, 'docker_image[formsender]', :immediately
 end
 
 formsender_env = data_bag_item('osl-app', 'formsender')
