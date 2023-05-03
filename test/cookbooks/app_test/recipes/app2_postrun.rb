@@ -12,7 +12,10 @@ ruby_block 'wait_for_replicant' do
     end
   end
   not_if { get_return_code('http://127.0.0.1:8090/') == 200 }
+  only_if { ::File.exist?('/root/.replicant-postrun') }
 end
+
+file '/root/.replicant-postrun'
 
 # localhost / test kitchen ip is not in OSL ips
 # allow all traffic so kitchen test works
