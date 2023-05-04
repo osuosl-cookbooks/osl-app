@@ -90,6 +90,7 @@ describe 'osl-app::app2' do
           repository: 'https://github.com/osuosl/formsender.git',
           revision: 'antoniagaete/RT_api'
         )
+        expect(chef_run.git('/var/lib/formsender')).to notify('docker_image[formsender]').to(:build)
       end
 
       it do
@@ -100,11 +101,7 @@ describe 'osl-app::app2' do
       end
 
       it do
-        expect(chef_run.git('var/lib/formsender')).to_not notify('docker_image[formsender]').to(:build)
-      end
-
-      it do
-        expect(chef_run).to run_docker_container('support.osuosl.org').with(
+        expect(chef_run).to run_docker_container('formsender').with(
           repo: 'formsender',
           tag: 'latest',
           port: '8086:5000',

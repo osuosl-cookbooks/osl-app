@@ -109,7 +109,7 @@ end
 
 formsender_env = data_bag_item('osl-app', 'formsender')
 
-docker_container 'support.osuosl.org' do
+docker_container 'formsender' do
   repo 'formsender'
   tag 'latest'
   port '8086:5000'
