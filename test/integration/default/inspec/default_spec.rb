@@ -16,19 +16,6 @@ when 7
       it { should be_installed }
     end
   end
-when 8
-  %w(
-    freetype-devel
-    libjpeg-turbo-devel
-    libpng-devel
-    proj
-    python3-gdal
-    python3-psycopg2
-  ).each do |p|
-    describe package(p) do
-      it { should be_installed }
-    end
-  end
 end
 
 describe command('node --version') do

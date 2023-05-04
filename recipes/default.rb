@@ -43,9 +43,6 @@ package %w(
 package 'osl-app packages' do
   package_name osl_app_packages
 end
-package 'python-psycopg2' do
-  package_name 'python2-psycopg2' if node['platform_version'].to_i >= 8
-end
 
 # Keep systemd services private from non-root users
 directory '/etc/systemd/system' do

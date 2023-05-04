@@ -9,7 +9,6 @@ description      'Installs/Configures osl-app'
 version          '4.3.3'
 
 supports         'centos', '~> 7.0'
-supports         'centos_stream', '~> 8.0'
 
 depends          'base'
 depends          'git'
