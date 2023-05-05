@@ -110,7 +110,7 @@ describe 'osl-app::app2' do
             'TOKEN=faketoken',
             'RECAPTCHA_SECRET=fakerecaptcha',
           ],
-          sensitive: 'true'
+          sensitive: true
         )
       end
     end
