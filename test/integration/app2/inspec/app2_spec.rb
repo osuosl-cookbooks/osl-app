@@ -60,7 +60,7 @@ end
   end
 end
 
-describe docker_container('support.osuosl.org') do
+describe docker_container('formsender') do
   it { should exist }
   it { should be_running }
   its('image') { should eq 'formsender:latest' }

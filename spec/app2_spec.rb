@@ -109,7 +109,8 @@ describe 'osl-app::app2' do
           env: [
             'TOKEN=faketoken',
             'RECAPTCHA_SECRET=fakerecaptcha',
-          ]
+          ],
+          sensitive: 'true'
         )
       end
     end
