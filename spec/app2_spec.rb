@@ -22,6 +22,7 @@ describe 'osl-app::app2' do
       before do
         stub_data_bag_item('osl-app', 'formsender').and_return(
           token: 'faketoken',
+          rt_token: 'rt_faketoken',
           recaptcha_secret: 'fakerecaptcha'
         )
       end
@@ -105,6 +106,7 @@ describe 'osl-app::app2' do
           restart_policy: 'always',
           env: [
             'TOKEN=faketoken',
+            'RT_TOKEN=rt_faketoken',
             'RECAPTCHA_SECRET=fakerecaptcha',
           ],
           sensitive: true
