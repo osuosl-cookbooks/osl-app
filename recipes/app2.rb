@@ -112,7 +112,7 @@ formsender_env = data_bag_item('osl-app', 'formsender')
 docker_container 'formsender' do
   repo 'formsender'
   tag 'latest'
-  port '8086:5000'
+  port '8085:5000'
   restart_policy 'always'
   env [
     "TOKEN=#{formsender_env['token']}",

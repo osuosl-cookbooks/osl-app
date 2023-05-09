@@ -64,9 +64,9 @@ describe docker_container('formsender') do
   it { should exist }
   it { should be_running }
   its('image') { should eq 'formsender:latest' }
-  its('ports') { should eq '0.0.0.0:8086->5000/tcp' }
+  its('ports') { should eq '0.0.0.0:8085->5000/tcp' }
 end
 
-describe http 'http://127.0.0.1:8086/server-status' do
+describe http 'http://127.0.0.1:8085/server-status' do
   its('status') { should eq 200 }
 end

@@ -104,7 +104,7 @@ describe 'osl-app::app2' do
         expect(chef_run).to run_docker_container('formsender').with(
           repo: 'formsender',
           tag: 'latest',
-          port: '8086:5000',
+          port: '8085:5000',
           restart_policy: 'always',
           env: [
             'TOKEN=faketoken',
