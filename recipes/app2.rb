@@ -2,7 +2,7 @@
 # Cookbook:: osl-app
 # Recipe:: app2
 #
-# Copyright:: 2016-2022, Oregon State University
+# Copyright:: 2016-2023, Oregon State University
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -29,38 +29,6 @@ users_manage 'app2' do
 end
 
 #### Apps ####
-
-# this app's service depends on the logs/ directory being present inside
-# ~formsender-staging/
-osl_app 'formsender-staging-gunicorn' do
-  description 'formsender staging app'
-  user 'formsender-staging'
-  start_cmd '/home/formsender-staging/venv/bin/gunicorn -b 0.0.0.0:8086 '\
-    '-D --pid /home/formsender-staging/tmp/pids/gunicorn.pid '\
-    '--access-logfile /home/formsender-staging/logs/access.log '\
-    '--error-logfile /home/formsender-staging/logs/error.log '\
-    '--log-level debug '\
-    'formsender.wsgi:application'
-  environment 'PATH=/home/formsender-staging/venv/bin'
-  working_directory '/home/formsender-staging/formsender'
-  pid_file '/home/formsender-staging/tmp/pids/gunicorn.pid'
-end
-
-# this service depends on the logs/ directory being present inside
-# ~formsender-production/
-osl_app 'formsender-production-gunicorn' do
-  description 'formsender production app'
-  user 'formsender-production'
-  start_cmd '/home/formsender-production/venv/bin/gunicorn -b 0.0.0.0:8085 '\
-    '-D --pid /home/formsender-production/tmp/pids/gunicorn.pid '\
-    '--access-logfile /home/formsender-production/logs/access.log '\
-    '--error-logfile /home/formsender-production/logs/error.log '\
-    '--log-level debug '\
-    'formsender.wsgi:application'
-  environment 'PATH=/home/formsender-production/venv/bin'
-  working_directory '/home/formsender-production/formsender'
-  pid_file '/home/formsender-production/tmp/pids/gunicorn.pid'
-end
 
 osl_app 'iam-staging' do
   description 'osuosl metrics'
@@ -121,6 +89,33 @@ docker_container 'redmine.replicant.us' do
     "REDMINE_DB_USERNAME=#{replicant_dbcreds['db_user']}",
     "REDMINE_DB_PASSWORD=#{replicant_dbcreds['db_passwd']}",
     'REDMINE_PLUGINS_MIGRATE=1',
+  ]
+  sensitive true
+end
+
+git '/var/lib/formsender' do
+  repository 'https://github.com/osuosl/formsender.git'
+  revision 'master'
+  notifies :build, 'docker_image[formsender]', :immediately
+  notifies :redeploy, 'docker_container[formsender]'
+end
+
+docker_image 'formsender' do
+  tag 'latest'
+  source '/var/lib/formsender'
+  action :nothing
+end
+
+formsender_env = data_bag_item('osl-app', 'formsender')
+
+docker_container 'formsender' do
+  repo 'formsender'
+  tag 'latest'
+  port '8085:5000'
+  restart_policy 'always'
+  env [
+    "TOKEN=#{formsender_env['token']}",
+    "RECAPTCHA_SECRET=#{formsender_env['recaptcha_secret']}",
   ]
   sensitive true
 end

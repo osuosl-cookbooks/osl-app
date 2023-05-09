@@ -41,6 +41,10 @@ Username and password for test mulgara redmine instance:
 username: admin
 password: password
 
+#### osl-app::app2
+The token and recaptcha in the `formsender.json` data bag
+should be set locally before development
+
 Contributing
 ------------
 
