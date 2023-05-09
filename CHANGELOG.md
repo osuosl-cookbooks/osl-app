@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.3.1 (2023-05-09)
+------------------
+- Add RT_TOKEN
+
 4.3.0 (2023-05-09)
 ------------------
 - Migrate to new containerized formsender
