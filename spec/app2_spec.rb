@@ -82,15 +82,12 @@ describe 'osl-app::app2' do
       end
 
       it do
-        expect(chef_run).to create_directory('/formsender')
-      end
-
-      it do
         expect(chef_run).to sync_git('/var/lib/formsender').with(
           repository: 'https://github.com/osuosl/formsender.git',
-          revision: 'antoniagaete/RT_api'
+          revision: 'master'
         )
-        expect(chef_run.git('/var/lib/formsender')).to notify('docker_image[formsender]').to(:build)
+        expect(chef_run.git('/var/lib/formsender')).to notify('docker_image[formsender]').to(:build).immediately
+        expect(chef_run.git('/var/lib/formsender')).to notify('docker_container[formsender]').to(:redeploy).delayed
       end
 
       it do

@@ -93,12 +93,11 @@ docker_container 'redmine.replicant.us' do
   sensitive true
 end
 
-directory '/formsender'
-
 git '/var/lib/formsender' do
   repository 'https://github.com/osuosl/formsender.git'
-  revision 'antoniagaete/RT_api'
+  revision 'master'
   notifies :build, 'docker_image[formsender]', :immediately
+  notifies :redeploy, 'docker_container[formsender]'
 end
 
 docker_image 'formsender' do
