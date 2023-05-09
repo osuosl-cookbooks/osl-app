@@ -37,7 +37,7 @@ osl_app 'openid-staging-unicorn' do
   environment 'RAILS_ENV=staging'
   working_directory '/home/openid-staging/current'
   pid_file '/home/openid-staging/current/tmp/pids/unicorn.pid'
-  start_cmd '/home/openid-staging/.rvm/bin/rvm 2.7.5 do bundle exec unicorn -c /home/openid-staging/current/config/unicorn/staging.rb -E deployment -D'
+  start_cmd '/home/openid-staging/.rvm/bin/rvm 3.1.4 do bundle exec unicorn -c /home/openid-staging/current/config/unicorn/staging.rb -E deployment -D'
   reload_cmd '/bin/kill -USR2 $MAINPID'
 end
 
@@ -50,8 +50,8 @@ osl_app 'openid-staging-delayed-job' do
   user 'openid-staging'
   environment 'RAILS_ENV=staging'
   working_directory '/home/openid-staging/current'
-  start_cmd '/home/openid-staging/.rvm/bin/rvm 2.5.3 do bundle exec bin/delayed_job -n 2 start'
-  reload_cmd '/home/openid-staging/.rvm/bin/rvm 2.5.3 do bundle exec bin/delayed_job -n 2 restart'
+  start_cmd '/home/openid-staging/.rvm/bin/rvm 3.1.4 do bundle exec bin/delayed_job -n 2 start'
+  reload_cmd '/home/openid-staging/.rvm/bin/rvm 3.1.4 do bundle exec bin/delayed_job -n 2 restart'
 end
 
 osl_app 'openid-production-unicorn' do
