@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.3.0 (2023-05-09)
+------------------
+- Migrate to new containerized formsender
+
 4.2.3 (2022-05-12)
 ------------------
 - Use system installed node binary
