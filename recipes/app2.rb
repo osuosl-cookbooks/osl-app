@@ -115,6 +115,7 @@ docker_container 'formsender' do
   restart_policy 'always'
   env [
     "TOKEN=#{formsender_env['token']}",
+    "RT_TOKEN=#{formsender_env['rt_token']}",
     "RECAPTCHA_SECRET=#{formsender_env['recaptcha_secret']}",
   ]
   sensitive true
