@@ -1,28 +1,12 @@
-include_recipe 'osl-mysql::server'
-
 replicant_dbcreds = data_bag_item('replicant_redmine', 'mysql_creds')
 replicant_dbcreds['db_hostname'] = '172.%'
 
-percona_mysql_user replicant_dbcreds['db_user'] do
-  host replicant_dbcreds['db_hostname']
+osl_mysql_test replicant_dbcreds['db_db'] do
+  username replicant_dbcreds['db_user']
   password replicant_dbcreds['db_passwd']
-  ctrl_password ''
-  action :create
 end
 
-percona_mysql_database replicant_dbcreds['db_db'] do
-  password ''
-end
-
-percona_mysql_user replicant_dbcreds['db_user'] do
-  host replicant_dbcreds['db_hostname']
-  database_name replicant_dbcreds['db_db']
-  privileges ['ALL PRIVILEGES']
-  table '*'
-  password replicant_dbcreds['db_passwd']
-  ctrl_password ''
-  action :grant
-end
+osl_firewall_port 'mysql'
 
 cookbook_file '/tmp/replicant_redmine.sql' do
   source 'replicant_redmine.sql'
