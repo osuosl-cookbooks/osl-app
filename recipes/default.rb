@@ -16,7 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 include_recipe 'osl-repos::centos' if platform?('centos')
-include_recipe 'osl-repos::almalinux' if platform?('almalinux')
+include_recipe 'osl-repos::alma' if platform?('almalinux')
 include_recipe 'osl-repos::epel'
 include_recipe 'osl-mysql::client'
 include_recipe 'base::python'
