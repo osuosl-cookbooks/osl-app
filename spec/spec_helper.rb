@@ -7,7 +7,7 @@ CENTOS_7 = {
 }.freeze
 
 ALMA_8 = {
-  platform: 'centos',
+  platform: 'almalinux',
   version: '8',
 }.freeze
 
