@@ -43,6 +43,18 @@ describe 'osl-app::default' do
             python-psycopg2
           ))
         end
+      when ALMA_8
+        it do
+          expect(chef_run).to install_package(%w(
+            freetype-devel
+            libjpeg-turbo-devel
+            libpng-devel
+            postgresql-devel
+            proj
+            python3-gdal
+            python3-psycopg2
+          ))
+        end
       end
 
       it do

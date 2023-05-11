@@ -15,7 +15,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-include_recipe 'osl-repos::centos'
+include_recipe 'osl-repos::centos' if platform?('centos')
+include_recipe 'osl-repos::almalinux' if platform?('almalinux')
 include_recipe 'osl-repos::epel'
 include_recipe 'osl-mysql::client'
 include_recipe 'base::python'
@@ -42,6 +43,10 @@ package %w(
 
 package 'osl-app packages' do
   package_name osl_app_packages
+end
+
+package 'python-psycopg2' do
+  package_name 'python3-psycopg2' if node['platform_version'].to_i >= 8
 end
 
 # Keep systemd services private from non-root users
