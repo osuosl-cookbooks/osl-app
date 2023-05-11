@@ -15,8 +15,8 @@ describe 'osl-app::default' do
       end
 
       it do
-        expect { chef_run }.to include_recipe('osl-repos::centos') if plat == CENTOS_7
-        expect { chef_run }.to include_recipe('osl-repos::alma') if plat == ALMA_8
+        expect(chef_run).to include_recipe('osl-repos::centos') if plat == CENTOS_7
+        expect(chef_run).to include_recipe('osl-repos::alma') if plat == ALMA_8
       end
 
       it do
