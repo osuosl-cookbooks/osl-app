@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.3.2 (2023-05-11)
+------------------
+- Moved app1 staging site to ruby 3.1.4
+
 4.3.1 (2023-05-09)
 ------------------
 - Add RT_TOKEN
