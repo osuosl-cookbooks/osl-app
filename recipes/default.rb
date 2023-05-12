@@ -15,53 +15,58 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-include_recipe 'osl-repos::centos' if platform?('centos')
-include_recipe 'osl-repos::alma' if platform?('almalinux')
-include_recipe 'osl-repos::epel'
-include_recipe 'osl-mysql::client'
-include_recipe 'base::python'
 
-# WARNING!
-# If this gets updated, all NodeJS apps running will need to have their
-# node_modules directories completely removed and `npm install` run again to
-# update the modules to match the new Node version's ABI.
-node.override['nodejs']['repo'] = 'https://rpm.nodesource.com/pub_6.x/el/$releasever/$basearch'
+if node['platform_version'].to_i <= 7
 
-# rvm package depends
-package %w(
-  automake
-  ImageMagick-devel
-  libffi-devel
-  libtool
-  libyaml-devel
-  openssl-devel
-  postgresql-devel
-  readline-devel
-  sqlite-devel
-  zlib-devel
-)
+  include_recipe 'osl-repos::centos'
+  include_recipe 'osl-repos::epel'
+  include_recipe 'osl-mysql::client'
+  include_recipe 'base::python'
 
-package 'osl-app packages' do
-  package_name osl_app_packages
+  # WARNING!
+  # If this gets updated, all NodeJS apps running will need to have their
+  # node_modules directories completely removed and `npm install` run again to
+  # update the modules to match the new Node version's ABI.
+  node.override['nodejs']['repo'] = 'https://rpm.nodesource.com/pub_6.x/el/$releasever/$basearch'
+
+  # rvm package depends
+  package %w(
+    automake
+    ImageMagick-devel
+    libffi-devel
+    libtool
+    libyaml-devel
+    openssl-devel
+    postgresql-devel
+    readline-devel
+    sqlite-devel
+    zlib-devel
+  )
+
+  package 'osl-app packages' do
+    package_name osl_app_packages
+  end
+
+  package 'python-psycopg2' do
+    package_name 'python3-psycopg2' if node['platform_version'].to_i >= 8
+  end
+
+  # Keep systemd services private from non-root users
+  directory '/etc/systemd/system' do
+    mode '750'
+  end
+
+  # rewind the sudoers template to support sudoers_d
+  temp = resources(template: '/etc/sudoers')
+  temp.variables['include_sudoers_d'] = true
+
+  build_essential 'install tools'
+
 end
-
-package 'python-psycopg2' do
-  package_name 'python3-psycopg2' if node['platform_version'].to_i >= 8
-end
-
-# Keep systemd services private from non-root users
-directory '/etc/systemd/system' do
-  mode '750'
-end
-
-# rewind the sudoers template to support sudoers_d
-temp = resources(template: '/etc/sudoers')
-temp.variables['include_sudoers_d'] = true
-
-build_essential 'install tools'
 
 include_recipe 'git'
-include_recipe 'osl-nodejs'
+
+include_recipe 'osl-nodejs' if node['platform_version'].to_i <= 7
 
 osl_firewall_port 'unicorn' do
   osl_only true

@@ -1,7 +1,7 @@
 require_relative 'spec_helper'
 
 describe 'osl-app::default' do
-  ALL_PLATFORMS.each do |plat|
+  [CENTOS_7].each do |plat|
     context "#{plat[:platform]} #{plat[:version]}" do
       cached(:chef_run) do
         ChefSpec::SoloRunner.new(plat) do |_node, server|
@@ -14,25 +14,25 @@ describe 'osl-app::default' do
         expect { chef_run }.to_not raise_error
       end
 
-      it do
-        expect(chef_run).to include_recipe('osl-repos::centos') if plat == CENTOS_7
-        expect(chef_run).to include_recipe('osl-repos::alma') if plat == ALMA_8
-      end
+      case plat[:version].to_i
+      when 7
 
-      it do
-        %w(
-          osl-repos::epel
-          osl-mysql::default
-          base::python
-        ).each do |p|
-          expect(chef_run).to include_recipe(p)
+        it do
+          expect(chef_run).to include_recipe('osl-repos::centos') if plat == CENTOS_7
         end
-      end
 
-      it { expect(chef_run).to accept_osl_firewall_port('unicorn').with(osl_only: true) }
+        it do
+          %w(
+            osl-repos::epel
+            osl-mysql::default
+            base::python
+          ).each do |p|
+            expect(chef_run).to include_recipe(p)
+          end
+        end
 
-      case plat
-      when CENTOS_7
+        it { expect(chef_run).to accept_osl_firewall_port('unicorn').with(osl_only: true) }
+
         it do
           expect(chef_run).to install_package(%w(
             freetype-devel
@@ -47,22 +47,14 @@ describe 'osl-app::default' do
             python-psycopg2
           ))
         end
-      when ALMA_8
         it do
-          expect(chef_run).to install_package(%w(
-            freetype-devel
-            libjpeg-turbo-devel
-            libpng-devel
-            postgresql-devel
-            proj
-            python3-gdal
-            python3-psycopg2
-          ))
+          expect(chef_run).to create_directory('/etc/systemd/system').with(mode: '750')
         end
       end
 
       it do
-        expect(chef_run).to create_directory('/etc/systemd/system').with(mode: '750')
+        expect(chef_run).to include_recipe('osl-git')
+        expect(chef_run).to include_recipe('osl-nodejs') if plat[:version].to_i <= 7
       end
     end
   end

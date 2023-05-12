@@ -16,34 +16,21 @@ when 7
       it { should be_installed }
     end
   end
-when 8
-  %w(
-    freetype-devel
-    libjpeg-turbo-devel
-    libpng-devel
-    proj
-    python3-gdal
-    python3-psycopg2
-  ).each do |p|
-    describe package(p) do
-      it { should be_installed }
-    end
+
+  describe command('node --version') do
+    its('exit_status') { should eq 0 }
+    its('stdout') { should match(/^v6\.*/) }
   end
-end
 
-describe command('node --version') do
-  its('exit_status') { should eq 0 }
-  its('stdout') { should match(/^v6\.*/) }
-end
+  describe file('/etc/systemd/system') do
+    it { should be_directory }
+    its('mode') { should cmp '0750' }
+  end
 
-describe file('/etc/systemd/system') do
-  it { should be_directory }
-  its('mode') { should cmp '0750' }
-end
-
-describe file('/etc/sudoers') do
-  it { should be_file }
-  its('content') { should match(%r{#includedir \/etc\/sudoers\.d}) }
+  describe file('/etc/sudoers') do
+    it { should be_file }
+    its('content') { should match(%r{#includedir \/etc\/sudoers\.d}) }
+  end
 end
 
 describe iptables do
