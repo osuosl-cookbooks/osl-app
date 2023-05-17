@@ -1,9 +1,21 @@
+node.force_override['osl-mysql']['enable_percona_client'] = false
+
 replicant_dbcreds = data_bag_item('replicant_redmine', 'mysql_creds')
 replicant_dbcreds['db_hostname'] = '172.%'
 
 osl_mysql_test replicant_dbcreds['db_db'] do
   username replicant_dbcreds['db_user']
   password replicant_dbcreds['db_passwd']
+end
+
+# Modify the replicant user to allow for DB connections outside of localhost
+mariadb_user 'replicant_dbcreds' do
+  ctrl_password 'osl_mysql_test'
+  database_name replicant_dbcreds['db_db']
+  password replicant_dbcreds['db_passwd']
+  host '%'
+  privileges [:all]
+  action :grant
 end
 
 osl_firewall_port 'mysql'
@@ -14,7 +26,7 @@ cookbook_file '/tmp/replicant_redmine.sql' do
 end
 
 execute 'import sql dump' do
-  command "mysql #{replicant_dbcreds['db_db']} < /tmp/replicant_redmine.sql && touch /root/.replicant-imported"
+  command "mysql -posl_mysql_test #{replicant_dbcreds['db_db']} < /tmp/replicant_redmine.sql && touch /root/.replicant-imported"
   creates '/root/.replicant-imported'
 end
 

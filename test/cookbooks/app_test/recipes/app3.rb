@@ -1,3 +1,5 @@
+node.force_override['osl-mysql']['enable_percona_client'] = false
+
 [
   %w(etherpad osl),
   %w(etherpad snowdrift),
@@ -19,7 +21,7 @@ cookbook_file '/tmp/mulgara_redmine.sql' do
   sensitive true # just to supress wall of text
 end
 
-execute 'mysql mulgara_redmine < /tmp/mulgara_redmine.sql && touch /tmp/mulgara_redmine.done' do
+execute 'mysql -posl_mysql_test mulgara_redmine < /tmp/mulgara_redmine.sql && touch /tmp/mulgara_redmine.done' do
   creates '/tmp/mulgara_redmine.done'
 end
 
