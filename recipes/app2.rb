@@ -16,11 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Enable live-restore to keep containers running when docker restarts
-node.override['osl-docker']['service'] = { misc_opts: '--live-restore' }
-
 include_recipe 'osl-app::default'
-include_recipe 'osl-docker'
 
 users = search('users', '*:*')
 
@@ -62,61 +58,4 @@ osl_app 'timesync-production' do
   working_directory '/home/timesync-production/timesync'
   pid_file '/home/timesync-production/pids/timesync.pid'
   service_type 'simple'
-end
-
-# Docker containers
-directory '/data/docker/redmine.replicant.us' do
-  recursive true
-end
-
-docker_image 'osuosl/redmine-replicant' do
-  tag '4.2.3-2022.01.14.1907'
-  action :pull
-end
-
-replicant_dbcreds = data_bag_item('replicant_redmine', 'mysql_creds')
-replicant_dbcreds['db_hostname'] = node['ipaddress'] if node['kitchen']
-
-docker_container 'redmine.replicant.us' do
-  repo 'osuosl/redmine-replicant'
-  tag '4.2.3-2022.01.14.1907'
-  port '8090:3000'
-  restart_policy 'always'
-  volumes ['/data/docker/redmine.replicant.us:/usr/src/redmine/files']
-  env [
-    "REDMINE_DB_MYSQL=#{replicant_dbcreds['db_hostname']}",
-    "REDMINE_DB_DATABASE=#{replicant_dbcreds['db_db']}",
-    "REDMINE_DB_USERNAME=#{replicant_dbcreds['db_user']}",
-    "REDMINE_DB_PASSWORD=#{replicant_dbcreds['db_passwd']}",
-    'REDMINE_PLUGINS_MIGRATE=1',
-  ]
-  sensitive true
-end
-
-git '/var/lib/formsender' do
-  repository 'https://github.com/osuosl/formsender.git'
-  revision 'master'
-  notifies :build, 'docker_image[formsender]', :immediately
-  notifies :redeploy, 'docker_container[formsender]'
-end
-
-docker_image 'formsender' do
-  tag 'latest'
-  source '/var/lib/formsender'
-  action :nothing
-end
-
-formsender_env = data_bag_item('osl-app', 'formsender')
-
-docker_container 'formsender' do
-  repo 'formsender'
-  tag 'latest'
-  port '8085:5000'
-  restart_policy 'always'
-  env [
-    "TOKEN=#{formsender_env['token']}",
-    "RT_TOKEN=#{formsender_env['rt_token']}",
-    "RECAPTCHA_SECRET=#{formsender_env['recaptcha_secret']}",
-  ]
-  sensitive true
 end
