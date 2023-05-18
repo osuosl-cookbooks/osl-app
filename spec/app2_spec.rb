@@ -7,6 +7,8 @@ describe 'osl-app::app2' do
         ChefSpec::SoloRunner.new(plat) do |_node, server|
         end.converge('sudo', described_recipe)
       end
+    
+      include_context 'common_stubs'
 
       %w(staging production).each do |env|
         it do

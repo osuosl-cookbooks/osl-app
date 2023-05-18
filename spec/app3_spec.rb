@@ -8,6 +8,8 @@ describe 'osl-app::app3' do
         end.converge('sudo', described_recipe)
       end
 
+      include_context 'common_stubs'
+
       %w(staging production).each do |env|
         it do
           port = env == 'staging' ? 8081 : 8080

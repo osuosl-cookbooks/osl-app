@@ -18,7 +18,7 @@ describe 'osl-app::default' do
       when 7
 
         it do
-          expect(chef_run).to include_recipe('osl-repos::centos') if plat == CENTOS_7
+          expect(chef_run).to include_recipe('osl-repos::centos')
         end
 
         it do
@@ -50,34 +50,17 @@ describe 'osl-app::default' do
         it do
           expect(chef_run).to create_directory('/etc/systemd/system').with(mode: '750')
         end
-      end
 
-      it do
-        expect(chef_run).to include_recipe('osl-git')
-        expect(chef_run).to include_recipe('osl-nodejs') if plat[:version].to_i <= 7
+        it do
+          expect(chef_run).to include_recipe('osl-git')
+          expect(chef_run).to include_recipe('osl-nodejs')
+        end
       end
 
       context 'app2' do
         cached(:subject) { chef_run }
 
         include_context 'common_stubs'
-
-        before do
-          stub_data_bag_item('replicant_redmine', 'mysql_creds').and_return(
-            db_db: 'fakedb',
-            db_hostname: 'testdb.osuosl.bak',
-            db_passwd: 'fakepw',
-            db_user: 'fakeuser'
-          )
-        end
-
-        before do
-          stub_data_bag_item('osl-app', 'formsender').and_return(
-            token: 'faketoken',
-            rt_token: 'rt_faketoken',
-            recaptcha_secret: 'fakerecaptcha'
-          )
-        end
 
         it do
           expect(chef_run).to create_directory('/data/docker/redmine.replicant.us').with(
@@ -147,25 +130,6 @@ describe 'osl-app::default' do
         cached(:subject) { chef_run }
 
         include_context 'common_stubs'
-
-        before do
-          stub_data_bag_item('mulgara_redmine', 'mysql_creds').and_return(
-            db_db: 'fakedb',
-            db_hostname: 'testdb.osuosl.bak',
-            db_passwd: 'fakepw',
-            db_user: 'fakeuser'
-          )
-
-          %w(osl snowdrift).each do |type|
-            stub_data_bag_item('etherpad', type).and_return(
-              db_db: 'fakedb',
-              db_hostname: 'testdb.osuosl.bak',
-              db_passwd: 'fakepw',
-              db_user: 'fakeuser',
-              admin_passwd: 'fakeadmin'
-            )
-          end
-        end
 
         it do
           expect(chef_run).to create_directory('/data/docker/code.mulgara.org').wi

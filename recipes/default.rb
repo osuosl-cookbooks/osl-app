@@ -16,7 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-if node['platform_version'].to_i <= 7
+if node['platform_version'].to_i < 8
 
   include_recipe 'osl-repos::centos'
   include_recipe 'osl-repos::epel'
@@ -47,9 +47,7 @@ if node['platform_version'].to_i <= 7
     package_name osl_app_packages
   end
 
-  package 'python-psycopg2' do
-    package_name 'python3-psycopg2' if node['platform_version'].to_i >= 8
-  end
+  package 'python-psycopg2'
 
   # Keep systemd services private from non-root users
   directory '/etc/systemd/system' do
