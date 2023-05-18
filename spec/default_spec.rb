@@ -18,14 +18,13 @@ describe 'osl-app::default' do
       when 7
 
         it do
-          expect(chef_run).to include_recipe('osl-repos::centos')
-        end
-
-        it do
           %w(
-            osl-repos::epel
-            osl-mysql::default
             base::python
+            git::default
+            osl-mysql::default
+            osl-nodejs::default
+            osl-repos::centos
+            osl-repos::epel
           ).each do |p|
             expect(chef_run).to include_recipe(p)
           end
@@ -49,11 +48,6 @@ describe 'osl-app::default' do
         end
         it do
           expect(chef_run).to create_directory('/etc/systemd/system').with(mode: '750')
-        end
-
-        it do
-          expect(chef_run).to include_recipe('osl-git')
-          expect(chef_run).to include_recipe('osl-nodejs')
         end
       end
 
@@ -132,8 +126,7 @@ describe 'osl-app::default' do
         include_context 'common_stubs'
 
         it do
-          expect(chef_run).to create_directory('/data/docker/code.mulgara.org').wi
-          th(
+          expect(chef_run).to create_directory('/data/docker/code.mulgara.org').with(
             recursive: true
           )
         end
