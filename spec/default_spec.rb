@@ -14,13 +14,15 @@ describe 'osl-app::default' do
         expect { chef_run }.to_not raise_error
       end
 
+      it do
+        expect(chef_run).to include_recipe('git')
+      end
+
       case plat[:version].to_i
       when 7
-
         it do
           %w(
             base::python
-            git::default
             osl-mysql::default
             osl-nodejs::default
             osl-repos::centos

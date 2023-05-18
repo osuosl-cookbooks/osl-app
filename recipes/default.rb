@@ -16,6 +16,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+include_recipe 'git'
+
 if node['platform_version'].to_i < 8
 
   include_recipe 'osl-repos::centos'
@@ -60,7 +62,6 @@ if node['platform_version'].to_i < 8
 
   build_essential 'install tools'
 
-  include_recipe 'git'
   include_recipe 'osl-nodejs'
 
 end
