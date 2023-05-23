@@ -19,7 +19,6 @@
 include_recipe 'git'
 
 if node['platform_version'].to_i < 8
-
   include_recipe 'osl-repos::centos'
   include_recipe 'osl-repos::epel'
   include_recipe 'osl-mysql::client'
@@ -61,7 +60,6 @@ if node['platform_version'].to_i < 8
   temp.variables['include_sudoers_d'] = true
 
   build_essential 'install tools'
-
   include_recipe 'osl-nodejs'
 
 end

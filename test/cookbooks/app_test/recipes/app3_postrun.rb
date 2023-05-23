@@ -1,3 +1,4 @@
+build_essential 'app-test'
 chef_gem 'rest-client'
 
 ruby_block 'wait_for_mulgara' do
