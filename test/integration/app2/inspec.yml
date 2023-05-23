@@ -1,0 +1,5 @@
+---
+name: app2
+depends:
+  - name: default
+    path: ../osl-app/test/integration/default

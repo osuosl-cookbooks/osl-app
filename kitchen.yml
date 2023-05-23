@@ -30,6 +30,10 @@ suites:
     run_list:
       - recipe[sudo]
       - recipe[osl-app::app1]
+    verifier:
+      controls:
+        - app1
+        - default
   - name: app2
     attributes:
       osl-mysql:
@@ -46,6 +50,10 @@ suites:
       - recipe[app_test::app2]
       - recipe[osl-app::app2]
       - recipe[app_test::app2_postrun]
+    verifier:
+      controls:
+        - app2
+        - default
     driver:
       flavor_ref: 'm1.large'
     provisioner:
@@ -70,3 +78,7 @@ suites:
     provisioner:
       # db grant is not idempotent
       enforce_idempotency: false
+    verifier:
+      controls:
+        - app3
+        - default
