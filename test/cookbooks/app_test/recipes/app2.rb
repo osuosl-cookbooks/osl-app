@@ -9,7 +9,7 @@ osl_mysql_test replicant_dbcreds['db_db'] do
 end
 
 # Modify the replicant user to allow for DB connections outside of localhost
-mariadb_user 'replicant_dbcreds' do
+mariadb_user replicant_dbcreds['db_user'] do
   ctrl_password 'osl_mysql_test'
   database_name replicant_dbcreds['db_db']
   password replicant_dbcreds['db_passwd']

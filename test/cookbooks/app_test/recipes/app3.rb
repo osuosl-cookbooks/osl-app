@@ -12,6 +12,15 @@ node.force_override['osl-mysql']['enable_percona_client'] = false
     username dbcreds['db_user']
     password dbcreds['db_passwd']
   end
+
+  # Create the same user with a different host destination to allow for them to connect remotely
+  mariadb_user dbcreds['db_user'] do
+    password dbcreds['db_passwd']
+    host dbcreds['db_hostname']
+    database_name dbcreds['db_db']
+    ctrl_password 'osl_mysql_test'
+    action [:create, :grant]
+  end
 end
 
 osl_firewall_port 'mysql'
