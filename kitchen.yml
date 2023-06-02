@@ -54,6 +54,8 @@ suites:
       controls:
         - app2
         - default
+      inputs:
+        osl_only: false
     driver:
       flavor_ref: 'm1.large'
     provisioner:

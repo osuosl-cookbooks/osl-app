@@ -1,2 +1,5 @@
 ---
 name: default
+inputs:
+  - name: osl_only
+    value: true
