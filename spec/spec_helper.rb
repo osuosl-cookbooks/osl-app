@@ -6,14 +6,14 @@ CENTOS_7 = {
   version: '7',
 }.freeze
 
-CENTOS_8 = {
-  platform: 'centos',
+ALMA_8 = {
+  platform: 'almalinux',
   version: '8',
 }.freeze
 
 ALL_PLATFORMS = [
   CENTOS_7,
-  CENTOS_8,
+  ALMA_8,
 ].freeze
 
 RSpec.configure do |config|

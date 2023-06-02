@@ -15,20 +15,24 @@ describe 'osl-app::default' do
       end
 
       it do
-        %w(
-          osl-repos::centos
-          osl-repos::epel
-          osl-mysql::default
-          base::python
-        ).each do |p|
-          expect(chef_run).to include_recipe(p)
-        end
+        expect(chef_run).to include_recipe('git')
+        expect(chef_run).to include_recipe('osl-docker')
       end
 
-      it { expect(chef_run).to accept_osl_firewall_port('unicorn').with(osl_only: true) }
+      case plat[:version].to_i
+      when 7
+        it do
+          %w(
+            base::python
+            osl-mysql::default
+            osl-nodejs::default
+            osl-repos::centos
+            osl-repos::epel
+          ).each do |p|
+            expect(chef_run).to include_recipe(p)
+          end
+        end
 
-      case plat
-      when CENTOS_7
         it do
           expect(chef_run).to install_package(%w(
             freetype-devel
@@ -43,22 +47,14 @@ describe 'osl-app::default' do
             python-psycopg2
           ))
         end
-      when CENTOS_8
+
         it do
-          expect(chef_run).to install_package(%w(
-            freetype-devel
-            libjpeg-turbo-devel
-            libpng-devel
-            postgresql-devel
-            proj
-            python3-gdal
-            python3-psycopg2
-          ))
+          expect(chef_run).to create_directory('/etc/systemd/system').with(mode: '750')
         end
       end
 
       it do
-        expect(chef_run).to create_directory('/etc/systemd/system').with(mode: '750')
+        expect(chef_run).to accept_osl_firewall_port('unicorn').with(osl_only: true)
       end
     end
   end

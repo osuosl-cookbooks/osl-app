@@ -16,12 +16,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Enable live-restore to keep containers running when docker restarts
-node.override['osl-docker']['service'] = { misc_opts: '--live-restore' }
-
 include_recipe 'osl-app::default'
 include_recipe 'osl-nginx'
-include_recipe 'osl-docker'
 
 # Save nginx service for later use
 service 'nginx' do

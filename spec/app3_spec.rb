@@ -17,7 +17,6 @@ describe 'osl-app::app3' do
           db_passwd: 'fakepw',
           db_user: 'fakeuser'
         )
-
         %w(osl snowdrift).each do |type|
           stub_data_bag_item('etherpad', type).and_return(
             db_db: 'fakedb',

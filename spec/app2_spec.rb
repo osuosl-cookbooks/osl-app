@@ -17,9 +17,6 @@ describe 'osl-app::app2' do
           db_passwd: 'fakepw',
           db_user: 'fakeuser'
         )
-      end
-
-      before do
         stub_data_bag_item('osl-app', 'formsender').and_return(
           token: 'faketoken',
           rt_token: 'rt_faketoken',

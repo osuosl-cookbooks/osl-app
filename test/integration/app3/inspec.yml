@@ -1,0 +1,6 @@
+---
+name: app3
+depends:
+  - name: default
+    path: ../osl-app/test/integration/default
+
