@@ -9,8 +9,6 @@ provisioner:
   multiple_converge: 2
   deprecations_as_errors: true
   attributes:
-    percona:
-      skip_passwords: true
     kitchen: true
 driver:
   flavor_ref: 'm1.medium'
@@ -36,8 +34,6 @@ suites:
         - default
   - name: app2
     attributes:
-      osl-mysql:
-        enable_percona_client: true
       users:
         - formsender-staging
         - formsender-production
@@ -50,6 +46,9 @@ suites:
       - recipe[app_test::app2]
       - recipe[osl-app::app2]
       - recipe[app_test::app2_postrun]
+    provisioner:
+      # Waiting for redmine is not idempotent
+      enforce_idempotency: false
     verifier:
       controls:
         - app2
@@ -58,13 +57,8 @@ suites:
         osl_only: false
     driver:
       flavor_ref: 'm1.large'
-    provisioner:
-      # db grant is not idempotent
-      enforce_idempotency: false
   - name: app3
     attributes:
-      osl-mysql:
-        enable_percona_client: true
       users:
         - streamwebs-staging
         - streamwebs-production
@@ -78,7 +72,7 @@ suites:
     driver:
       flavor_ref: 'm1.large'
     provisioner:
-      # db grant is not idempotent
+      # Waiting for mulgara is not idempotent
       enforce_idempotency: false
     verifier:
       controls:
