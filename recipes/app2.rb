@@ -113,6 +113,7 @@ docker_container 'formsender' do
     "TOKEN=#{formsender_env['token']}",
     "RT_TOKEN=#{formsender_env['rt_token']}",
     "RECAPTCHA_SECRET=#{formsender_env['recaptcha_secret']}",
+    "SENTRY_URI=#{formsender_env['sentry_uri']}",
   ]
   sensitive true
 end

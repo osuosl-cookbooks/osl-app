@@ -1,5 +1,6 @@
 {
   "token": "",
   "rt_token": "",
-  "recaptcha_secret": ""
+  "recaptcha_secret": "",
+  "sentry_uri": ""
 }
