@@ -1,5 +1,3 @@
-node.force_override['osl-mysql']['enable_percona_client'] = false
-
 [
   %w(etherpad osl),
   %w(etherpad snowdrift),
@@ -22,8 +20,6 @@ node.force_override['osl-mysql']['enable_percona_client'] = false
     action [:create, :grant]
   end
 end
-
-osl_firewall_port 'mysql'
 
 cookbook_file '/tmp/mulgara_redmine.sql' do
   source 'mulgara_redmine.sql'

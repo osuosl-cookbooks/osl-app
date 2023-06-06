@@ -1,5 +1,3 @@
-node.force_override['osl-mysql']['enable_percona_client'] = false
-
 replicant_dbcreds = data_bag_item('replicant_redmine', 'mysql_creds')
 replicant_dbcreds['db_hostname'] = '172.%'
 
@@ -17,8 +15,6 @@ mariadb_user replicant_dbcreds['db_user'] do
   privileges [:all]
   action :grant
 end
-
-osl_firewall_port 'mysql'
 
 cookbook_file '/tmp/replicant_redmine.sql' do
   source 'replicant_redmine.sql'
