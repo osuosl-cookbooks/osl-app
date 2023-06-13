@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.4.1 (2023-06-13)
+------------------
+- Add Sentry URI to app2 recipe
+
 4.4.0 (2023-06-02)
 ------------------
 - Remove CentOS Stream 8 references
