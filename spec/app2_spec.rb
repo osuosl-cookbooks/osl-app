@@ -20,7 +20,8 @@ describe 'osl-app::app2' do
         stub_data_bag_item('osl-app', 'formsender').and_return(
           token: 'faketoken',
           rt_token: 'rt_faketoken',
-          recaptcha_secret: 'fakerecaptcha'
+          recaptcha_secret: 'fakerecaptcha',
+          sentry_uri: 'fakeuri'
         )
       end
 
@@ -105,6 +106,7 @@ describe 'osl-app::app2' do
             'TOKEN=faketoken',
             'RT_TOKEN=rt_faketoken',
             'RECAPTCHA_SECRET=fakerecaptcha',
+            'SENTRY_URI=fakeuri',
           ],
           sensitive: true
         )
