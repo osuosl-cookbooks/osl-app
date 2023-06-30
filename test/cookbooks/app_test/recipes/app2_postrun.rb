@@ -25,10 +25,6 @@ edit_resource!(:osl_firewall_port, 'unicorn') do
   osl_only false
 end
 
-edit_resource!(:osl_firewall_port, 'mysql') do
-  osl_only false
-end
-
 edit_resource!(:osl_firewall_docker, 'osl-docker') do
   osl_only false
 end

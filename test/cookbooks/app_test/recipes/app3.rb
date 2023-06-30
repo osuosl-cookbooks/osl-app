@@ -1,5 +1,3 @@
-include_recipe 'osl-mysql::server'
-
 [
   %w(etherpad osl),
   %w(etherpad snowdrift),
@@ -8,25 +6,18 @@ include_recipe 'osl-mysql::server'
   dbcreds = data_bag_item(bag, item)
   dbcreds['db_hostname'] = '172.%'
 
-  percona_mysql_user dbcreds['db_user'] do
-    host dbcreds['db_hostname']
+  osl_mysql_test dbcreds['db_db'] do
+    username dbcreds['db_user']
     password dbcreds['db_passwd']
-    ctrl_password ''
-    action :create
   end
 
-  percona_mysql_database dbcreds['db_db'] do
-    password ''
-  end
-
-  percona_mysql_user dbcreds['db_user'] do
+  # Create the same user with a different host destination to allow for them to connect remotely
+  mariadb_user dbcreds['db_user'] do
+    password dbcreds['db_passwd']
     host dbcreds['db_hostname']
     database_name dbcreds['db_db']
-    privileges ['ALL PRIVILEGES']
-    table '*'
-    password dbcreds['db_passwd']
-    ctrl_password ''
-    action :grant
+    ctrl_password 'osl_mysql_test'
+    action [:create, :grant]
   end
 end
 
@@ -35,7 +26,7 @@ cookbook_file '/tmp/mulgara_redmine.sql' do
   sensitive true # just to supress wall of text
 end
 
-execute 'mysql mulgara_redmine < /tmp/mulgara_redmine.sql && touch /tmp/mulgara_redmine.done' do
+execute 'mysql -posl_mysql_test mulgara_redmine < /tmp/mulgara_redmine.sql && touch /tmp/mulgara_redmine.done' do
   creates '/tmp/mulgara_redmine.done'
 end
 
