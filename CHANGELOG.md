@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.4.2 (2023-07-25)
+------------------
+- Remove server_names_hash_bucket_size as this is now included in osl-nginx
+
 4.4.1 (2023-06-13)
 ------------------
 - Add Sentry URI to app2 recipe
