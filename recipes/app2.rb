@@ -94,6 +94,7 @@ git '/var/lib/formsender' do
   revision 'master'
   notifies :build, 'docker_image[formsender]', :immediately
   notifies :redeploy, 'docker_container[formsender]'
+  ignore_failure true
 end
 
 docker_image 'formsender' do
