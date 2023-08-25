@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.4.3 (2023-08-25)
+------------------
+- Add ignore_failure true to git resources
+
 4.4.2 (2023-07-25)
 ------------------
 - Remove server_names_hash_bucket_size as this is now included in osl-nginx
