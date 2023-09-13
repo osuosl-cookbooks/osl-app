@@ -26,40 +26,6 @@ end
 
 #### Apps ####
 
-osl_app 'iam-staging' do
-  description 'osuosl metrics'
-  start_cmd '/home/iam-staging/.rvm/bin/rvm 2.3.0 do bundle exec unicorn -l 8084 -c unicorn.rb -E deployment -D'
-  pid_file '/home/iam-staging/pids/unicorn.pid'
-  working_directory '/home/iam-staging/iam'
-end
-
-osl_app 'iam-production' do
-  description 'osuosl metrics'
-  start_cmd '/home/iam-production/.rvm/bin/rvm 2.3.0 do bundle exec unicorn -l 8083 -c unicorn.rb -E deployment -D'
-  working_directory '/home/iam-production/iam'
-  pid_file '/home/iam-production/pids/unicorn.pid'
-end
-
-osl_app 'timesync-staging' do
-  description 'Time tracker'
-  # Port 8089 (set in env file)
-  start_cmd '/usr/bin/node /home/timesync-staging/timesync/src/app.js'
-  environment_file '/home/timesync-staging/timesync.env'
-  working_directory '/home/timesync-staging/timesync'
-  pid_file '/home/timesync-staging/pids/timesync.pid'
-  service_type 'simple'
-end
-
-osl_app 'timesync-production' do
-  description 'Time tracker'
-  # Port 8088 (set in env file)
-  start_cmd '/usr/bin/node /home/timesync-production/timesync/src/app.js'
-  environment_file '/home/timesync-production/timesync.env'
-  working_directory '/home/timesync-production/timesync'
-  pid_file '/home/timesync-production/pids/timesync.pid'
-  service_type 'simple'
-end
-
 # Docker containers
 directory '/data/docker/redmine.replicant.us' do
   recursive true

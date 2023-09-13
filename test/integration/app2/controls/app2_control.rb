@@ -1,16 +1,8 @@
 include_controls 'default'
 
 control 'app2' do
-  %w(
-    iam-production
-    iam-staging
-    timesync-production
-    timesync-staging
-    docker
-  ).each do |s|
-    describe service(s) do
-      it { should be_enabled }
-    end
+  describe service('docker') do
+    it { should be_enabled }
   end
 
   describe http(
@@ -49,17 +41,6 @@ control 'app2' do
       REDMINE_PLUGINS_MIGRATE=1
     ).each do |line|
       its('stdout') { should match line }
-    end
-  end
-
-  %w(
-    iam-production
-    iam-staging
-    timesync-production
-    timesync-staging
-  ).each do |app|
-    describe command "sudo -U #{app} -l" do
-      its('stdout') { should match %r{\(ALL\) NOPASSWD: /usr/bin/systemctl restart #{app}} }
     end
   end
 
