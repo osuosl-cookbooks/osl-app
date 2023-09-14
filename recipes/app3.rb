@@ -58,25 +58,6 @@ osl_app 'streamwebs-production-gunicorn' do
   pid_file '/home/streamwebs-production/tmp/pids/gunicorn.pid'
 end
 
-osl_app 'timesync-web-staging' do
-  description 'timesync-web staging app'
-  start_cmd '/home/timesync-web-staging/venv/bin/gunicorn -b 0.0.0.0:8082 '\
-    '-D --pid /home/timesync-web-staging/tmp/pids/gunicorn.pid wsgi:app'
-  environment 'PATH=/home/timesync-web-staging/venv/bin'
-  working_directory '/home/timesync-web-staging/timesync-web'
-  pid_file '/home/timesync-web-staging/tmp/pids/gunicorn.pid'
-end
-
-osl_app 'timesync-web-production' do
-  description 'timesync-web production app'
-  start_cmd '/home/timesync-web-production/venv/bin/gunicorn '\
-    '-b 0.0.0.0:8083 '\
-    '-D --pid /home/timesync-web-production/tmp/pids/gunicorn.pid wsgi:app'
-  environment 'PATH=/home/timesync-web-production/venv/bin'
-  working_directory '/home/timesync-web-production/timesync-web'
-  pid_file '/home/timesync-web-production/tmp/pids/gunicorn.pid'
-end
-
 # Nginx
 node.default['osl-app']['nginx'] = {
   'streamwebs.org' => {

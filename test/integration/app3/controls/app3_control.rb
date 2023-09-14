@@ -38,12 +38,7 @@ control 'app3' do
     its('status') { should eq 200 }
   end
 
-  %w(
-    streamwebs-production-gunicorn
-    streamwebs-staging-gunicorn
-    timesync-web-production
-    timesync-web-staging
-  ).each do |s|
+  %w(streamwebs-production-gunicorn streamwebs-staging-gunicorn).each do |s|
     describe service(s) do
       it { should be_enabled }
     end
@@ -116,14 +111,5 @@ control 'app3' do
 
   describe command 'sudo -U streamwebs-production -l' do
     its('stdout') { should match %r{\(ALL\) NOPASSWD: /usr/bin/systemctl restart streamwebs-production-gunicorn} }
-  end
-
-  %w(
-    timesync-web-staging
-    timesync-web-production
-  ).each do |app|
-    describe command "sudo -U #{app} -l" do
-      its('stdout') { should match %r{\(ALL\) NOPASSWD: /usr/bin/systemctl restart #{app}} }
-    end
   end
 end
