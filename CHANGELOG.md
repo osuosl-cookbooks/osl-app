@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.5.0 (2023-10-04)
+------------------
+- Remove IAM and Timesync
+
 4.4.3 (2023-08-25)
 ------------------
 - Add ignore_failure true to git resources
