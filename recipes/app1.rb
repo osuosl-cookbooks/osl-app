@@ -2,7 +2,7 @@
 # Cookbook:: osl-app
 # Recipe:: app1
 #
-# Copyright:: 2016-2023, Oregon State University
+# Copyright:: 2016-2024, Oregon State University
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,34 +25,102 @@ users_manage 'app1' do
 end
 
 openid_secrets = data_bag_item('osl-app', 'openid')
+openid_db_host = node['kitchen'] ? node['ipaddress'] : openid_secrets['db_host']
 
-#### Systemd Services ####
-
-osl_app 'openid-staging-unicorn' do
-  description 'openid staging app'
-  service_after 'network.target'
-  wanted_by 'multi-user.target'
-  service_type 'forking'
-  user 'openid-staging'
-  environment 'RAILS_ENV=staging'
-  working_directory '/home/openid-staging/current'
-  pid_file '/home/openid-staging/current/tmp/pids/unicorn.pid'
-  start_cmd '/home/openid-staging/.rvm/bin/rvm 3.1.4 do bundle exec unicorn -c /home/openid-staging/current/config/unicorn/staging.rb -E deployment -D'
-  reload_cmd '/bin/kill -USR2 $MAINPID'
+git_credentials 'app1-root' do
+  owner 'root'
+  secrets_item 'app1'
 end
 
-osl_app 'openid-staging-delayed-job' do
-  description 'openid delayed job'
-  service_after 'network.target openid-staging-unicorn.service'
-  service_wants 'openid-staging-unicorn.service'
-  wanted_by 'multi-user.target'
-  service_type 'forking'
-  user 'openid-staging'
-  environment 'RAILS_ENV=staging'
-  working_directory '/home/openid-staging/current'
-  start_cmd '/home/openid-staging/.rvm/bin/rvm 3.1.4 do bundle exec bin/delayed_job -n 2 start'
-  reload_cmd '/home/openid-staging/.rvm/bin/rvm 3.1.4 do bundle exec bin/delayed_job -n 2 restart'
+git '/var/lib/openid-staging' do
+  user 'root'
+  group 'root'
+  repository 'https://github.com/openid-foundation/oidf-members.git'
+  revision 'develop'
+  notifies :build, 'docker_image[openid-staging]', :immediately
+  notifies :redeploy, 'docker_container[openid-staging-website]'
+  notifies :redeploy, 'docker_container[openid-staging-delayed-job]'
+  ignore_failure true
 end
+
+# git '/var/lib/openid-production' do
+#   user 'root'
+#   group 'root'
+#   repository 'https://github.com/openid-foundation/oidf-members.git'
+#   revision 'master'
+#   notifies :build, 'docker_image[openid-production]', :immediately
+#   notifies :redeploy, 'docker_container[openid-production-website]'
+#   notifies :redeploy, 'docker_container[openid-production-delayed-job]'
+#   ignore_failure true
+# end
+
+docker_image 'openid-staging' do
+  tag 'staging'
+  source '/var/lib/openid-staging'
+  action :nothing
+end
+
+# docker_image 'openid-production' do
+#   tag 'production'
+#   source '/var/lib/openid-production'
+#   action :nothing
+# end
+
+docker_container 'openid-staging-website' do
+  repo 'openid-staging'
+  tag 'staging'
+  port '8080:8080'
+  command "sh -c 'bundle exec rake db:migrate && bundle exec unicorn -c config/unicorn.rb'"
+  env [
+    'RAILS_ENV=staging',
+    "DB_PASSWORD=#{openid_secrets['db_password']}",
+    "DB_HOST=#{openid_db_host}",
+  ]
+  sensitive true
+end
+
+# docker_container 'openid-production-website' do
+#   repo 'openid-production'
+#   tag 'production'
+#   port '8081:8080'
+#   command "sh -c 'bundle exec rake db:migrate && bundle exec unicorn -c config/unicorn.rb'"
+#   env [
+#     'RAILS_ENV=production',
+#     "DB_PASSWORD=#{openid_secrets['db_password']}",
+#     "DB_HOST=#{openid_db_host}",
+#     "SECRET_KEY_BASE=#{openid_secrets['secret_key_base']}",
+#     "BRAINTREE_ACCESS_TOKEN=#{openid_secrets['braintree_access_token']}",
+#     "RECAPTCHA_SITE_KEY=#{openid_secrets['recaptcha_site_key']}",
+#     "RECAPTCHA_SECRET_KEY=#{openid_secrets['recaptcha_secret_key']}",
+#   ]
+#   sensitive true
+# end
+
+docker_container 'openid-staging-delayed-job' do
+  repo 'openid-staging'
+  tag 'staging'
+  restart_policy 'always'
+  command 'bundle exec bin/delayed_job -n 2 run'
+  env [
+    'RAILS_ENV=staging',
+    "DB_PASSWORD=#{openid_secrets['db_password']}",
+    "DB_HOST=#{openid_db_host}",
+  ]
+  sensitive true
+end
+
+# docker_container 'openid-production-delayed-job' do
+#   repo 'openid-production'
+#   tag 'production'
+#   restart_policy 'always'
+#   command 'bundle exec bin/delayed_job -n 2 run'
+#   env [
+#     'RAILS_ENV=production',
+#     "DB_PASSWORD=#{openid_secrets['db_password']}",
+#     "DB_HOST=#{openid_db_host}",
+#   ]
+#   sensitive true
+# end
 
 osl_app 'openid-production-unicorn' do
   description 'openid production app'
@@ -84,16 +152,4 @@ osl_app 'openid-production-delayed-job' do
   working_directory '/home/openid-production/current'
   start_cmd '/home/openid-production/.rvm/bin/rvm 3.1.4 do bundle exec bin/delayed_job -n 2 start'
   reload_cmd '/home/openid-production/.rvm/bin/rvm 3.1.4 do bundle exec bin/delayed_job -n 2 restart'
-end
-
-# Setup logrotate, also make sure that unicorn releases the file handles
-# by sending it a USR1 signal, which will cause it reopen its logs
-%w(production staging).each do |type|
-  logrotate_app "OpenID-#{type}" do
-    path "/home/openid-#{type}/shared/log/*.log"
-    postrotate "/bin/kill -USR1 $(cat /home/openid-#{type}/current/tmp/pids/unicorn.pid)"
-    frequency 'daily'
-    su "openid-#{type} openid-#{type}"
-    rotate 30
-  end
 end

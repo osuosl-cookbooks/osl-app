@@ -2,7 +2,7 @@
 # Cookbook:: osl-app
 # Recipe:: default
 #
-# Copyright:: 2016-2023, Oregon State University
+# Copyright:: 2016-2024, Oregon State University
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-include_recipe 'git'
+include_recipe 'osl-git'
 
 if node['platform_version'].to_i < 8
   include_recipe 'osl-repos::centos'
