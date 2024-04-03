@@ -1,30 +1,44 @@
 {
   "id": "openid",
   "secret_key_base": {
-    "encrypted_data": "4z6gQNulerYFNXVusSM4CtMOrcHOLfBc5FAso9SkSYINk4E02kgVPo1BW+9s\no1bkpGWMMeP/YAk0j4JutOFN7+OgVRKBqm1k6xVtVAFCMFrI/SDdKv8Ei0YT\ner9eo/R0qQKu/sxKVzm9jUtsaH0L7uD3r87ikYwJQJLUIaWN61XudtHw4j2Y\nDW06ziHhT+u9BQA1nbPPwYU09CfeGlf+Mw==\n",
-    "hmac": "nBdQfz3B/Ocyk1dYfEVv5pY+zdUNBIrzwGcjbT7th4Q=\n",
-    "iv": "2FM6a7vaq32M4mz3TYDthA==\n",
+    "encrypted_data": "b9mRMICtGnZsqsrvD2sZp9VrynaCQmTOCtQpigYQbRGbfKv3mnp0Kq7TgIGG\nO5Vmt9nRYkjr7WQZYleTui8cHlUrvWxWUwsgncH13CCZ+f6I/IDBDNJjmSmG\nBuEfDUBLs/cJH1tDXFYy+It39utfQLRHvi/7JFCwcro6fbksamzrQPwUuUoe\nAx4wbLN2UiBvxbVtNCbDQ/hCFaCUMEkUPA==\n",
+    "hmac": "EHfnA0/u5gfWbMrAjDfWbgBnYpLf70OjSt7ptQAHzXY=\n",
+    "iv": "eoRZIIEbvDV4A2WdA+dtGg==\n",
     "version": 2,
     "cipher": "aes-256-cbc"
   },
   "braintree_access_token": {
-    "encrypted_data": "Bmw4Wmu7BCPfKmGwmg8uHnVnnjkWxXgpATtjIXHnUZ2ENlYd9ArggppmezM1\nCQEW6RHnjPxypd4uW69drGQ86vfhBPfpZs5dZvf0Akm82bU=\n",
-    "hmac": "wZa5holyNLqvaiXQlxVPVa3CYB3miR33Y515AUpe7JY=\n",
-    "iv": "XyML5jcJlR/MjMI9NYZ9xQ==\n",
+    "encrypted_data": "MzebbxDIjOwrCxzoIWS1i1Or9jAKlTOjoMXOCdEgOrd1EvPxh6Z20XUfzt1/\nX4s3lendypNr32IMczpFTCl+9fLoSlXH71a080rzRc5Gx9o=\n",
+    "hmac": "d8nHdmhfQ9ei8QwKKFHOZ3X0ISjwJzPRitB/S3zYpMw=\n",
+    "iv": "tVgLHUHamu3suQad5YvwLQ==\n",
     "version": 2,
     "cipher": "aes-256-cbc"
   },
   "recaptcha_site_key": {
-    "encrypted_data": "eKG3WpnogrI3U+HdCfSEcoVyJAuDGoSDHgUyIfln643Yw7VGWVBj43b43nyE\n68POhjap4M27pWWYC0deR7JmNg==\n",
-    "hmac": "5JpbvOEbJcdLDS2oEkEV8CqX75iK+e47WV7gsMnajVE=\n",
-    "iv": "7DM9uT/b8NDN1G8hrMqaXw==\n",
+    "encrypted_data": "PvhqCKRAHVQtJ7XQVa2bPaV1YOIHp5XFwLBdZg2zXtJvkM49QputgKutzxDl\nM0EoxFUMsrunsornmr95560NkA==\n",
+    "hmac": "FBfOVwSHMSzfpmMNilPDB1AY9wRD1wJa3m3snUc15nI=\n",
+    "iv": "LYAnkCDeGjZbOn7VnRqAmQ==\n",
     "version": 2,
     "cipher": "aes-256-cbc"
   },
   "recaptcha_secret_key": {
-    "encrypted_data": "X3ntz6aQQ3K0uPI/32hk9e8oKTZuUR0ft3Y79nuN92Roes1/FrCrF0lKWmUB\n7vP+zCjOexybA1P8Op1ZKit9jg==\n",
-    "hmac": "lxY8LQYA5DfdJab5kuqfirGWnI3Pc0uC9q4YOa5o1yE=\n",
-    "iv": "1Tv8XA09Ah1PKJ+GF5EhEg==\n",
+    "encrypted_data": "bKDYlDgqyukpGuqOmgAMWmmLWhk8Ugo0GvDMSeDpNDWsz5nFDtqWexP9cwW1\n0PIUjI944YJgWyu1X/FFJmnxCQ==\n",
+    "hmac": "LQ4xXRLtNRzYAWqB3RxYIYpf9Vda18ukvkxcJozrub0=\n",
+    "iv": "StnUkUeC3eoY2z6ZjTCaIQ==\n",
+    "version": 2,
+    "cipher": "aes-256-cbc"
+  },
+  "db_password": {
+    "encrypted_data": "A1HaGWGSwUeHaiSKHUSoKlU/CtcwKFeYWDjBztbiVUI=\n",
+    "hmac": "L+2NUXV9o5KSCpwuiQlDcGE+M9a7jiGqBfk5eA7GwxY=\n",
+    "iv": "lqNHkUCG8F6tFVAKKl3WiA==\n",
+    "version": 2,
+    "cipher": "aes-256-cbc"
+  },
+  "db_host": {
+    "encrypted_data": "SGtqROwJ4em7+KWbdwsUAuW86cA9w/JK+brGU9ayYeE=\n",
+    "hmac": "vvteEIjKqJeNxSwVrPkZ/wZu/aNQj/Xa9owjO1hqlzk=\n",
+    "iv": "hvqfrge6n0tOgbQxUOMATg==\n",
     "version": 2,
     "cipher": "aes-256-cbc"
   }
