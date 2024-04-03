@@ -22,7 +22,13 @@ describe 'osl-app::app1' do
         )
       end
 
-      it { is_expected.to create_git_credentials('app1-root').with(owner: 'root', secrets_item: 'app1') }
+      it do
+        is_expected.to create_git_credentials('app1-root').with(
+          owner: 'root',
+          secrets_databag: 'git',
+          secrets_item: 'app1'
+        )
+      end
 
       it do
         is_expected.to sync_git('/var/lib/openid-staging').with(

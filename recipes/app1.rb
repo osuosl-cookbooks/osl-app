@@ -29,6 +29,7 @@ openid_db_host = node['kitchen'] ? node['ipaddress'] : openid_secrets['db_host']
 
 git_credentials 'app1-root' do
   owner 'root'
+  secrets_databag 'git'
   secrets_item 'app1'
 end
 
