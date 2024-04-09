@@ -5,4 +5,5 @@ license          'Apache-2.0'
 description      'Installs/Configures app_test'
 version          '0.1.0'
 
+depends          'osl-docker'
 depends          'osl-mysql'

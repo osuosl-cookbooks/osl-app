@@ -11,6 +11,28 @@ describe 'osl-app::app3' do
       include_context 'common_stubs'
 
       before do
+        stub_data_bag_item('docker', 'ghcr-io').and_return(
+          username: 'gh_user',
+          password: 'gh_password'
+        )
+        stub_data_bag_item('osl-app', 'streamwebs').and_return(
+          staging: {
+            fqdn: 'streamwebs-staging.osuosl.org',
+            secret_key: 'NrXzeh4ccgBi6lXC',
+            recaptcha_public_key: 'recaptcha_public_key',
+            recaptcha_private_key: 'recaptcha_private_key',
+            google_maps_api_key: 'google_maps_api_key',
+            google_maps_map_type: 'google.maps.MapTypeId.TERRAIN',
+            debug: 'False',
+            default_from_email: 'testing@streamwebs.org',
+            db_name: 'streamwebs-staging',
+            db_user: 'streamwebs-staging',
+            db_password: 'staging_password',
+            db_host: 'postgres_host',
+            sentry_dsn: 'sentry_dsn',
+            sentry_public_dsn: 'sentry_public_dsn',
+          }
+        )
         stub_data_bag_item('mulgara_redmine', 'mysql_creds').and_return(
           db_db: 'fakedb',
           db_hostname: 'testdb.osuosl.bak',
@@ -28,9 +50,55 @@ describe 'osl-app::app3' do
         end
       end
 
-      %w(staging production).each do |env|
+      it { is_expected.to login_docker_registry('ghcr.io').with(username: 'gh_user', password: 'gh_password') }
+      it { is_expected.to pull_docker_image('ghcr.io/osuosl/streamwebs').with(tag: 'develop') }
+
+      it do
+        is_expected.to create_template('/home/streamwebs-staging/settings.py').with(
+          variables: {
+            secrets: {
+              'db_host' => 'postgres_host',
+              'db_name' => 'streamwebs-staging',
+              'db_password' => 'staging_password',
+              'db_user' => 'streamwebs-staging',
+              'debug' => 'False',
+              'default_from_email' => 'testing@streamwebs.org',
+              'fqdn' => 'streamwebs-staging.osuosl.org',
+              'google_maps_api_key' => 'google_maps_api_key',
+              'google_maps_map_type' => 'google.maps.MapTypeId.TERRAIN',
+              'recaptcha_private_key' => 'recaptcha_private_key',
+              'recaptcha_public_key' => 'recaptcha_public_key',
+              'secret_key' => 'NrXzeh4ccgBi6lXC',
+              'sentry_dsn' => 'sentry_dsn',
+              'sentry_public_dsn' => 'sentry_public_dsn',
+            },
+          },
+          sensitive: true
+        )
+      end
+
+      it do
+        expect(chef_run.template('/home/streamwebs-staging/settings.py')).to \
+          notify('docker_container[streamwebs-staging.osuosl.org]').to(:restart)
+      end
+
+      it do
+        is_expected.to run_docker_container('streamwebs-staging.osuosl.org').with(
+          repo: 'ghcr.io/osuosl/streamwebs',
+          tag: 'develop',
+          port: '8081:8000',
+          command: ['/usr/src/app/entrypoint.sh'],
+          links: nil,
+          volumes_binds: [
+            '/home/streamwebs-staging/media:/usr/src/app/media',
+            '/home/streamwebs-staging/settings.py:/usr/src/app/streamwebs_frontend/streamwebs_frontend/settings.py',
+          ]
+        )
+      end
+
+      %w(production).each do |env|
         it do
-          port = env == 'staging' ? 8081 : 8080
+          port = 8080
           expect(chef_run).to create_osl_app("streamwebs-#{env}-gunicorn").with(
             description: "streamwebs #{env} app",
             user: "streamwebs-#{env}",
