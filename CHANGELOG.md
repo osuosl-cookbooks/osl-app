@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.7.1 (2024-04-09)
+------------------
+- Fix path to media folder on streamwebs-staging
+
 4.7.0 (2024-04-09)
 ------------------
 - Migrate streamwebs-staging to running in a container
