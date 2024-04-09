@@ -1,0 +1,13 @@
+#!/bin/bash
+FOLLOW=""
+while getopts "f" opt ; do
+  case $opt in
+    f)
+      FOLLOW="--follow"
+      ;;
+    *)
+    ;;
+  esac
+done
+
+/usr/bin/docker logs ${FOLLOW} <%= @container_name %>
