@@ -31,11 +31,11 @@ users_manage 'app3' do
 end
 
 streamwebs_secrets = data_bag_item('osl-app', 'streamwebs')
-gh_creds = github_credentials
+ghcr_io = ghcr_io_credentials
 
 docker_registry 'ghcr.io' do
-  username gh_creds['username']
-  password gh_creds['password']
+  username ghcr_io['username']
+  password ghcr_io['password']
 end
 
 docker_image 'ghcr.io/osuosl/streamwebs' do

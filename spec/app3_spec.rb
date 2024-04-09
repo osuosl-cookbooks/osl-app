@@ -11,7 +11,7 @@ describe 'osl-app::app3' do
       include_context 'common_stubs'
 
       before do
-        stub_data_bag_item('osl-app', 'github_credentials').and_return(
+        stub_data_bag_item('docker', 'ghcr-io').and_return(
           username: 'gh_user',
           password: 'gh_password'
         )

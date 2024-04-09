@@ -69,8 +69,8 @@ suites:
         - streamwebs-production
         - timesync-web-staging
         - timesync-web-production
-      osl-app:
-        github_credentials:
+      docker:
+        ghcr_io:
           username: <%= ENV['GITHUB_USER'] %>
           password: <%= ENV['GITHUB_TOKEN'] %>
     run_list:
