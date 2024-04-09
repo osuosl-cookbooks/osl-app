@@ -36,7 +36,19 @@ end
     recursive true
   end
 
+  directory "/home/streamwebs-#{env}/media" do
+    user "streamwebs-#{env}"
+    group "streamwebs-#{env}"
+    recursive true
+  end
+
   file "/home/streamwebs-#{env}/streamwebs/streamwebs_frontend/media/index.html" do
+    user "streamwebs-#{env}"
+    group "streamwebs-#{env}"
+    content "streamwebs-#{env}"
+  end
+
+  file "/home/streamwebs-#{env}/media/index.html" do
     user "streamwebs-#{env}"
     group "streamwebs-#{env}"
     content "streamwebs-#{env}"
