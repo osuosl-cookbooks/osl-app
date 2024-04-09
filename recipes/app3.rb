@@ -40,12 +40,13 @@ end
 
 docker_image 'ghcr.io/osuosl/streamwebs' do
   tag 'develop'
+  notifies :redeploy, 'docker_container[streamwebs-staging.osuosl.org]'
 end
 
 template '/home/streamwebs-staging/settings.py' do
   variables(secrets: streamwebs_secrets['staging'])
   sensitive true
-  notifies :restart, 'docker_container[streamwebs-staging.osuosl.org]'
+  notifies :redeploy, 'docker_container[streamwebs-staging.osuosl.org]'
 end
 
 docker_container 'streamwebs-staging.osuosl.org' do
@@ -100,6 +101,7 @@ end
 nginx_app 'app3.osuosl.org' do
   template 'app-nginx.erb'
   cookbook 'osl-app'
+  notifies :restart, 'service[nginx]'
 end
 
 # Docker containers
@@ -113,7 +115,7 @@ mulgara_redmine_tag = '4.1.1'
 
 docker_image 'library/redmine' do
   tag mulgara_redmine_tag
-  action :pull
+  notifies :redeploy, 'docker_container[code.mulgara.org]'
 end
 
 docker_container 'code.mulgara.org' do
@@ -138,7 +140,7 @@ etherpad_osl_tag = '1.8.6-2020.11.13.2015'
 
 docker_image 'osuosl/etherpad' do
   tag etherpad_osl_tag
-  action :pull
+  notifies :redeploy, 'docker_container[etherpad-lite.osuosl.org]'
 end
 
 docker_container 'etherpad-lite.osuosl.org' do
@@ -164,7 +166,7 @@ etherpad_snowdrift_tag = '1.8.6-2020.11.13.2015'
 
 docker_image 'osuosl/etherpad-snowdrift' do
   tag etherpad_snowdrift_tag
-  action :pull
+  notifies :redeploy, 'docker_container[etherpad-snowdrift.osuosl.org]'
 end
 
 docker_container 'etherpad-snowdrift.osuosl.org' do

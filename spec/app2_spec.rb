@@ -38,6 +38,11 @@ describe 'osl-app::app2' do
       end
 
       it do
+        expect(chef_run.docker_image('osuosl/redmine-replicant')).to \
+          notify('docker_container[redmine.replicant.us]').to(:redeploy)
+      end
+
+      it do
         expect(chef_run).to run_docker_container('redmine.replicant.us').with(
           repo: 'osuosl/redmine-replicant',
           tag: '4.2.3-2022.01.14.1907',
