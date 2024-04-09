@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.7.3 (2024-04-09)
+------------------
+- Set streamwebs to restart always so it comes back on reboot
+
 4.7.2 (2024-04-09)
 ------------------
 - Redeploy the container after updating the image
