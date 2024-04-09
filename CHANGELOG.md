@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.7.0 (2024-04-09)
+------------------
+- Migrate streamwebs-staging to running in a container
+
 4.6.1 (2024-04-03)
 ------------------
 - Set secrets_databag
