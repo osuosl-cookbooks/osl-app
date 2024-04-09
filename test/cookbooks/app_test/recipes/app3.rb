@@ -21,6 +21,19 @@
   end
 end
 
+include_recipe 'osl-docker'
+
+docker_image 'postgis/postgis'
+
+docker_container 'pg_streamwebs_staging' do
+  repo 'postgis/postgis'
+  env [
+    'POSTGRES_DB=streamwebs-staging',
+    'POSTGRES_USER=streamwebs-staging',
+    'POSTGRES_PASSWORD=staging_password',
+  ]
+end
+
 cookbook_file '/tmp/mulgara_redmine.sql' do
   source 'mulgara_redmine.sql'
   sensitive true # just to supress wall of text

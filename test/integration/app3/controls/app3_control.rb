@@ -7,6 +7,14 @@ control 'app3' do
   end
 
   describe http(
+    'http://127.0.0.1:8081',
+    headers: { 'Host' => 'streamwebs-staging.osuosl.org' }
+  ) do
+    its('status') { should eq 200 }
+    its('body') { should match 'streamwebs' }
+  end
+
+  describe http(
     'http://127.0.0.1/streamwebs-staging/media/index.html',
     headers: { 'Host' => 'streamwebs-staging.osuosl.org' }
   ) do
@@ -38,14 +46,24 @@ control 'app3' do
     its('status') { should eq 200 }
   end
 
-  %w(streamwebs-production-gunicorn streamwebs-staging-gunicorn).each do |s|
-    describe service(s) do
-      it { should be_enabled }
-    end
+  describe service 'streamwebs-production-gunicorn' do
+    it { should be_enabled }
+  end
+
+  describe docker.images.where { repository == 'ghcr.io/osuosl/streamwebs' && tag == 'develop' } do
+    it { should exist }
   end
 
   describe docker.images.where { repository == 'redmine' && tag == '4.1.1' } do
     it { should exist }
+  end
+
+  describe docker_container('streamwebs-staging.osuosl.org') do
+    it { should exist }
+    it { should be_running }
+    its('image') { should eq 'ghcr.io/osuosl/streamwebs:develop' }
+    its('ports') { should eq '0.0.0.0:8081->8000/tcp' }
+    its('command') { should eq '/usr/src/app/entrypoint.sh' }
   end
 
   describe docker_container('code.mulgara.org') do
@@ -97,16 +115,6 @@ control 'app3' do
     describe user(u) do
       its('groups') { should include 'streamwebs-production' }
     end
-  end
-
-  %w(streamwebs-staging nginx).each do |u|
-    describe user(u) do
-      its('groups') { should include 'streamwebs-staging' }
-    end
-  end
-
-  describe command 'sudo -U streamwebs-staging -l' do
-    its('stdout') { should match %r{\(ALL\) NOPASSWD: /usr/bin/systemctl restart streamwebs-staging-gunicorn} }
   end
 
   describe command 'sudo -U streamwebs-production -l' do

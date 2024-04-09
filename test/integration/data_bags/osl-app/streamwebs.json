@@ -1,0 +1,19 @@
+{
+  "id": "streamwebs",
+  "staging": {
+    "fqdn": "streamwebs-staging.osuosl.org",
+    "secret_key": "NrXzeh4ccgBi6lXC",
+    "recaptcha_public_key": "",
+    "recaptcha_private_key": "",
+    "google_maps_api_key": "",
+    "google_maps_map_type": "google.maps.MapTypeId.TERRAIN",
+    "debug": "False",
+    "default_from_email": "testing@streamwebs.org",
+    "db_name": "streamwebs-staging",
+    "db_user": "streamwebs-staging",
+    "db_password": "staging_password",
+    "db_host": "postgres_host",
+    "sentry_dsn": "",
+    "sentry_public_dsn": ""
+  }
+}

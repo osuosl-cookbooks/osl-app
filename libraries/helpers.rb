@@ -37,6 +37,18 @@ module OslApp
           )
         end
       end
+
+      def github_credentials
+        data_bag_item('osl-app', 'github_credentials')
+      rescue Net::HTTPServerException => e
+        if e.response.code == '404'
+          Chef::Log.warn("Could not find databag 'osl-app:github_credentials'; falling back to default attributes.")
+          node['osl-app']['github_credentials']
+        else
+          Chef::Log.fatal("Unable to load databag 'osl-app:github_credentials'; exiting. Please fix the databag and try again.")
+          raise
+        end
+      end
     end
   end
 end

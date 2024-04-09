@@ -30,20 +30,37 @@ users_manage 'app3' do
   users users
 end
 
-#### Apps ####
+streamwebs_secrets = data_bag_item('osl-app', 'streamwebs')
+gh_creds = github_credentials
 
-osl_app 'streamwebs-staging-gunicorn' do
-  description 'streamwebs staging app'
-  user 'streamwebs-staging'
-  start_cmd '/home/streamwebs-staging/venv/bin/gunicorn -b 0.0.0.0:8081 '\
-    '-D --pid /home/streamwebs-staging/tmp/pids/gunicorn.pid '\
-    '--access-logfile /home/streamwebs-staging/logs/access.log '\
-    '--error-logfile /home/streamwebs-staging/logs/error.log ' \
-    'streamwebs_frontend.wsgi:application'
-  environment 'PATH=/home/streamwebs-staging/venv/bin'
-  working_directory '/home/streamwebs-staging/streamwebs/streamwebs_frontend'
-  pid_file '/home/streamwebs-staging/tmp/pids/gunicorn.pid'
+docker_registry 'ghcr.io' do
+  username gh_creds['username']
+  password gh_creds['password']
 end
+
+docker_image 'ghcr.io/osuosl/streamwebs' do
+  tag 'develop'
+end
+
+template '/home/streamwebs-staging/settings.py' do
+  variables(secrets: streamwebs_secrets['staging'])
+  sensitive true
+  notifies :restart, 'docker_container[streamwebs-staging.osuosl.org]'
+end
+
+docker_container 'streamwebs-staging.osuosl.org' do
+  repo 'ghcr.io/osuosl/streamwebs'
+  tag 'develop'
+  port '8081:8000'
+  command '/usr/src/app/entrypoint.sh'
+  links ['pg_streamwebs_staging:postgres_host'] if node['kitchen']
+  volumes [
+    '/home/streamwebs-staging/media:/usr/src/app/media',
+    '/home/streamwebs-staging/settings.py:/usr/src/app/streamwebs_frontend/streamwebs_frontend/settings.py',
+  ]
+end
+
+#### Apps ####
 
 osl_app 'streamwebs-production-gunicorn' do
   description 'streamwebs production app'
