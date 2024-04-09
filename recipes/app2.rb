@@ -33,7 +33,7 @@ end
 
 docker_image 'osuosl/redmine-replicant' do
   tag '4.2.3-2022.01.14.1907'
-  action :pull
+  notifies :redeploy, 'docker_container[redmine.replicant.us]'
 end
 
 replicant_dbcreds = data_bag_item('replicant_redmine', 'mysql_creds')

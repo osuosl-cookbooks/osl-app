@@ -54,6 +54,11 @@ describe 'osl-app::app3' do
       it { is_expected.to pull_docker_image('ghcr.io/osuosl/streamwebs').with(tag: 'develop') }
 
       it do
+        expect(chef_run.docker_image('ghcr.io/osuosl/streamwebs')).to \
+          notify('docker_container[streamwebs-staging.osuosl.org]').to(:redeploy)
+      end
+
+      it do
         is_expected.to create_template('/home/streamwebs-staging/settings.py').with(
           variables: {
             secrets: {
@@ -79,7 +84,7 @@ describe 'osl-app::app3' do
 
       it do
         expect(chef_run.template('/home/streamwebs-staging/settings.py')).to \
-          notify('docker_container[streamwebs-staging.osuosl.org]').to(:restart)
+          notify('docker_container[streamwebs-staging.osuosl.org]').to(:redeploy)
       end
 
       it do
@@ -134,6 +139,11 @@ describe 'osl-app::app3' do
       end
 
       it do
+        expect(chef_run.docker_image('library/redmine')).to \
+          notify('docker_container[code.mulgara.org]').to(:redeploy)
+      end
+
+      it do
         expect(chef_run).to run_docker_container('code.mulgara.org').with(
           repo: 'redmine',
           tag: '4.1.1',
@@ -160,6 +170,11 @@ describe 'osl-app::app3' do
       end
 
       it do
+        expect(chef_run.docker_image('osuosl/etherpad')).to \
+          notify('docker_container[etherpad-lite.osuosl.org]').to(:redeploy)
+      end
+
+      it do
         expect(chef_run).to run_docker_container('etherpad-lite.osuosl.org').with(
           repo: 'osuosl/etherpad',
           tag: '1.8.6-2020.11.13.2015',
@@ -181,6 +196,11 @@ describe 'osl-app::app3' do
         expect(chef_run).to pull_docker_image('osuosl/etherpad-snowdrift').with(
           tag: '1.8.6-2020.11.13.2015'
         )
+      end
+
+      it do
+        expect(chef_run.docker_image('osuosl/etherpad-snowdrift')).to \
+          notify('docker_container[etherpad-snowdrift.osuosl.org]').to(:redeploy)
       end
 
       it do
