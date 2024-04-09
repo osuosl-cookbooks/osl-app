@@ -83,7 +83,7 @@ node.default['osl-app']['nginx'] = {
   },
   'streamwebs-staging.osuosl.org' => {
     'uri' => '/streamwebs-staging/media',
-    'folder' => '/home/streamwebs-staging/streamwebs/streamwebs_frontend/media',
+    'folder' => '/home/streamwebs-staging/media',
   },
 }
 
