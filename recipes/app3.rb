@@ -53,6 +53,7 @@ docker_container 'streamwebs-staging.osuosl.org' do
   repo 'ghcr.io/osuosl/streamwebs'
   tag 'develop'
   port '8081:8000'
+  restart_policy 'always'
   command '/usr/src/app/entrypoint.sh'
   links ['pg_streamwebs_staging:postgres_host'] if node['kitchen']
   volumes [

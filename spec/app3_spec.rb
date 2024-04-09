@@ -92,6 +92,7 @@ describe 'osl-app::app3' do
           repo: 'ghcr.io/osuosl/streamwebs',
           tag: 'develop',
           port: '8081:8000',
+          restart_policy: 'always',
           command: ['/usr/src/app/entrypoint.sh'],
           links: nil,
           volumes_binds: [
