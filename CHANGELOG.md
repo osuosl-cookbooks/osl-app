@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.8.1 (2024-04-10)
+------------------
+- Switch streamwebs-production to container
+
 4.8.0 (2024-04-10)
 ------------------
 - Switch to using ghcr.io images for openid-staging
