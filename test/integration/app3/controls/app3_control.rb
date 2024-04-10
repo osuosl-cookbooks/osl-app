@@ -7,6 +7,14 @@ control 'app3' do
   end
 
   describe http(
+    'http://127.0.0.1:8080',
+    headers: { 'Host' => 'streamwebs.org' }
+  ) do
+    its('status') { should eq 200 }
+    its('body') { should match 'streamwebs' }
+  end
+
+  describe http(
     'http://127.0.0.1:8081',
     headers: { 'Host' => 'streamwebs-staging.osuosl.org' }
   ) do
@@ -46,11 +54,11 @@ control 'app3' do
     its('status') { should eq 200 }
   end
 
-  describe service 'streamwebs-production-gunicorn' do
-    it { should be_enabled }
+  describe docker.images.where { repository == 'ghcr.io/osuosl/streamwebs' && tag == 'develop' } do
+    it { should exist }
   end
 
-  describe docker.images.where { repository == 'ghcr.io/osuosl/streamwebs' && tag == 'develop' } do
+  describe docker.images.where { repository == 'ghcr.io/osuosl/streamwebs' && tag == 'master' } do
     it { should exist }
   end
 
@@ -63,6 +71,14 @@ control 'app3' do
     it { should be_running }
     its('image') { should eq 'ghcr.io/osuosl/streamwebs:develop' }
     its('ports') { should eq '0.0.0.0:8081->8000/tcp' }
+    its('command') { should eq '/usr/src/app/entrypoint.sh' }
+  end
+
+  describe docker_container('streamwebs.org') do
+    it { should exist }
+    it { should be_running }
+    its('image') { should eq 'ghcr.io/osuosl/streamwebs:master' }
+    its('ports') { should eq '0.0.0.0:8080->8000/tcp' }
     its('command') { should eq '/usr/src/app/entrypoint.sh' }
   end
 
@@ -117,7 +133,9 @@ control 'app3' do
     end
   end
 
-  describe command 'sudo -U streamwebs-production -l' do
-    its('stdout') { should match %r{\(ALL\) NOPASSWD: /usr/bin/systemctl restart streamwebs-production-gunicorn} }
+  %w(streamwebs-staging nginx).each do |u|
+    describe user(u) do
+      its('groups') { should include 'streamwebs-staging' }
+    end
   end
 end

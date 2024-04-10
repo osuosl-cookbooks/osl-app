@@ -15,5 +15,21 @@
     "db_host": "postgres_host",
     "sentry_dsn": "",
     "sentry_public_dsn": ""
+  },
+  "production": {
+    "fqdn": "streamwebs.org",
+    "secret_key": "NrXzeh4ccgBi6lXC",
+    "recaptcha_public_key": "",
+    "recaptcha_private_key": "",
+    "google_maps_api_key": "",
+    "google_maps_map_type": "google.maps.MapTypeId.TERRAIN",
+    "debug": "False",
+    "default_from_email": "testing@streamwebs.org",
+    "db_name": "streamwebs-production",
+    "db_user": "streamwebs-production",
+    "db_password": "production_password",
+    "db_host": "postgres_host",
+    "sentry_dsn": "",
+    "sentry_public_dsn": ""
   }
 }
