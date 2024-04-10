@@ -67,8 +67,6 @@ suites:
       users:
         - streamwebs-staging
         - streamwebs-production
-        - timesync-web-staging
-        - timesync-web-production
       docker:
         ghcr_io:
           username: <%= ENV['GITHUB_USER'] %>

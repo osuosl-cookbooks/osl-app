@@ -30,22 +30,10 @@ edit_resource!(:osl_firewall_docker, 'osl-docker') do
 end
 
 %w(production staging).each do |env|
-  directory "/home/streamwebs-#{env}/streamwebs/streamwebs_frontend/media" do
-    user "streamwebs-#{env}"
-    group "streamwebs-#{env}"
-    recursive true
-  end
-
   directory "/home/streamwebs-#{env}/media" do
     user "streamwebs-#{env}"
     group "streamwebs-#{env}"
     recursive true
-  end
-
-  file "/home/streamwebs-#{env}/streamwebs/streamwebs_frontend/media/index.html" do
-    user "streamwebs-#{env}"
-    group "streamwebs-#{env}"
-    content "streamwebs-#{env}"
   end
 
   file "/home/streamwebs-#{env}/media/index.html" do

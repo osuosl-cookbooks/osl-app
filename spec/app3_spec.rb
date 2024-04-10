@@ -16,6 +16,22 @@ describe 'osl-app::app3' do
           password: 'gh_password'
         )
         stub_data_bag_item('osl-app', 'streamwebs').and_return(
+          production: {
+            fqdn: 'streamwebs.org',
+            secret_key: 'NrXzeh4ccgBi6lXC',
+            recaptcha_public_key: 'recaptcha_public_key',
+            recaptcha_private_key: 'recaptcha_private_key',
+            google_maps_api_key: 'google_maps_api_key',
+            google_maps_map_type: 'google.maps.MapTypeId.TERRAIN',
+            debug: 'False',
+            default_from_email: 'testing@streamwebs.org',
+            db_name: 'streamwebs-production',
+            db_user: 'streamwebs-production',
+            db_password: 'production_password',
+            db_host: 'postgres_host',
+            sentry_dsn: 'sentry_dsn',
+            sentry_public_dsn: 'sentry_public_dsn',
+          },
           staging: {
             fqdn: 'streamwebs-staging.osuosl.org',
             secret_key: 'NrXzeh4ccgBi6lXC',
@@ -51,11 +67,23 @@ describe 'osl-app::app3' do
       end
 
       it { is_expected.to login_docker_registry('ghcr.io').with(username: 'gh_user', password: 'gh_password') }
-      it { is_expected.to pull_docker_image('ghcr.io/osuosl/streamwebs').with(tag: 'develop') }
 
       it do
-        expect(chef_run.docker_image('ghcr.io/osuosl/streamwebs')).to \
+        is_expected.to pull_docker_image('streamwebs-develop').with(repo: 'ghcr.io/osuosl/streamwebs', tag: 'develop')
+      end
+
+      it do
+        is_expected.to pull_docker_image('streamwebs-master').with(repo: 'ghcr.io/osuosl/streamwebs', tag: 'master')
+      end
+
+      it do
+        expect(chef_run.docker_image('streamwebs-develop')).to \
           notify('docker_container[streamwebs-staging.osuosl.org]').to(:redeploy)
+      end
+
+      it do
+        expect(chef_run.docker_image('streamwebs-master')).to \
+          notify('docker_container[streamwebs.org]').to(:redeploy)
       end
 
       it do
@@ -83,8 +111,37 @@ describe 'osl-app::app3' do
       end
 
       it do
+        is_expected.to create_template('/home/streamwebs-production/settings.py').with(
+          variables: {
+            secrets: {
+              'db_host' => 'postgres_host',
+              'db_name' => 'streamwebs-production',
+              'db_password' => 'production_password',
+              'db_user' => 'streamwebs-production',
+              'debug' => 'False',
+              'default_from_email' => 'testing@streamwebs.org',
+              'fqdn' => 'streamwebs.org',
+              'google_maps_api_key' => 'google_maps_api_key',
+              'google_maps_map_type' => 'google.maps.MapTypeId.TERRAIN',
+              'recaptcha_private_key' => 'recaptcha_private_key',
+              'recaptcha_public_key' => 'recaptcha_public_key',
+              'secret_key' => 'NrXzeh4ccgBi6lXC',
+              'sentry_dsn' => 'sentry_dsn',
+              'sentry_public_dsn' => 'sentry_public_dsn',
+            },
+          },
+          sensitive: true
+        )
+      end
+
+      it do
         expect(chef_run.template('/home/streamwebs-staging/settings.py')).to \
           notify('docker_container[streamwebs-staging.osuosl.org]').to(:redeploy)
+      end
+
+      it do
+        expect(chef_run.template('/home/streamwebs-production/settings.py')).to \
+          notify('docker_container[streamwebs.org]').to(:redeploy)
       end
 
       it do
@@ -102,22 +159,19 @@ describe 'osl-app::app3' do
         )
       end
 
-      %w(production).each do |env|
-        it do
-          port = 8080
-          expect(chef_run).to create_osl_app("streamwebs-#{env}-gunicorn").with(
-            description: "streamwebs #{env} app",
-            user: "streamwebs-#{env}",
-            start_cmd: "/home/streamwebs-#{env}/venv/bin/gunicorn -b 0.0.0.0:#{port} "\
-              "-D --pid /home/streamwebs-#{env}/tmp/pids/gunicorn.pid "\
-              "--access-logfile /home/streamwebs-#{env}/logs/access.log "\
-              "--error-logfile /home/streamwebs-#{env}/logs/error.log "\
-              'streamwebs_frontend.wsgi:application',
-            environment: "PATH=/home/streamwebs-#{env}/venv/bin",
-            working_directory: "/home/streamwebs-#{env}/streamwebs/streamwebs_frontend",
-            pid_file: "/home/streamwebs-#{env}/tmp/pids/gunicorn.pid"
-          )
-        end
+      it do
+        is_expected.to run_docker_container('streamwebs.org').with(
+          repo: 'ghcr.io/osuosl/streamwebs',
+          tag: 'master',
+          port: '8080:8000',
+          restart_policy: 'always',
+          command: ['/usr/src/app/entrypoint.sh'],
+          links: nil,
+          volumes_binds: [
+            '/home/streamwebs-production/media:/usr/src/app/media',
+            '/home/streamwebs-production/settings.py:/usr/src/app/streamwebs_frontend/streamwebs_frontend/settings.py',
+          ]
+        )
       end
 
       it do

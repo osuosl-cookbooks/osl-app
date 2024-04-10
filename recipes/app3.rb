@@ -38,15 +38,28 @@ docker_registry 'ghcr.io' do
   password ghcr_io['password']
 end
 
-docker_image 'ghcr.io/osuosl/streamwebs' do
+docker_image 'streamwebs-develop' do
+  repo 'ghcr.io/osuosl/streamwebs'
   tag 'develop'
   notifies :redeploy, 'docker_container[streamwebs-staging.osuosl.org]'
+end
+
+docker_image 'streamwebs-master' do
+  repo 'ghcr.io/osuosl/streamwebs'
+  tag 'master'
+  notifies :redeploy, 'docker_container[streamwebs.org]'
 end
 
 template '/home/streamwebs-staging/settings.py' do
   variables(secrets: streamwebs_secrets['staging'])
   sensitive true
   notifies :redeploy, 'docker_container[streamwebs-staging.osuosl.org]'
+end
+
+template '/home/streamwebs-production/settings.py' do
+  variables(secrets: streamwebs_secrets['production'])
+  sensitive true
+  notifies :redeploy, 'docker_container[streamwebs.org]'
 end
 
 docker_container 'streamwebs-staging.osuosl.org' do
@@ -62,26 +75,24 @@ docker_container 'streamwebs-staging.osuosl.org' do
   ]
 end
 
-#### Apps ####
-
-osl_app 'streamwebs-production-gunicorn' do
-  description 'streamwebs production app'
-  user 'streamwebs-production'
-  start_cmd '/home/streamwebs-production/venv/bin/gunicorn -b 0.0.0.0:8080 '\
-    '-D --pid /home/streamwebs-production/tmp/pids/gunicorn.pid '\
-    '--access-logfile /home/streamwebs-production/logs/access.log '\
-    '--error-logfile /home/streamwebs-production/logs/error.log ' \
-    'streamwebs_frontend.wsgi:application'
-  environment 'PATH=/home/streamwebs-production/venv/bin'
-  working_directory '/home/streamwebs-production/streamwebs/streamwebs_frontend'
-  pid_file '/home/streamwebs-production/tmp/pids/gunicorn.pid'
+docker_container 'streamwebs.org' do
+  repo 'ghcr.io/osuosl/streamwebs'
+  tag 'master'
+  port '8080:8000'
+  restart_policy 'always'
+  command '/usr/src/app/entrypoint.sh'
+  links ['pg_streamwebs_production:postgres_host'] if node['kitchen']
+  volumes [
+    '/home/streamwebs-production/media:/usr/src/app/media',
+    '/home/streamwebs-production/settings.py:/usr/src/app/streamwebs_frontend/streamwebs_frontend/settings.py',
+  ]
 end
 
 # Nginx
 node.default['osl-app']['nginx'] = {
   'streamwebs.org' => {
     'uri' => '/streamwebs-production/media',
-    'folder' => '/home/streamwebs-production/streamwebs/streamwebs_frontend/media',
+    'folder' => '/home/streamwebs-production/media',
   },
   'streamwebs-staging.osuosl.org' => {
     'uri' => '/streamwebs-staging/media',

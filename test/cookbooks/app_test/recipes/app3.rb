@@ -34,9 +34,18 @@ docker_container 'pg_streamwebs_staging' do
   ]
 end
 
+docker_container 'pg_streamwebs_production' do
+  repo 'postgis/postgis'
+  env [
+    'POSTGRES_DB=streamwebs-production',
+    'POSTGRES_USER=streamwebs-production',
+    'POSTGRES_PASSWORD=production_password',
+  ]
+end
+
 cookbook_file '/tmp/mulgara_redmine.sql' do
   source 'mulgara_redmine.sql'
-  sensitive true # just to supress wall of text
+  sensitive true # just to suppress wall of text
 end
 
 execute 'mysql -posl_mysql_test mulgara_redmine < /tmp/mulgara_redmine.sql && touch /tmp/mulgara_redmine.done' do
