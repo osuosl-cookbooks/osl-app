@@ -185,7 +185,7 @@ describe 'osl-app::app3' do
 
       it do
         expect(chef_run).to pull_docker_image('library/redmine').with(
-          tag: '4.1.1'
+          tag: '5'
         )
       end
 
@@ -197,7 +197,7 @@ describe 'osl-app::app3' do
       it do
         expect(chef_run).to run_docker_container('code.mulgara.org').with(
           repo: 'redmine',
-          tag: '4.1.1',
+          tag: '5',
           port: '8084:3000',
           restart_policy: 'always',
           # This needs to be volumes_binds, since the volumes property gets coerced into a volumes_binds property if it's
@@ -215,25 +215,32 @@ describe 'osl-app::app3' do
       end
 
       it do
-        expect(chef_run).to pull_docker_image('osuosl/etherpad').with(
-          tag: '1.8.6-2020.11.13.2015'
+        expect(chef_run).to pull_docker_image('elestio/etherpad').with(
+          tag: 'latest'
         )
       end
 
       it do
-        expect(chef_run.docker_image('osuosl/etherpad')).to \
+        expect(chef_run.docker_image('elestio/etherpad')).to \
           notify('docker_container[etherpad-lite.osuosl.org]').to(:redeploy)
       end
 
       it do
+        expect(chef_run.docker_image('ghcr.io/osuosl/etherpad-snowdrift')).to \
+          notify('docker_container[etherpad-snowdrift.osuosl.org]').to(:redeploy)
+      end
+
+      it do
         expect(chef_run).to run_docker_container('etherpad-lite.osuosl.org').with(
-          repo: 'osuosl/etherpad',
-          tag: '1.8.6-2020.11.13.2015',
+          repo: 'elestio/etherpad',
+          tag: 'latest',
           port: '8085:9001',
           restart_policy: 'always',
           user: 'etherpad',
           env: [
             'DB_TYPE=mysql',
+            'DB_CHARSET=utf8mb4',
+            'DB_COLLECTION=utf8mb4_unicode_ci',
             'DB_HOST=testdb.osuosl.bak',
             'DB_NAME=fakedb',
             'DB_USER=fakeuser',
@@ -244,25 +251,16 @@ describe 'osl-app::app3' do
       end
 
       it do
-        expect(chef_run).to pull_docker_image('osuosl/etherpad-snowdrift').with(
-          tag: '1.8.6-2020.11.13.2015'
-        )
-      end
-
-      it do
-        expect(chef_run.docker_image('osuosl/etherpad-snowdrift')).to \
-          notify('docker_container[etherpad-snowdrift.osuosl.org]').to(:redeploy)
-      end
-
-      it do
         expect(chef_run).to run_docker_container('etherpad-snowdrift.osuosl.org').with(
-          repo: 'osuosl/etherpad-snowdrift',
-          tag: '1.8.6-2020.11.13.2015',
+          repo: 'ghcr.io/osuosl/etherpad-snowdrift',
+          tag: 'latest',
           port: '8086:9001',
           restart_policy: 'always',
           user: 'etherpad',
           env: [
             'DB_TYPE=mysql',
+            'DB_CHARSET=utf8mb4',
+            'DB_COLLECTION=utf8mb4_unicode_ci',
             'DB_HOST=testdb.osuosl.bak',
             'DB_NAME=fakedb',
             'DB_USER=fakeuser',

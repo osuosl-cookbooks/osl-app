@@ -123,16 +123,15 @@ end
 
 mulgara_redmine_creds = data_bag_item('mulgara_redmine', 'mysql_creds')
 mulgara_redmine_creds['db_hostname'] = node['ipaddress'] if node['kitchen']
-mulgara_redmine_tag = '4.1.1'
 
 docker_image 'library/redmine' do
-  tag mulgara_redmine_tag
+  tag '5'
   notifies :redeploy, 'docker_container[code.mulgara.org]'
 end
 
 docker_container 'code.mulgara.org' do
   repo 'redmine'
-  tag mulgara_redmine_tag
+  tag '5'
   port '8084:3000'
   restart_policy 'always'
   volumes ['/data/docker/code.mulgara.org:/usr/src/redmine/files']
@@ -148,21 +147,24 @@ end
 
 etherpad_osl_secrets = data_bag_item('etherpad', 'osl')
 etherpad_osl_secrets['db_hostname'] = node['ipaddress'] if node['kitchen']
-etherpad_osl_tag = '1.8.6-2020.11.13.2015'
 
-docker_image 'osuosl/etherpad' do
-  tag etherpad_osl_tag
+docker_image 'elestio/etherpad' do
   notifies :redeploy, 'docker_container[etherpad-lite.osuosl.org]'
 end
 
+docker_image 'ghcr.io/osuosl/etherpad-snowdrift' do
+  notifies :redeploy, 'docker_container[etherpad-snowdrift.osuosl.org]'
+end
+
 docker_container 'etherpad-lite.osuosl.org' do
-  repo 'osuosl/etherpad'
-  tag etherpad_osl_tag
+  repo 'elestio/etherpad'
   port '8085:9001'
   restart_policy 'always'
   user 'etherpad'
   env [
     'DB_TYPE=mysql',
+    'DB_CHARSET=utf8mb4',
+    'DB_COLLECTION=utf8mb4_unicode_ci',
     "DB_HOST=#{etherpad_osl_secrets['db_hostname']}",
     "DB_NAME=#{etherpad_osl_secrets['db_db']}",
     "DB_USER=#{etherpad_osl_secrets['db_user']}",
@@ -174,21 +176,16 @@ end
 
 etherpad_snowdrift_secrets = data_bag_item('etherpad', 'snowdrift')
 etherpad_snowdrift_secrets['db_hostname'] = node['ipaddress'] if node['kitchen']
-etherpad_snowdrift_tag = '1.8.6-2020.11.13.2015'
-
-docker_image 'osuosl/etherpad-snowdrift' do
-  tag etherpad_snowdrift_tag
-  notifies :redeploy, 'docker_container[etherpad-snowdrift.osuosl.org]'
-end
 
 docker_container 'etherpad-snowdrift.osuosl.org' do
-  repo 'osuosl/etherpad-snowdrift'
-  tag etherpad_snowdrift_tag
+  repo 'ghcr.io/osuosl/etherpad-snowdrift'
   port '8086:9001'
   restart_policy 'always'
   user 'etherpad'
   env [
     'DB_TYPE=mysql',
+    'DB_CHARSET=utf8mb4',
+    'DB_COLLECTION=utf8mb4_unicode_ci',
     "DB_HOST=#{etherpad_snowdrift_secrets['db_hostname']}",
     "DB_NAME=#{etherpad_snowdrift_secrets['db_db']}",
     "DB_USER=#{etherpad_snowdrift_secrets['db_user']}",
