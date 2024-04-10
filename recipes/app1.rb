@@ -27,50 +27,32 @@ end
 openid_secrets = data_bag_item('osl-app', 'openid')
 openid_db_host = node['kitchen'] ? node['ipaddress'] : openid_secrets['db_host']
 
-git_credentials 'app1-root' do
-  owner 'root'
-  secrets_databag 'git'
-  secrets_item 'app1'
+ghcr_io = ghcr_io_credentials
+
+docker_registry 'ghcr.io' do
+  username ghcr_io['username']
+  password ghcr_io['password']
 end
 
-git '/var/lib/openid-staging' do
-  user 'root'
-  group 'root'
-  repository 'https://github.com/openid-foundation/oidf-members.git'
-  revision 'develop'
-  notifies :build, 'docker_image[openid-staging]', :immediately
+docker_image 'oidf-members-develop' do
+  repo 'ghcr.io/openid-foundation/oidf-members'
+  tag 'develop'
   notifies :redeploy, 'docker_container[openid-staging-website]'
   notifies :redeploy, 'docker_container[openid-staging-delayed-job]'
-  ignore_failure true
 end
 
-# git '/var/lib/openid-production' do
-#   user 'root'
-#   group 'root'
-#   repository 'https://github.com/openid-foundation/oidf-members.git'
-#   revision 'master'
-#   notifies :build, 'docker_image[openid-production]', :immediately
+# docker_image 'oidf-members-master' do
+#   repo 'ghcr.io/openid-foundation/oidf-members'
+#   tag 'master'
 #   notifies :redeploy, 'docker_container[openid-production-website]'
 #   notifies :redeploy, 'docker_container[openid-production-delayed-job]'
-#   ignore_failure true
-# end
-
-docker_image 'openid-staging' do
-  tag 'staging'
-  source '/var/lib/openid-staging'
-  action :nothing
-end
-
-# docker_image 'openid-production' do
-#   tag 'production'
-#   source '/var/lib/openid-production'
-#   action :nothing
 # end
 
 docker_container 'openid-staging-website' do
-  repo 'openid-staging'
-  tag 'staging'
+  repo 'ghcr.io/openid-foundation/oidf-members'
+  tag 'develop'
   port '8080:8080'
+  restart_policy 'always'
   command "sh -c 'bundle exec rake db:migrate && bundle exec unicorn -c config/unicorn.rb'"
   env [
     'RAILS_ENV=staging',
@@ -81,9 +63,10 @@ docker_container 'openid-staging-website' do
 end
 
 # docker_container 'openid-production-website' do
-#   repo 'openid-production'
-#   tag 'production'
+#   repo 'ghcr.io/openid-foundation/oidf-members'
+#   tag 'master'
 #   port '8081:8080'
+#   restart_policy 'always'
 #   command "sh -c 'bundle exec rake db:migrate && bundle exec unicorn -c config/unicorn.rb'"
 #   env [
 #     'RAILS_ENV=production',
@@ -98,8 +81,8 @@ end
 # end
 
 docker_container 'openid-staging-delayed-job' do
-  repo 'openid-staging'
-  tag 'staging'
+  repo 'ghcr.io/openid-foundation/oidf-members'
+  tag 'develop'
   restart_policy 'always'
   command 'bundle exec bin/delayed_job -n 2 run'
   env [
@@ -111,8 +94,8 @@ docker_container 'openid-staging-delayed-job' do
 end
 
 # docker_container 'openid-production-delayed-job' do
-#   repo 'openid-production'
-#   tag 'production'
+#   repo 'ghcr.io/openid-foundation/oidf-members'
+#   tag 'master'
 #   restart_policy 'always'
 #   command 'bundle exec bin/delayed_job -n 2 run'
 #   env [
@@ -122,6 +105,14 @@ end
 #   ]
 #   sensitive true
 # end
+
+osl_app_docker_wrapper 'openid-staging-website' do
+  user 'openid-staging'
+end
+
+osl_app_docker_wrapper 'openid-staging-delayed-job' do
+  user 'openid-staging'
+end
 
 osl_app 'openid-production-unicorn' do
   description 'openid production app'

@@ -5,6 +5,14 @@ control 'app1' do
   #   its('ports') { should eq '0.0.0.0:8081->8080/tcp' }
   # end
 
+  describe docker.images.where { repository == 'ghcr.io/openid-foundation/oidf-members' && tag == 'develop' } do
+    it { should exist }
+  end
+
+  # describe docker.images.where { repository == 'ghcr.io/openid-foundation/oidf-members' && tag == 'master' } do
+  #   it { should exist }
+  # end
+
   describe docker_container 'openid-staging-website' do
     it { should exist }
     it { should be_running }
@@ -38,6 +46,28 @@ control 'app1' do
     describe service(s) do
       it { should be_enabled }
     end
+  end
+
+  %w(
+    openid-staging-website
+    openid-staging-delayed-job
+  ).each do |f|
+    describe file "/usr/local/bin/#{f}-console" do
+      it { should exist }
+      it { should be_executable }
+    end
+
+    describe file "/usr/local/bin/#{f}-logs" do
+      it { should exist }
+      it { should be_executable }
+    end
+  end
+
+  describe command 'sudo -U openid-staging -l' do
+    its('stdout') { should match %r{\(ALL\) NOPASSWD: /usr/local/bin/openid-staging-website-console} }
+    its('stdout') { should match %r{\(ALL\) NOPASSWD: /usr/local/bin/openid-staging-website-logs} }
+    its('stdout') { should match %r{\(ALL\) NOPASSWD: /usr/local/bin/openid-staging-delayed-job-console} }
+    its('stdout') { should match %r{\(ALL\) NOPASSWD: /usr/local/bin/openid-staging-delayed-job-logs} }
   end
 
   describe command 'sudo -U openid-production -l' do

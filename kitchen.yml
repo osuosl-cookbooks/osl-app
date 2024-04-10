@@ -25,10 +25,10 @@ suites:
     attributes:
       users:
         - test1-staging
-      osl-git:
-        secrets:
-          credentials:
-            - https://<%= ENV['GITHUB_USER'] %>:<%= ENV['GITHUB_TOKEN'] %>@github.com/openid-foundation/oidf-members.git
+      docker:
+        ghcr_io:
+          username: <%= ENV['GITHUB_USER'] %>
+          password: <%= ENV['GITHUB_TOKEN'] %>
     run_list:
       - recipe[sudo]
       - recipe[app_test::app1]

@@ -10,6 +10,10 @@ describe 'osl-app::app1' do
       include_context 'common_stubs'
 
       before do
+        stub_data_bag_item('docker', 'ghcr-io').and_return(
+          username: 'gh_user',
+          password: 'gh_password'
+        )
         stub_data_bag_item('osl-app', 'openid').and_return(
           secret_key_base: '7eef5c70ecb083192f46e601144f9d77c9b66061b634963a507'\
             '0fb086ae78bc9353af2c6311edb168abbb9d0bd428f800a0b1713534cf4ad239e8d'\
@@ -22,48 +26,31 @@ describe 'osl-app::app1' do
         )
       end
 
+      it { is_expected.to login_docker_registry('ghcr.io').with(username: 'gh_user', password: 'gh_password') }
+
       it do
-        is_expected.to create_git_credentials('app1-root').with(
-          owner: 'root',
-          secrets_databag: 'git',
-          secrets_item: 'app1'
+        is_expected.to pull_docker_image('oidf-members-develop').with(
+          repo: 'ghcr.io/openid-foundation/oidf-members',
+          tag: 'develop'
         )
       end
 
       it do
-        is_expected.to sync_git('/var/lib/openid-staging').with(
-          user: 'root',
-          group: 'root',
-          repository: 'https://github.com/openid-foundation/oidf-members.git',
-          revision: 'develop',
-          ignore_failure: true
-        )
-      end
-
-      it do
-        expect(chef_run.git('/var/lib/openid-staging')).to \
-          notify('docker_image[openid-staging]').to(:build).immediately
-      end
-
-      it do
-        expect(chef_run.git('/var/lib/openid-staging')).to \
+        expect(chef_run.docker_image('oidf-members-develop')).to \
           notify('docker_container[openid-staging-website]').to(:redeploy)
       end
 
       it do
-        expect(chef_run.git('/var/lib/openid-staging')).to \
+        expect(chef_run.docker_image('oidf-members-develop')).to \
           notify('docker_container[openid-staging-delayed-job]').to(:redeploy)
       end
 
       it do
-        is_expected.to nothing_docker_image('openid-staging').with(tag: 'staging', source: '/var/lib/openid-staging')
-      end
-
-      it do
         is_expected.to run_docker_container('openid-staging-website').with(
-          repo: 'openid-staging',
-          tag: 'staging',
+          repo: 'ghcr.io/openid-foundation/oidf-members',
+          tag: 'develop',
           port: '8080:8080',
+          restart_policy: 'always',
           command: ['sh', '-c', 'bundle exec rake db:migrate && bundle exec unicorn -c config/unicorn.rb'],
           env: [
             'RAILS_ENV=staging',
@@ -76,8 +63,8 @@ describe 'osl-app::app1' do
 
       it do
         is_expected.to run_docker_container('openid-staging-delayed-job').with(
-          repo: 'openid-staging',
-          tag: 'staging',
+          repo: 'ghcr.io/openid-foundation/oidf-members',
+          tag: 'develop',
           restart_policy: 'always',
           command: ['bundle', 'exec', 'bin/delayed_job', '-n', '2', 'run'],
           env: [
@@ -117,6 +104,9 @@ describe 'osl-app::app1' do
           reload_cmd: '/home/openid-production/.rvm/bin/rvm 3.1.4 do bundle exec bin/delayed_job -n 2 restart'
         )
       end
+
+      it { is_expected.to create_osl_app_docker_wrapper('openid-staging-website').with(user: 'openid-staging') }
+      it { is_expected.to create_osl_app_docker_wrapper('openid-staging-delayed-job').with(user: 'openid-staging') }
     end
   end
 end
