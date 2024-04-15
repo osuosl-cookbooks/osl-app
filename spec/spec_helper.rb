@@ -29,5 +29,9 @@ shared_context 'common_stubs' do
       'key' => 'dh param key'
     )
     stub_search('users', '*:*').and_return([])
+    stub_data_bag_item('docker', 'ghcr-io').and_return(
+      username: 'gh_user',
+      password: 'gh_password'
+    )
   end
 end

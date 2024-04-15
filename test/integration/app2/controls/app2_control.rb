@@ -47,7 +47,7 @@ control 'app2' do
   describe docker_container('formsender') do
     it { should exist }
     it { should be_running }
-    its('image') { should eq 'formsender:latest' }
+    its('image') { should eq 'ghcr.io/osuosl/formsender:master' }
     its('ports') { should eq '0.0.0.0:8085->5000/tcp' }
   end
 
