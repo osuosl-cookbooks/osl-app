@@ -32,6 +32,13 @@ describe 'osl-app::app1' do
       end
 
       it do
+        is_expected.to pull_docker_image('oidf-members-master').with(
+          repo: 'ghcr.io/openid-foundation/oidf-members',
+          tag: 'master'
+        )
+      end
+
+      it do
         expect(chef_run.docker_image('oidf-members-develop')).to \
           notify('docker_container[openid-staging-website]').to(:redeploy)
       end
@@ -39,6 +46,16 @@ describe 'osl-app::app1' do
       it do
         expect(chef_run.docker_image('oidf-members-develop')).to \
           notify('docker_container[openid-staging-delayed-job]').to(:redeploy)
+      end
+
+      it do
+        expect(chef_run.docker_image('oidf-members-master')).to \
+          notify('docker_container[openid-production-website]').to(:redeploy)
+      end
+
+      it do
+        expect(chef_run.docker_image('oidf-members-master')).to \
+          notify('docker_container[openid-production-delayed-job]').to(:redeploy)
       end
 
       it do
@@ -53,6 +70,27 @@ describe 'osl-app::app1' do
             'RAILS_ENV=staging',
             'DB_PASSWORD=db_password',
             'DB_HOST=db_host',
+          ],
+          sensitive: true
+        )
+      end
+
+      it do
+        is_expected.to run_docker_container('openid-production-website').with(
+          repo: 'ghcr.io/openid-foundation/oidf-members',
+          tag: 'master',
+          port: '8081:8080',
+          restart_policy: 'always',
+          init: true,
+          command: ['/usr/src/app/entrypoint.sh'],
+          env: [
+            'RAILS_ENV=production',
+            'DB_PASSWORD=db_password',
+            'DB_HOST=db_host',
+            'SECRET_KEY_BASE=7eef5c70ecb083192f46e601144f9d77c9b66061b634963a5070fb086ae78bc9353af2c6311edb168abbb9d0bd428f800a0b1713534cf4ad239e8d07fdd16c34',
+            'BRAINTREE_ACCESS_TOKEN=access_token$production$mnlc24xq7uGUqKczYhg5PpNGiVOkss',
+            'RECAPTCHA_SITE_KEY=4infjrcfj9e4mcerefa89cm8h4rvnmv9e4cu8anh',
+            'RECAPTCHA_SECRET_KEY=hxia4nvuirax4hfx8cem450tuw5uwvn74xgq783y',
           ],
           sensitive: true
         )
@@ -74,36 +112,24 @@ describe 'osl-app::app1' do
       end
 
       it do
-        is_expected.to create_osl_app('openid-production-unicorn').with(
-          description: 'openid production app',
-          service_after: 'network.target',
-          wanted_by: 'multi-user.target',
-          service_type: 'forking',
-          user: 'openid-production',
-          working_directory: '/home/openid-production/current',
-          pid_file: '/home/openid-production/current/tmp/pids/unicorn.pid',
-          start_cmd: '/home/openid-production/.rvm/bin/rvm 3.1.4 do bundle exec unicorn -c /home/openid-production/current/config/unicorn/production.rb -E deployment -D',
-          reload_cmd: '/bin/kill -USR2 $MAINPID'
-        )
-      end
-
-      it do
-        is_expected.to create_osl_app('openid-production-delayed-job').with(
-          description: 'openid delayed job',
-          service_after: 'network.target openid-production-unicorn.service',
-          service_wants: 'openid-production-unicorn.service',
-          wanted_by: 'multi-user.target',
-          service_type: 'forking',
-          user: 'openid-production',
-          environment: 'RAILS_ENV=production',
-          working_directory: '/home/openid-production/current',
-          start_cmd: '/home/openid-production/.rvm/bin/rvm 3.1.4 do bundle exec bin/delayed_job -n 2 start',
-          reload_cmd: '/home/openid-production/.rvm/bin/rvm 3.1.4 do bundle exec bin/delayed_job -n 2 restart'
+        is_expected.to run_docker_container('openid-production-delayed-job').with(
+          repo: 'ghcr.io/openid-foundation/oidf-members',
+          tag: 'master',
+          restart_policy: 'always',
+          command: ['bundle', 'exec', 'bin/delayed_job', '-n', '2', 'run'],
+          env: [
+            'RAILS_ENV=production',
+            'DB_PASSWORD=db_password',
+            'DB_HOST=db_host',
+          ],
+          sensitive: true
         )
       end
 
       it { is_expected.to create_osl_app_docker_wrapper('openid-staging-website').with(user: 'openid-staging') }
       it { is_expected.to create_osl_app_docker_wrapper('openid-staging-delayed-job').with(user: 'openid-staging') }
+      it { is_expected.to create_osl_app_docker_wrapper('openid-production-website').with(user: 'openid-production') }
+      it { is_expected.to create_osl_app_docker_wrapper('openid-production-delayed-job').with(user: 'openid-production') }
     end
   end
 end
