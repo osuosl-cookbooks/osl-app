@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.8.2 (2024-04-16)
+------------------
+- Migrate formsender to using image hosted on ghcr.io
+
 4.8.1 (2024-04-10)
 ------------------
 - Switch streamwebs-production to container
