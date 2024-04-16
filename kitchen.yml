@@ -10,6 +10,10 @@ provisioner:
   deprecations_as_errors: true
   attributes:
     kitchen: true
+    docker:
+      ghcr_io:
+        username: <%= ENV['GITHUB_USER'] %>
+        password: <%= ENV['GITHUB_TOKEN'] %>
 driver:
   flavor_ref: 'm1.medium'
 
@@ -25,10 +29,6 @@ suites:
     attributes:
       users:
         - test1-staging
-      docker:
-        ghcr_io:
-          username: <%= ENV['GITHUB_USER'] %>
-          password: <%= ENV['GITHUB_TOKEN'] %>
     run_list:
       - recipe[sudo]
       - recipe[app_test::app1]
@@ -67,10 +67,6 @@ suites:
       users:
         - streamwebs-staging
         - streamwebs-production
-      docker:
-        ghcr_io:
-          username: <%= ENV['GITHUB_USER'] %>
-          password: <%= ENV['GITHUB_TOKEN'] %>
     run_list:
       - recipe[sudo]
       - recipe[app_test::app3]

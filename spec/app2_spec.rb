@@ -25,6 +25,8 @@ describe 'osl-app::app2' do
         )
       end
 
+      it { is_expected.to login_docker_registry('ghcr.io').with(username: 'gh_user', password: 'gh_password') }
+
       it do
         expect(chef_run).to create_directory('/data/docker/redmine.replicant.us').with(
           recursive: true
@@ -62,26 +64,12 @@ describe 'osl-app::app2' do
         )
       end
 
-      it do
-        expect(chef_run).to sync_git('/var/lib/formsender').with(
-          repository: 'https://github.com/osuosl/formsender.git',
-          revision: 'master'
-        )
-        expect(chef_run.git('/var/lib/formsender')).to notify('docker_image[formsender]').to(:build).immediately
-        expect(chef_run.git('/var/lib/formsender')).to notify('docker_container[formsender]').to(:redeploy).delayed
-      end
-
-      it do
-        expect(chef_run).to_not pull_docker_image('/var/lib/formsender').with(
-          tag: 'latest',
-          source: '/var/lib/formsender'
-        )
-      end
+      it { expect(chef_run).to pull_docker_image('ghcr.io/osuosl/formsender').with(tag: 'master') }
 
       it do
         expect(chef_run).to run_docker_container('formsender').with(
-          repo: 'formsender',
-          tag: 'latest',
+          repo: 'ghcr.io/osuosl/formsender',
+          tag: 'master',
           port: '8085:5000',
           restart_policy: 'always',
           env: [

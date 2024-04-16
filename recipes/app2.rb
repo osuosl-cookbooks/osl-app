@@ -24,6 +24,13 @@ users_manage 'app2' do
   users users
 end
 
+ghcr_io = ghcr_io_credentials
+
+docker_registry 'ghcr.io' do
+  username ghcr_io['username']
+  password ghcr_io['password']
+end
+
 #### Apps ####
 
 # Docker containers
@@ -55,25 +62,16 @@ docker_container 'redmine.replicant.us' do
   sensitive true
 end
 
-git '/var/lib/formsender' do
-  repository 'https://github.com/osuosl/formsender.git'
-  revision 'master'
-  notifies :build, 'docker_image[formsender]', :immediately
+docker_image 'ghcr.io/osuosl/formsender' do
+  tag 'master'
   notifies :redeploy, 'docker_container[formsender]'
-  ignore_failure true
-end
-
-docker_image 'formsender' do
-  tag 'latest'
-  source '/var/lib/formsender'
-  action :nothing
 end
 
 formsender_env = data_bag_item('osl-app', 'formsender')
 
 docker_container 'formsender' do
-  repo 'formsender'
-  tag 'latest'
+  repo 'ghcr.io/osuosl/formsender'
+  tag 'master'
   port '8085:5000'
   restart_policy 'always'
   env [
