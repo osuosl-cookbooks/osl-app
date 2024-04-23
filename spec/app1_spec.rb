@@ -47,7 +47,8 @@ describe 'osl-app::app1' do
           tag: 'develop',
           port: '8080:8080',
           restart_policy: 'always',
-          command: ['sh', '-c', 'bundle exec rake db:migrate && bundle exec unicorn -c config/unicorn.rb'],
+          init: true,
+          command: ['/usr/src/app/entrypoint.sh'],
           env: [
             'RAILS_ENV=staging',
             'DB_PASSWORD=db_password',
