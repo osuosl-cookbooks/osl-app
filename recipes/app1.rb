@@ -53,7 +53,8 @@ docker_container 'openid-staging-website' do
   tag 'develop'
   port '8080:8080'
   restart_policy 'always'
-  command "sh -c 'bundle exec rake db:migrate && bundle exec unicorn -c config/unicorn.rb'"
+  init true
+  command '/usr/src/app/entrypoint.sh'
   env [
     'RAILS_ENV=staging',
     "DB_PASSWORD=#{openid_secrets['db_password']}",
@@ -67,7 +68,8 @@ end
 #   tag 'master'
 #   port '8081:8080'
 #   restart_policy 'always'
-#   command "sh -c 'bundle exec rake db:migrate && bundle exec unicorn -c config/unicorn.rb'"
+#   init true
+#   command '/usr/src/app/entrypoint.sh'
 #   env [
 #     'RAILS_ENV=production',
 #     "DB_PASSWORD=#{openid_secrets['db_password']}",
