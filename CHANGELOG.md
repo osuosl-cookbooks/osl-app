@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.8.4 (2024-04-25)
+------------------
+- Switch openid-production to containers
+
 4.8.3 (2024-04-23)
 ------------------
 - Precompile assets and setup cron jobs for openid-staging
