@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.8.5 (2024-06-11)
+------------------
+- Update redmine and etherpad on app3
+
 4.8.4 (2024-04-25)
 ------------------
 - Switch openid-production to containers
