@@ -44,16 +44,6 @@ control 'app3' do
     end
   end
 
-  # Ensure ep_small_list plugin is not installed on etherpad-lite
-  describe http('http://127.0.0.1:8085/small_list') do
-    its('status') { should eq 404 }
-  end
-
-  # Ensure ep_small_list plugin is installed on etherpad-snowdrift
-  describe http('http://127.0.0.1:8086/small_list') do
-    its('status') { should eq 200 }
-  end
-
   describe docker.images.where { repository == 'ghcr.io/osuosl/streamwebs' && tag == 'develop' } do
     it { should exist }
   end
@@ -62,7 +52,11 @@ control 'app3' do
     it { should exist }
   end
 
-  describe docker.images.where { repository == 'redmine' && tag == '4.1.1' } do
+  describe docker.images.where { repository == 'redmine' && tag == '5' } do
+    it { should exist }
+  end
+
+  describe docker.images.where { repository == 'elestio/etherpad' && tag == 'latest' } do
     it { should exist }
   end
 
@@ -85,7 +79,7 @@ control 'app3' do
   describe docker_container('code.mulgara.org') do
     it { should exist }
     it { should be_running }
-    its('image') { should eq 'redmine:4.1.1' }
+    its('image') { should eq 'redmine:5' }
     its('ports') { should eq '0.0.0.0:8084->3000/tcp' }
   end
 
