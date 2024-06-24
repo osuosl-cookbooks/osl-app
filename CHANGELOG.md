@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.8.6 (2024-06-24)
+------------------
+- Move ghcr_io_credentials library helper to osl-docker
+
 4.8.5 (2024-06-11)
 ------------------
 - Update redmine and etherpad on app3
