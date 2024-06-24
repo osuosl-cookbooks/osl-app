@@ -37,18 +37,6 @@ module OslApp
           )
         end
       end
-
-      def ghcr_io_credentials
-        data_bag_item('docker', 'ghcr-io')
-      rescue Net::HTTPServerException => e
-        if e.response.code == '404'
-          Chef::Log.warn("Could not find databag 'docker:ghcr-io'; falling back to default attributes.")
-          node['docker']['ghcr_io']
-        else
-          Chef::Log.fatal("Unable to load databag 'docker:ghcr-io'; exiting. Please fix the databag and try again.")
-          raise
-        end
-      end
     end
   end
 end
