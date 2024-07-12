@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.8.7 (2024-07-12)
+------------------
+- Update openid delayed_job container to use new entrypoint script
+
 4.8.6 (2024-06-24)
 ------------------
 - Move ghcr_io_credentials library helper to osl-docker
