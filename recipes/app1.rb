@@ -86,7 +86,7 @@ docker_container 'openid-staging-delayed-job' do
   repo 'ghcr.io/openid-foundation/oidf-members'
   tag 'develop'
   restart_policy 'always'
-  command 'bundle exec bin/delayed_job -n 2 run'
+  command '/usr/src/app/entrypoint-delayed-job.sh'
   env [
     'RAILS_ENV=staging',
     "DB_PASSWORD=#{openid_secrets['db_password']}",
@@ -99,7 +99,7 @@ docker_container 'openid-production-delayed-job' do
   repo 'ghcr.io/openid-foundation/oidf-members'
   tag 'master'
   restart_policy 'always'
-  command 'bundle exec bin/delayed_job -n 2 run'
+  command '/usr/src/app/entrypoint-delayed-job.sh'
   env [
     'RAILS_ENV=production',
     "DB_PASSWORD=#{openid_secrets['db_password']}",
