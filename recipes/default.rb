@@ -18,52 +18,6 @@
 
 include_recipe 'osl-git'
 
-if node['platform_version'].to_i < 8
-  include_recipe 'osl-repos::centos'
-  include_recipe 'osl-repos::epel'
-  include_recipe 'osl-mysql::client'
-  include_recipe 'base::python'
-
-  # WARNING!
-  # If this gets updated, all NodeJS apps running will need to have their
-  # node_modules directories completely removed and `npm install` run again to
-  # update the modules to match the new Node version's ABI.
-  node.override['nodejs']['repo'] = 'https://rpm.nodesource.com/pub_6.x/el/$releasever/$basearch'
-
-  # rvm package depends
-  package %w(
-    automake
-    ImageMagick-devel
-    libffi-devel
-    libtool
-    libyaml-devel
-    openssl-devel
-    postgresql-devel
-    readline-devel
-    sqlite-devel
-    zlib-devel
-  )
-
-  package 'osl-app packages' do
-    package_name osl_app_packages
-  end
-
-  package 'python-psycopg2'
-
-  # Keep systemd services private from non-root users
-  directory '/etc/systemd/system' do
-    mode '750'
-  end
-
-  # rewind the sudoers template to support sudoers_d
-  temp = resources(template: '/etc/sudoers')
-  temp.variables['include_sudoers_d'] = true
-
-  build_essential 'install tools'
-  include_recipe 'osl-nodejs'
-
-end
-
 osl_firewall_port 'unicorn' do
   osl_only true
 end
