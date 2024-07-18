@@ -5,7 +5,7 @@ describe 'osl-app::app1' do
     context "#{plat[:platform]} #{plat[:version]}" do
       cached(:chef_run) do
         ChefSpec::SoloRunner.new(plat) do |_node, server|
-        end.converge('sudo', described_recipe)
+        end.converge(described_recipe)
       end
       include_context 'common_stubs'
 

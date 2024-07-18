@@ -23,14 +23,12 @@ suites:
       users:
         - test1-staging
     run_list:
-      - recipe[sudo]
       - recipe[osl-app::default]
   - name: app1
     attributes:
       users:
         - test1-staging
     run_list:
-      - recipe[sudo]
       - recipe[app_test::app1]
       - recipe[osl-app::app1]
     verifier:
@@ -47,7 +45,6 @@ suites:
         - timesync-production
         - timesync-staging
     run_list:
-      - recipe[sudo]
       - recipe[app_test::app2]
       - recipe[osl-app::app2]
       - recipe[app_test::app2_postrun]
@@ -68,7 +65,6 @@ suites:
         - streamwebs-staging
         - streamwebs-production
     run_list:
-      - recipe[sudo]
       - recipe[app_test::app3]
       - recipe[osl-app::app3]
       - recipe[app_test::app3_postrun]
