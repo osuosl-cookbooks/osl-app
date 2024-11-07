@@ -1,8 +1,17 @@
 ---
+driver:
+  name: vagrant
+
 verifier:
   name: inspec
+
+transport:
+  name: rsync
+
 provisioner:
-  name: chef_zero
+  name: chef_infra
+  product_name: cinc
+  product_version: '18'
   data_bag_path: test/integration/data_bags
   encrypted_data_bag_secret_key_path: test/integration/encrypted_data_bag_secret
   enforce_idempotency: true
@@ -14,8 +23,9 @@ provisioner:
       ghcr_io:
         username: <%= ENV['GITHUB_USER'] %>
         password: <%= ENV['GITHUB_TOKEN'] %>
-driver:
-  flavor_ref: 'm1.medium'
+
+platforms:
+  - name: almalinux-8
 
 suites:
   - name: default
