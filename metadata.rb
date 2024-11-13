@@ -9,6 +9,7 @@ description      'Installs/Configures osl-app'
 version          '4.9.0'
 
 supports         'almalinux', '~> 8.0'
+supports         'almalinux', '~> 9.0'
 
 depends          'osl-docker'
 depends          'osl-firewall'
