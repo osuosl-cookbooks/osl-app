@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.9.1 (2024-11-13)
+------------------
+- Add Support for AlmaLinux 9
+
 4.9.0 (2024-07-18)
 ------------------
 - Remove support for CentOS 7
