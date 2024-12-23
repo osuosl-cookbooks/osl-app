@@ -20,6 +20,23 @@ describe 'osl-app::app1' do
           db_password: 'db_password',
           db_host: 'db_host'
         )
+        stub_data_bag_item('osl-app', 'registry').and_return(
+          access_key: 'access_key',
+          secret_key: 'secret_key',
+          docker_username: 'docker_username',
+          docker_password: 'docker_password',
+          htpasswds: [
+            {
+              username: 'guest',
+              password: 'guest',
+            },
+            {
+              username: 'admin',
+              password: 'admin',
+              type: 'plaintext',
+            },
+          ]
+        )
       end
 
       it { is_expected.to login_docker_registry('ghcr.io').with(username: 'gh_user', password: 'gh_password') }
@@ -35,6 +52,12 @@ describe 'osl-app::app1' do
         is_expected.to pull_docker_image('oidf-members-master').with(
           repo: 'ghcr.io/openid-foundation/oidf-members',
           tag: 'master'
+        )
+      end
+
+      it do
+        is_expected.to pull_docker_image('registry').with(
+          tag: '2'
         )
       end
 
@@ -56,6 +79,30 @@ describe 'osl-app::app1' do
       it do
         expect(chef_run.docker_image('oidf-members-master')).to \
           notify('docker_container[openid-production-delayed-job]').to(:redeploy)
+      end
+
+      it do
+        expect(chef_run.docker_image('registry')).to \
+          notify('docker_container[registry.osuosl.org]').to(:redeploy)
+      end
+
+      it { is_expected.to create_directory('/usr/local/etc/registry.osuosl.org').with(recursive: true) }
+
+      it do
+        is_expected.to add_htpasswd('guest in /usr/local/etc/registry.osuosl.org/htpasswd').with(
+          file: '/usr/local/etc/registry.osuosl.org/htpasswd',
+          user: 'guest',
+          password: 'guest'
+        )
+      end
+
+      it do
+        is_expected.to add_htpasswd('admin in /usr/local/etc/registry.osuosl.org/htpasswd').with(
+          file: '/usr/local/etc/registry.osuosl.org/htpasswd',
+          user: 'admin',
+          password: 'admin',
+          type: 'plaintext'
+        )
       end
 
       it do
@@ -122,6 +169,30 @@ describe 'osl-app::app1' do
             'DB_PASSWORD=db_password',
             'DB_HOST=db_host',
           ],
+          sensitive: true
+        )
+      end
+
+      it do
+        is_expected.to run_docker_container('registry.osuosl.org').with(
+          tag: '2',
+          port: '8082:5000',
+          restart_policy: 'always',
+          env: [
+            'REGISTRY_STORAGE=s3',
+            'REGISTRY_STORAGE_S3_ACCESSKEY=access_key',
+            'REGISTRY_STORAGE_S3_SECRETKEY=secret_key',
+            'REGISTRY_STORAGE_S3_REGION=us-east-1',
+            'REGISTRY_STORAGE_S3_BUCKET=osuosl-registry',
+            'REGISTRY_STORAGE_S3_ENDPOINT=s3.osuosl.org',
+            'REGISTRY_AUTH=htpasswd',
+            'REGISTRY_AUTH_HTPASSWD_REALM="Registry Realm"',
+            'REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd',
+            'REGISTRY_PROXY_REMOTEURL=https://registry-1.docker.io',
+            'REGISTRY_PROXY_USERNAME=docker_username',
+            'REGISTRY_PROXY_PASSWORD=docker_password',
+          ],
+          volumes_binds: ['/usr/local/etc/registry.osuosl.org:/auth'],
           sensitive: true
         )
       end

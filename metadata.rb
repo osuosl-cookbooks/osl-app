@@ -11,6 +11,7 @@ version          '4.9.1'
 supports         'almalinux', '~> 8.0'
 supports         'almalinux', '~> 9.0'
 
+depends          'htpasswd'
 depends          'osl-docker'
 depends          'osl-firewall'
 depends          'osl-git'

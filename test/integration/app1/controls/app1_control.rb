@@ -19,6 +19,15 @@ control 'app1' do
     its('ports') { should eq '0.0.0.0:8080->8080/tcp' }
   end
 
+  describe docker_container 'registry.osuosl.org' do
+    it { should exist }
+  end
+
+  describe file '/usr/local/etc/registry.osuosl.org/htpasswd' do
+    its('content') { should match /^guest:\$apr1/ }
+    its('content') { should match /^admin:\$apr1/ }
+  end
+
   describe docker_container 'openid-production-delayed-job' do
     it { should exist }
     it { should be_running }
