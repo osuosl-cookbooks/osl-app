@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.10.1 (2024-12-23)
+-------------------
+- Use correct env var
+
 4.10.0 (2024-12-23)
 -------------------
 - Create registry.osuosl.org
