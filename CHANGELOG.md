@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.10.0 (2024-12-23)
+-------------------
+- Create registry.osuosl.org
+
 4.9.1 (2024-11-13)
 ------------------
 - Add Support for AlmaLinux 9
