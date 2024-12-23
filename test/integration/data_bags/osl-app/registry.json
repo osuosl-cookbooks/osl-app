@@ -1,0 +1,17 @@
+{
+  "id": "registry",
+  "access_key": "access_key",
+  "secret_key": "secret_key",
+  "docker_username": "example",
+  "docker_password": "example",
+  "htpasswds": [
+    {
+      "username": "guest",
+      "password": "guest"
+    },
+    {
+      "username": "admin",
+      "password": "$apr1$8yP.u60F$xg8Dve/V/R09TKOhZ/1Ba."
+    }
+  ]
+}

@@ -17,6 +17,7 @@
 # limitations under the License.
 
 include_recipe 'osl-app::default'
+include_recipe 'htpasswd'
 
 users = search('users', '*:*')
 
@@ -26,6 +27,7 @@ end
 
 openid_secrets = data_bag_item('osl-app', 'openid')
 openid_db_host = node['kitchen'] ? node['ipaddress'] : openid_secrets['db_host']
+registry_secrets = data_bag_item('osl-app', 'registry')
 
 ghcr_io = ghcr_io_credentials
 
@@ -46,6 +48,11 @@ docker_image 'oidf-members-master' do
   tag 'master'
   notifies :redeploy, 'docker_container[openid-production-website]'
   notifies :redeploy, 'docker_container[openid-production-delayed-job]'
+end
+
+docker_image 'registry' do
+  tag '2'
+  notifies :redeploy, 'docker_container[registry.osuosl.org]'
 end
 
 docker_container 'openid-staging-website' do
@@ -106,6 +113,43 @@ docker_container 'openid-production-delayed-job' do
     "DB_HOST=#{openid_db_host}",
   ]
   sensitive true
+end
+
+directory '/usr/local/etc/registry.osuosl.org' do
+  recursive true
+end
+
+registry_secrets['htpasswds'].each do |u|
+  htpasswd "#{u['username']} in /usr/local/etc/registry.osuosl.org/htpasswd" do
+    file '/usr/local/etc/registry.osuosl.org/htpasswd'
+    user u['username']
+    password u['password']
+    type u['type'] if u['type']
+    notifies :redeploy, 'docker_container[registry.osuosl.org]'
+  end
+end
+
+docker_container 'registry.osuosl.org' do
+  repo 'registry'
+  tag '2'
+  restart_policy 'always'
+  sensitive true
+  env [
+    'REGISTRY_STORAGE=s3',
+    "REGISTRY_STORAGE_S3_ACCESSKEY=#{registry_secrets['access_key']}",
+    "REGISTRY_STORAGE_S3_SECRETKEY=#{registry_secrets['secret_key']}",
+    'REGISTRY_STORAGE_S3_REGION=us-east-1',
+    'REGISTRY_STORAGE_S3_BUCKET=osuosl-registry',
+    'REGISTRY_STORAGE_S3_ENDPOINT=s3.osuosl.org',
+    'REGISTRY_AUTH=htpasswd',
+    'REGISTRY_AUTH_HTPASSWD_REALM="Registry Realm"',
+    'REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd',
+    'REGISTRY_PROXY_REMOTEURL=https://registry-1.docker.io',
+    "REGISTRY_PROXY_USERNAME=#{registry_secrets['docker_username']}",
+    "REGISTRY_PROXY_PASSWORD=#{registry_secrets['docker_password']}",
+  ]
+  volumes ['/usr/local/etc/registry.osuosl.org:/auth']
+  port '8082:5000'
 end
 
 osl_app_docker_wrapper 'openid-staging-website' do

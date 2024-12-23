@@ -35,6 +35,8 @@ suites:
     run_list:
       - recipe[osl-app::default]
   - name: app1
+    driver:
+      flavor_ref: 'm2.local.4c4m50d'
     attributes:
       users:
         - test1-staging
