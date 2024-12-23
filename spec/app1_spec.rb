@@ -184,7 +184,7 @@ describe 'osl-app::app1' do
             'REGISTRY_STORAGE_S3_SECRETKEY=secret_key',
             'REGISTRY_STORAGE_S3_REGION=us-east-1',
             'REGISTRY_STORAGE_S3_BUCKET=osuosl-registry',
-            'REGISTRY_STORAGE_S3_ENDPOINT=s3.osuosl.org',
+            'REGISTRY_STORAGE_S3_REGIONENDPOINT=s3.osuosl.org',
             'REGISTRY_AUTH=htpasswd',
             'REGISTRY_AUTH_HTPASSWD_REALM="Registry Realm"',
             'REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd',
