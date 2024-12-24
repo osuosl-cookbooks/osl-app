@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.10.2 (2024-12-24)
+-------------------
+- Remove auth from registry
+
 4.10.1 (2024-12-23)
 -------------------
 - Use correct env var
