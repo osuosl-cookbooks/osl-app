@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.10.3 (2024-12-26)
+-------------------
+- Temporarily lock to redmine-5.1.4
+
 4.10.2 (2024-12-24)
 -------------------
 - Remove auth from registry
