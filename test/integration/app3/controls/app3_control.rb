@@ -52,7 +52,7 @@ control 'app3' do
     it { should exist }
   end
 
-  describe docker.images.where { repository == 'redmine' && tag == '5' } do
+  describe docker.images.where { repository == 'redmine' && tag == '5.1.4' } do
     it { should exist }
   end
 
@@ -79,7 +79,7 @@ control 'app3' do
   describe docker_container('code.mulgara.org') do
     it { should exist }
     it { should be_running }
-    its('image') { should eq 'redmine:5' }
+    its('image') { should eq 'redmine:5.1.4' }
     its('ports') { should eq '0.0.0.0:8084->3000/tcp' }
   end
 

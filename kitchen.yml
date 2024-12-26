@@ -1,6 +1,7 @@
 ---
 driver:
   name: vagrant
+  flavor_ref: 'm2.local.4c4m50d'
 
 verifier:
   name: inspec
@@ -35,8 +36,6 @@ suites:
     run_list:
       - recipe[osl-app::default]
   - name: app1
-    driver:
-      flavor_ref: 'm2.local.4c4m50d'
     attributes:
       users:
         - test1-staging
@@ -69,8 +68,6 @@ suites:
         - default
       inputs:
         osl_only: false
-    driver:
-      flavor_ref: 'm1.large'
   - name: app3
     attributes:
       users:
@@ -80,8 +77,6 @@ suites:
       - recipe[app_test::app3]
       - recipe[osl-app::app3]
       - recipe[app_test::app3_postrun]
-    driver:
-      flavor_ref: 'm1.large'
     provisioner:
       # Waiting for mulgara is not idempotent
       enforce_idempotency: false
