@@ -32,5 +32,6 @@ shared_context 'common_stubs' do
       username: 'gh_user',
       password: 'gh_password'
     )
+    stub_command('iptables -C INPUT -j REJECT --reject-with icmp-host-prohibited 2>/dev/null').and_return(true)
   end
 end
