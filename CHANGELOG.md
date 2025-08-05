@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.10.4 (2025-08-05)
+-------------------
+- Update and fix spec test with newer osl-docker cookbook
+
 4.10.3 (2024-12-26)
 -------------------
 - Temporarily lock to redmine-5.1.4
