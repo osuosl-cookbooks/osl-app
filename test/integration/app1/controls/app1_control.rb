@@ -40,7 +40,7 @@ control 'app1' do
 
   describe http 'localhost:8080/foundation/members/registration' do
     its('status') { should cmp 200 }
-    its('body') { should match 'https://staging.openid.net/foundation/members/rpx' }
+    its('body') { should match 'https://openid.net/foundation/members/rpx' }
   end
 
   describe http 'localhost:8081/foundation/members/registration' do
