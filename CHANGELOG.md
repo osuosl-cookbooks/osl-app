@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.10.5 (2025-10-01)
+-------------------
+- Almalinux 10 support
+
 4.10.4 (2025-08-05)
 -------------------
 - Update and fix spec test with newer osl-docker cookbook
