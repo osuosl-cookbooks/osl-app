@@ -21,25 +21,22 @@
   end
 end
 
-include_recipe 'osl-docker'
-
-docker_image 'postgis/postgis'
-
-docker_container 'pg_streamwebs_staging' do
-  repo 'postgis/postgis'
-  env [
-    'POSTGRES_DB=streamwebs-staging',
-    'POSTGRES_USER=streamwebs-staging',
-    'POSTGRES_PASSWORD=staging_password',
+osl_postgresql_test 'streamwebs-staging' do
+  username 'streamwebs-staging'
+  password 'staging_password'
+  source :repo
+  postgis true
+  additional_users [
+    {
+      name: 'streamwebs-production',
+      password: 'production_password',
+    },
   ]
-end
-
-docker_container 'pg_streamwebs_production' do
-  repo 'postgis/postgis'
-  env [
-    'POSTGRES_DB=streamwebs-production',
-    'POSTGRES_USER=streamwebs-production',
-    'POSTGRES_PASSWORD=production_password',
+  additional_databases [
+    {
+      name: 'streamwebs-production',
+      owner: 'streamwebs-production',
+    },
   ]
 end
 

@@ -12,7 +12,7 @@
     "db_name": "streamwebs-staging",
     "db_user": "streamwebs-staging",
     "db_password": "staging_password",
-    "db_host": "postgres_host",
+    "db_host": "127.0.0.1",
     "sentry_dsn": "",
     "sentry_public_dsn": ""
   },
@@ -28,7 +28,7 @@
     "db_name": "streamwebs-production",
     "db_user": "streamwebs-production",
     "db_password": "production_password",
-    "db_host": "postgres_host",
+    "db_host": "127.0.0.1",
     "sentry_dsn": "",
     "sentry_public_dsn": ""
   }
