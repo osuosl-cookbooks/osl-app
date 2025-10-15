@@ -68,7 +68,6 @@ docker_container 'streamwebs-staging.osuosl.org' do
   port '8081:8000'
   restart_policy 'always'
   command '/usr/src/app/entrypoint.sh'
-  links ['pg_streamwebs_staging:postgres_host'] if node['kitchen']
   volumes [
     '/home/streamwebs-staging/media:/usr/src/app/media',
     '/home/streamwebs-staging/settings.py:/usr/src/app/streamwebs_frontend/streamwebs_frontend/settings.py',
@@ -81,7 +80,6 @@ docker_container 'streamwebs.org' do
   port '8080:8000'
   restart_policy 'always'
   command '/usr/src/app/entrypoint.sh'
-  links ['pg_streamwebs_production:postgres_host'] if node['kitchen']
   volumes [
     '/home/streamwebs-production/media:/usr/src/app/media',
     '/home/streamwebs-production/settings.py:/usr/src/app/streamwebs_frontend/streamwebs_frontend/settings.py',

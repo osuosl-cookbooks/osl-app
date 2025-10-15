@@ -7,3 +7,4 @@ version          '0.1.0'
 
 depends          'osl-docker'
 depends          'osl-mysql'
+depends          'osl-postgresql', '>= 7.7.0'

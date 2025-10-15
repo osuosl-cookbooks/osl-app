@@ -80,8 +80,8 @@ suites:
       - recipe[osl-app::app3]
       - recipe[app_test::app3_postrun]
     provisioner:
-      # Waiting for mulgara is not idempotent
-      enforce_idempotency: false
+      # Waiting for mulgara is not idempotent so run three times
+      multiple_converge: 3
     verifier:
       controls:
         - app3
