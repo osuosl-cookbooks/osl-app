@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.10.6 (2025-10-15)
+-------------------
+- Migrate to using non-dockerized postgres server
+
 4.10.5 (2025-10-01)
 -------------------
 - Almalinux 10 support
