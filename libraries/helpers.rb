@@ -37,6 +37,13 @@ module OslApp
           )
         end
       end
+
+      private
+
+      def user_uid(username)
+        require 'etc'
+        Etc.getpwnam(username).uid
+      end
     end
   end
 end
