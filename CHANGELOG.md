@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.11.0 (2025-11-03)
+-------------------
+- Add staging instance for the Oregon Invasives Hotline site
+
 4.10.6 (2025-10-15)
 -------------------
 - Migrate to using non-dockerized postgres server
