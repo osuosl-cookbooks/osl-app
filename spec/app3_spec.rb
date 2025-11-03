@@ -298,6 +298,7 @@ describe 'osl-app::app3' do
         )
         expect(template.variables[:env]).to eq('staging')
         expect(template.variables[:image]).to eq('develop')
+        expect(template.variables[:load_balancer_ips]).to eq('140.211.9.50,140.211.9.52,140.211.9.53,10.0.0.2')
         expect(template.variables[:app_port]).to eq('8087')
         expect(template.variables[:allowed_hosts]).to eq(%w(staging.oregoninvasiveshotline.org))
         expect(template.variables[:db_name]).to eq('invasives-staging')

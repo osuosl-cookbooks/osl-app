@@ -216,6 +216,7 @@ template "#{invasives_staging}/.env" do
     db_user: invasives_secrets['staging']['db_user'],
     env: 'staging',
     image: 'develop',
+    load_balancer_ips: "140.211.9.50,140.211.9.52,140.211.9.53,#{node['ipaddress']}",
     sentry_dsn: invasives_secrets['staging']['sentry_dsn'],
     sentry_sample_rate: '0.5',
     user_id: lazy { user_uid('invasives-staging') },

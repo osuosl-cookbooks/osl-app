@@ -209,8 +209,10 @@ control 'app3' do
     its([0, 'State']) { should eq 'running' }
     its([1, 'Service']) { should eq 'celery' }
     its([1, 'State']) { should eq 'running' }
-    its([2, 'Service']) { should eq 'rabbitmq' }
+    its([2, 'Service']) { should eq 'nginx' }
     its([2, 'State']) { should eq 'running' }
+    its([3, 'Service']) { should eq 'rabbitmq' }
+    its([3, 'State']) { should eq 'running' }
   end
 
   describe http(
@@ -219,5 +221,13 @@ control 'app3' do
   ) do
     its('status') { should eq 200 }
     its('body') { should match /Oregon Invasives Hotline/ }
+  end
+
+  describe http(
+    'http://127.0.0.1:8087/static/robots.txt',
+    headers: { 'Host' => 'staging.oregoninvasiveshotline.org' }
+  ) do
+    its('status') { should eq 200 }
+    its('body') { should match /User-Agent:/ }
   end
 end
