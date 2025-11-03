@@ -1,0 +1,10 @@
+{
+  "id": "invasives-staging",
+  "username": "invasives-staging",
+  "ssh_keygen": false,
+  "homedir_mode": "02750",
+  "groups": [
+    "app3"
+  ],
+  "shell": "/bin/bash"
+}

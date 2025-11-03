@@ -31,13 +31,26 @@ osl_postgresql_test 'streamwebs-staging' do
       name: 'streamwebs-production',
       password: 'production_password',
     },
+    {
+      name: 'invasives-staging',
+      password: 'invasives-staging',
+    },
   ]
   additional_databases [
     {
       name: 'streamwebs-production',
       owner: 'streamwebs-production',
     },
+    {
+      name: 'invasives-staging',
+      owner: 'invasives-staging',
+    },
   ]
+  notifies :reload, 'service[postgresql-16]', :immediately
+end
+
+service 'postgresql-16' do
+  action :nothing
 end
 
 cookbook_file '/tmp/mulgara_redmine.sql' do

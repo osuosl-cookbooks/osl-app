@@ -192,3 +192,91 @@ docker_container 'etherpad-snowdrift.osuosl.org' do
   ]
   sensitive true
 end
+
+# Oregon Invasives Hotline
+invasives_staging = '/home/invasives-staging/oregoninvasiveshotline'
+invasives_secrets = data_bag_item('osl-app', 'invasives')
+invasives_secrets['staging']['db_host'] = node['ipaddress'] if node['kitchen']
+
+git invasives_staging do
+  repository 'https://github.com/osu-cass/oregoninvasiveshotline.git'
+  revision 'develop'
+  notifies :rebuild, 'osl_dockercompose[invasives-staging]'
+  notifies :restart, 'osl_dockercompose[invasives-staging]'
+end
+
+template "#{invasives_staging}/.env" do
+  source 'oregoninvasiveshotline-env.erb'
+  mode '0400'
+  variables(
+    allowed_hosts: %w(staging.oregoninvasiveshotline.org),
+    app_port: '8087',
+    db_host: invasives_secrets['staging']['db_host'],
+    db_name: invasives_secrets['staging']['db_name'],
+    db_user: invasives_secrets['staging']['db_user'],
+    env: 'staging',
+    image: 'develop',
+    sentry_dsn: invasives_secrets['staging']['sentry_dsn'],
+    sentry_sample_rate: '0.5',
+    user_id: lazy { user_uid('invasives-staging') },
+    volume_path: '/home/invasives-staging/volume'
+  )
+  sensitive true
+  notifies :rebuild, 'osl_dockercompose[invasives-staging]'
+  notifies :restart, 'osl_dockercompose[invasives-staging]'
+end
+
+directory "#{invasives_staging}/docker/secrets"
+
+directory '/home/invasives-staging/volume/media' do
+  owner 1000
+  group 1000
+  recursive true
+end
+
+directory '/home/invasives-staging/volume/static' do
+  owner 1000
+  group 1000
+  recursive true
+end
+
+file "#{invasives_staging}/docker/secrets/secret_key.txt" do
+  owner 1000
+  group 1000
+  mode '0400'
+  content invasives_secrets['staging']['secret_key']
+  sensitive true
+  notifies :rebuild, 'osl_dockercompose[invasives-staging]'
+  notifies :restart, 'osl_dockercompose[invasives-staging]'
+end
+
+file "#{invasives_staging}/docker/secrets/db_password.txt" do
+  owner 1000
+  group 1000
+  mode '0400'
+  content invasives_secrets['staging']['db_pass']
+  sensitive true
+  notifies :rebuild, 'osl_dockercompose[invasives-staging]'
+  notifies :restart, 'osl_dockercompose[invasives-staging]'
+end
+
+file "#{invasives_staging}/docker/secrets/google_api_key.txt" do
+  owner 1000
+  group 1000
+  mode '0400'
+  content invasives_secrets['staging']['google_api_key']
+  sensitive true
+  notifies :rebuild, 'osl_dockercompose[invasives-staging]'
+  notifies :restart, 'osl_dockercompose[invasives-staging]'
+end
+
+docker_image 'ghcr.io/osu-cass/oregoninvasiveshotline' do
+  tag 'develop'
+  notifies :rebuild, 'osl_dockercompose[invasives-staging]'
+  notifies :restart, 'osl_dockercompose[invasives-staging]'
+end
+
+osl_dockercompose 'invasives-staging' do
+  directory invasives_staging
+  config_files %w(docker-compose.deploy.yml)
+end
