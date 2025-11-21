@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.11.2 (2025-11-21)
+-------------------
+- Remove redundant :restart notifications for osl_dockercompose
+
 4.11.1 (2025-11-03)
 -------------------
 - Fix static content serving for invasives-staging
