@@ -202,7 +202,6 @@ git invasives_staging do
   repository 'https://github.com/osu-cass/oregoninvasiveshotline.git'
   revision 'develop'
   notifies :rebuild, 'osl_dockercompose[invasives-staging]'
-  notifies :restart, 'osl_dockercompose[invasives-staging]'
 end
 
 template "#{invasives_staging}/.env" do
@@ -224,7 +223,6 @@ template "#{invasives_staging}/.env" do
   )
   sensitive true
   notifies :rebuild, 'osl_dockercompose[invasives-staging]'
-  notifies :restart, 'osl_dockercompose[invasives-staging]'
 end
 
 directory "#{invasives_staging}/docker/secrets"
@@ -248,7 +246,6 @@ file "#{invasives_staging}/docker/secrets/secret_key.txt" do
   content invasives_secrets['staging']['secret_key']
   sensitive true
   notifies :rebuild, 'osl_dockercompose[invasives-staging]'
-  notifies :restart, 'osl_dockercompose[invasives-staging]'
 end
 
 file "#{invasives_staging}/docker/secrets/db_password.txt" do
@@ -258,7 +255,6 @@ file "#{invasives_staging}/docker/secrets/db_password.txt" do
   content invasives_secrets['staging']['db_pass']
   sensitive true
   notifies :rebuild, 'osl_dockercompose[invasives-staging]'
-  notifies :restart, 'osl_dockercompose[invasives-staging]'
 end
 
 file "#{invasives_staging}/docker/secrets/google_api_key.txt" do
@@ -268,13 +264,11 @@ file "#{invasives_staging}/docker/secrets/google_api_key.txt" do
   content invasives_secrets['staging']['google_api_key']
   sensitive true
   notifies :rebuild, 'osl_dockercompose[invasives-staging]'
-  notifies :restart, 'osl_dockercompose[invasives-staging]'
 end
 
 docker_image 'ghcr.io/osu-cass/oregoninvasiveshotline' do
   tag 'develop'
   notifies :rebuild, 'osl_dockercompose[invasives-staging]'
-  notifies :restart, 'osl_dockercompose[invasives-staging]'
 end
 
 osl_dockercompose 'invasives-staging' do

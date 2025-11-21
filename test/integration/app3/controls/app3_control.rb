@@ -217,9 +217,13 @@ control 'app3' do
 
   describe http(
     'http://127.0.0.1:8087',
-    headers: { 'Host' => 'staging.oregoninvasiveshotline.org' }
+    headers: {
+      'Host' => 'staging.oregoninvasiveshotline.org',
+      'X-Forwarded-Proto' => 'https',
+    }
   ) do
     its('status') { should eq 200 }
+    its('headers.location') { should cmp nil }
     its('body') { should match /Oregon Invasives Hotline/ }
   end
 
