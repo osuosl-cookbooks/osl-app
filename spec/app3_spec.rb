@@ -316,18 +316,8 @@ describe 'osl-app::app3' do
       end
 
       it do
-        expect(chef_run.template('/home/invasives-staging/oregoninvasiveshotline/.env')).to \
-          notify('osl_dockercompose[invasives-staging]').to(:restart)
-      end
-
-      it do
         expect(chef_run.git('/home/invasives-staging/oregoninvasiveshotline')).to \
           notify('osl_dockercompose[invasives-staging]').to(:rebuild)
-      end
-
-      it do
-        expect(chef_run.git('/home/invasives-staging/oregoninvasiveshotline')).to \
-          notify('osl_dockercompose[invasives-staging]').to(:restart)
       end
 
       it do
@@ -366,11 +356,6 @@ describe 'osl-app::app3' do
       end
 
       it do
-        expect(chef_run.file('/home/invasives-staging/oregoninvasiveshotline/docker/secrets/secret_key.txt')).to \
-          notify('osl_dockercompose[invasives-staging]').to(:restart)
-      end
-
-      it do
         is_expected.to create_file('/home/invasives-staging/oregoninvasiveshotline/docker/secrets/db_password.txt').with(
           owner: 1000,
           group: 1000,
@@ -383,11 +368,6 @@ describe 'osl-app::app3' do
       it do
         expect(chef_run.file('/home/invasives-staging/oregoninvasiveshotline/docker/secrets/db_password.txt')).to \
           notify('osl_dockercompose[invasives-staging]').to(:rebuild)
-      end
-
-      it do
-        expect(chef_run.file('/home/invasives-staging/oregoninvasiveshotline/docker/secrets/db_password.txt')).to \
-          notify('osl_dockercompose[invasives-staging]').to(:restart)
       end
 
       it do
@@ -406,11 +386,6 @@ describe 'osl-app::app3' do
       end
 
       it do
-        expect(chef_run.file('/home/invasives-staging/oregoninvasiveshotline/docker/secrets/google_api_key.txt')).to \
-          notify('osl_dockercompose[invasives-staging]').to(:restart)
-      end
-
-      it do
         is_expected.to pull_docker_image('ghcr.io/osu-cass/oregoninvasiveshotline').with(
           tag: 'develop'
         )
@@ -419,11 +394,6 @@ describe 'osl-app::app3' do
       it do
         expect(chef_run.docker_image('ghcr.io/osu-cass/oregoninvasiveshotline')).to \
           notify('osl_dockercompose[invasives-staging]').to(:rebuild)
-      end
-
-      it do
-        expect(chef_run.docker_image('ghcr.io/osu-cass/oregoninvasiveshotline')).to \
-          notify('osl_dockercompose[invasives-staging]').to(:restart)
       end
 
       it do
