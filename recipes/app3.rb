@@ -213,6 +213,9 @@ template "#{invasives_staging}/.env" do
     db_host: invasives_secrets['staging']['db_host'],
     db_name: invasives_secrets['staging']['db_name'],
     db_user: invasives_secrets['staging']['db_user'],
+    email_host: 'mailpit',
+    mailpit_port: '8088',
+    mailpit_ui_auth: invasives_secrets['staging']['mailpit_ui_auth'],
     env: 'staging',
     image: 'develop',
     load_balancer_ips: "140.211.9.50,140.211.9.52,140.211.9.53,#{node['ipaddress']}",
@@ -273,5 +276,5 @@ end
 
 osl_dockercompose 'invasives-staging' do
   directory invasives_staging
-  config_files %w(docker-compose.deploy.yml)
+  config_files %w(docker-compose.deploy.yml docker-compose.mailpit.yml)
 end

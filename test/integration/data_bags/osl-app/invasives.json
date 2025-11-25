@@ -7,6 +7,7 @@
     "db_user": "invasives-staging",
     "db_pass": "invasives-staging",
     "db_host": "127.0.0.1",
+    "mailpit_ui_auth": "admin:admin",
     "sentry_dsn": "https://368817c1266fd9015d79b8e5b6f99f73@o23529.ingest.us.sentry.io/4510286887583744",
     "google_api_key": "",
     "secret_key": "+cj5n258ct-lge3=vvr!r0byc-8$+ch7$f9&#g6_kk(uxngmkc"

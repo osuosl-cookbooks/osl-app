@@ -27,7 +27,7 @@ DEFAULT_FROM_EMAIL=no-reply@cass.oregonstate.edu
 NOTIFICATIONS_FROM_EMAIL=no-reply@oregoninvasiveshotline.org
 
 # SMTP Settings
-EMAIL_HOST=smtp.osuosl.org
+EMAIL_HOST=<%= @email_host %>
 
 # Celery Configuration
 CELERY_BROKER_URL=pyamqp://guest:guest@rabbitmq//
@@ -53,6 +53,10 @@ SENTRY_ENVIRONMENT=<%= @env %>
 SENTRY_TRACES_SAMPLE_RATE=<%= @sentry_sample_rate %>
 
 VOLUME_PATH=<%= @volume_path %>
-
 USER_ID=1000
 LOAD_BALANCER_IPS=<%= @load_balancer_ips %>
+<% if @mailpit_ui_auth && @mailpit_port -%>
+# Mailpit configuration
+MAILPIT_PORT=<%= @mailpit_port %>
+MAILPIT_UI_AUTH=<%= @mailpit_ui_auth %>
+<% end -%>
