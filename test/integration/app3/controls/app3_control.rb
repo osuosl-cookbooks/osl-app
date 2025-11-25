@@ -153,6 +153,9 @@ control 'app3' do
     its('content') { should match /DB_HOST=10.1.100.*/ }
     its('content') { should match /SENTRY_TRACES_SAMPLE_RATE=0.5/ }
     its('content') { should match %r{VOLUME_PATH=/home/invasives-staging/volume} }
+    its('content') { should match /EMAIL_HOST=mailpit/ }
+    its('content') { should match /MAILPIT_PORT=8088/ }
+    its('content') { should match /MAILPIT_UI_AUTH=admin:admin/ }
   end
 
   describe directory('/home/invasives-staging/oregoninvasiveshotline/docker/secrets') do
@@ -204,15 +207,17 @@ control 'app3' do
     it { should exist }
   end
 
-  describe json(content: command('docker compose -f /home/invasives-staging/oregoninvasiveshotline/docker-compose.deploy.yml -p invasives-staging ps --format json --no-trunc | jq -s \'map({Service: .Service, State: .State})\'').stdout) do
+  describe json(content: command('docker compose -f /home/invasives-staging/oregoninvasiveshotline/docker-compose.deploy.yml -f /home/invasives-staging/oregoninvasiveshotline/docker-compose.mailpit.yml -p invasives-staging ps --format json --no-trunc | jq -s \'map({Service: .Service, State: .State})\'').stdout) do
     its([0, 'Service']) { should eq 'app' }
     its([0, 'State']) { should eq 'running' }
     its([1, 'Service']) { should eq 'celery' }
     its([1, 'State']) { should eq 'running' }
-    its([2, 'Service']) { should eq 'nginx' }
+    its([2, 'Service']) { should eq 'mailpit' }
     its([2, 'State']) { should eq 'running' }
-    its([3, 'Service']) { should eq 'rabbitmq' }
+    its([3, 'Service']) { should eq 'nginx' }
     its([3, 'State']) { should eq 'running' }
+    its([4, 'Service']) { should eq 'rabbitmq' }
+    its([4, 'State']) { should eq 'running' }
   end
 
   describe http(

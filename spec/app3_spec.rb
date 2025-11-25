@@ -69,6 +69,7 @@ describe 'osl-app::app3' do
             db_pass: 'invasives-staging',
             db_host: '127.0.0.1',
             google_api_key: 'google_api_key:',
+            mailpit_ui_auth: 'admin:admin',
             secret_key: 'secret_key:',
           }
         )
@@ -304,6 +305,9 @@ describe 'osl-app::app3' do
         expect(template.variables[:db_name]).to eq('invasives-staging')
         expect(template.variables[:db_user]).to eq('invasives-staging')
         expect(template.variables[:db_host]).to eq('127.0.0.1')
+        expect(template.variables[:email_host]).to eq('mailpit')
+        expect(template.variables[:mailpit_port]).to eq('8088')
+        expect(template.variables[:mailpit_ui_auth]).to eq('admin:admin')
         expect(template.variables[:sentry_dsn]).to eq(nil)
         expect(template.variables[:sentry_sample_rate]).to eq('0.5')
         expect(template.variables[:user_id].call(chef_run.node)).to eq(1000)
@@ -399,7 +403,7 @@ describe 'osl-app::app3' do
       it do
         is_expected.to up_osl_dockercompose('invasives-staging').with(
           directory: '/home/invasives-staging/oregoninvasiveshotline',
-          config_files: %w(docker-compose.deploy.yml)
+          config_files: %w(docker-compose.deploy.yml docker-compose.mailpit.yml)
         )
       end
     end
