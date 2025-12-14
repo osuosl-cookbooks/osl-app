@@ -35,6 +35,10 @@ osl_postgresql_test 'streamwebs-staging' do
       name: 'invasives-staging',
       password: 'invasives-staging',
     },
+    {
+      name: 'invasives-production',
+      password: 'invasives-production',
+    },
   ]
   additional_databases [
     {
@@ -44,6 +48,10 @@ osl_postgresql_test 'streamwebs-staging' do
     {
       name: 'invasives-staging',
       owner: 'invasives-staging',
+    },
+    {
+      name: 'invasives-production',
+      owner: 'invasives-production',
     },
   ]
   notifies :reload, 'service[postgresql-16]', :immediately

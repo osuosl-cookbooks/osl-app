@@ -269,7 +269,8 @@ file "#{invasives_staging}/docker/secrets/google_api_key.txt" do
   notifies :rebuild, 'osl_dockercompose[invasives-staging]'
 end
 
-docker_image 'ghcr.io/osu-cass/oregoninvasiveshotline' do
+docker_image 'ghcr.io/osu-cass/oregoninvasiveshotline-develop' do
+  repo 'ghcr.io/osu-cass/oregoninvasiveshotline'
   tag 'develop'
   notifies :rebuild, 'osl_dockercompose[invasives-staging]'
 end
@@ -277,4 +278,88 @@ end
 osl_dockercompose 'invasives-staging' do
   directory invasives_staging
   config_files %w(docker-compose.deploy.yml docker-compose.mailpit.yml)
+end
+
+# Oregon Invasives Hotline - Production
+invasives_production = '/home/invasives-production/oregoninvasiveshotline'
+invasives_secrets['production']['db_host'] = node['ipaddress'] if node['kitchen']
+
+git invasives_production do
+  repository 'https://github.com/osu-cass/oregoninvasiveshotline.git'
+  revision 'main'
+  notifies :rebuild, 'osl_dockercompose[invasives-production]'
+end
+
+template "#{invasives_production}/.env" do
+  source 'oregoninvasiveshotline-env.erb'
+  mode '0400'
+  variables(
+    allowed_hosts: %w(oregoninvasiveshotline.org),
+    app_port: '8089',
+    db_host: invasives_secrets['production']['db_host'],
+    db_name: invasives_secrets['production']['db_name'],
+    db_user: invasives_secrets['production']['db_user'],
+    email_host: 'smtp.osuosl.org',
+    env: 'production',
+    image: 'main',
+    load_balancer_ips: "140.211.9.50,140.211.9.52,140.211.9.53,#{node['ipaddress']}",
+    sentry_dsn: invasives_secrets['production']['sentry_dsn'],
+    sentry_sample_rate: '1.0',
+    user_id: lazy { user_uid('invasives-production') },
+    volume_path: '/home/invasives-production/volume'
+  )
+  sensitive true
+  notifies :rebuild, 'osl_dockercompose[invasives-production]'
+end
+
+directory "#{invasives_production}/docker/secrets"
+
+directory '/home/invasives-production/volume/media' do
+  owner 1000
+  group 1000
+  recursive true
+end
+
+directory '/home/invasives-production/volume/static' do
+  owner 1000
+  group 1000
+  recursive true
+end
+
+file "#{invasives_production}/docker/secrets/secret_key.txt" do
+  owner 1000
+  group 1000
+  mode '0400'
+  content invasives_secrets['production']['secret_key']
+  sensitive true
+  notifies :rebuild, 'osl_dockercompose[invasives-production]'
+end
+
+file "#{invasives_production}/docker/secrets/db_password.txt" do
+  owner 1000
+  group 1000
+  mode '0400'
+  content invasives_secrets['production']['db_pass']
+  sensitive true
+  notifies :rebuild, 'osl_dockercompose[invasives-production]'
+end
+
+file "#{invasives_production}/docker/secrets/google_api_key.txt" do
+  owner 1000
+  group 1000
+  mode '0400'
+  content invasives_secrets['production']['google_api_key']
+  sensitive true
+  notifies :rebuild, 'osl_dockercompose[invasives-production]'
+end
+
+docker_image 'ghcr.io/osu-cass/oregoninvasiveshotline-main' do
+  repo 'ghcr.io/osu-cass/oregoninvasiveshotline'
+  tag 'main'
+  notifies :rebuild, 'osl_dockercompose[invasives-production]'
+end
+
+osl_dockercompose 'invasives-production' do
+  directory invasives_production
+  config_files %w(docker-compose.deploy.yml)
 end
