@@ -294,7 +294,7 @@ template "#{invasives_production}/.env" do
   source 'oregoninvasiveshotline-env.erb'
   mode '0400'
   variables(
-    allowed_hosts: %w(oregoninvasiveshotline.org),
+    allowed_hosts: %w(oregoninvasiveshotline.org production.oregoninvasiveshotline.org),
     app_port: '8089',
     db_host: invasives_secrets['production']['db_host'],
     db_name: invasives_secrets['production']['db_name'],

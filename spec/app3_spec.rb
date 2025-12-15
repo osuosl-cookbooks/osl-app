@@ -436,7 +436,7 @@ describe 'osl-app::app3' do
         expect(template.variables[:image]).to eq('main')
         expect(template.variables[:load_balancer_ips]).to eq('140.211.9.50,140.211.9.52,140.211.9.53,10.0.0.2')
         expect(template.variables[:app_port]).to eq('8089')
-        expect(template.variables[:allowed_hosts]).to eq(%w(oregoninvasiveshotline.org))
+        expect(template.variables[:allowed_hosts]).to eq(%w(oregoninvasiveshotline.org production.oregoninvasiveshotline.org))
         expect(template.variables[:db_name]).to eq('invasives-production')
         expect(template.variables[:db_user]).to eq('invasives-production')
         expect(template.variables[:db_host]).to eq('127.0.0.1')
