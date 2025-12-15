@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.11.4 (2025-12-15)
+-------------------
+- Add Oregon Invasives Hotline production deployment
+
 4.11.3 (2025-11-25)
 -------------------
 - Add mailpit support for invasives-staging
