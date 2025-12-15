@@ -13,6 +13,7 @@ describe 'osl-app::app3' do
 
       before do
         allow_any_instance_of(OslApp::Cookbook::Helpers).to receive(:user_uid).with('invasives-staging').and_return(1000)
+        allow_any_instance_of(OslApp::Cookbook::Helpers).to receive(:user_uid).with('invasives-production').and_return(1000)
         stub_data_bag_item('osl-app', 'streamwebs').and_return(
           production: {
             fqdn: 'streamwebs.org',
@@ -71,6 +72,15 @@ describe 'osl-app::app3' do
             google_api_key: 'google_api_key:',
             mailpit_ui_auth: 'admin:admin',
             secret_key: 'secret_key:',
+          },
+          "production": {
+            db_name: 'invasives-production',
+            db_user: 'invasives-production',
+            db_pass: 'invasives-production',
+            db_host: '127.0.0.1',
+            google_api_key: 'google_api_key:',
+            secret_key: 'secret_key:',
+            sentry_dsn: 'sentry_dsn',
           }
         )
       end
@@ -390,13 +400,14 @@ describe 'osl-app::app3' do
       end
 
       it do
-        is_expected.to pull_docker_image('ghcr.io/osu-cass/oregoninvasiveshotline').with(
+        is_expected.to pull_docker_image('ghcr.io/osu-cass/oregoninvasiveshotline-develop').with(
+          repo: 'ghcr.io/osu-cass/oregoninvasiveshotline',
           tag: 'develop'
         )
       end
 
       it do
-        expect(chef_run.docker_image('ghcr.io/osu-cass/oregoninvasiveshotline')).to \
+        expect(chef_run.docker_image('ghcr.io/osu-cass/oregoninvasiveshotline-develop')).to \
           notify('osl_dockercompose[invasives-staging]').to(:rebuild)
       end
 
@@ -404,6 +415,131 @@ describe 'osl-app::app3' do
         is_expected.to up_osl_dockercompose('invasives-staging').with(
           directory: '/home/invasives-staging/oregoninvasiveshotline',
           config_files: %w(docker-compose.deploy.yml docker-compose.mailpit.yml)
+        )
+      end
+
+      it do
+        is_expected.to sync_git('/home/invasives-production/oregoninvasiveshotline').with(
+          repository: 'https://github.com/osu-cass/oregoninvasiveshotline.git',
+          revision: 'main'
+        )
+      end
+
+      it do
+        template = chef_run.template('/home/invasives-production/oregoninvasiveshotline/.env')
+        is_expected.to create_template('/home/invasives-production/oregoninvasiveshotline/.env').with(
+          source: 'oregoninvasiveshotline-env.erb',
+          mode: '0400',
+          sensitive: true
+        )
+        expect(template.variables[:env]).to eq('production')
+        expect(template.variables[:image]).to eq('main')
+        expect(template.variables[:load_balancer_ips]).to eq('140.211.9.50,140.211.9.52,140.211.9.53,10.0.0.2')
+        expect(template.variables[:app_port]).to eq('8089')
+        expect(template.variables[:allowed_hosts]).to eq(%w(oregoninvasiveshotline.org production.oregoninvasiveshotline.org))
+        expect(template.variables[:db_name]).to eq('invasives-production')
+        expect(template.variables[:db_user]).to eq('invasives-production')
+        expect(template.variables[:db_host]).to eq('127.0.0.1')
+        expect(template.variables[:email_host]).to eq('smtp.osuosl.org')
+        expect(template.variables[:mailpit_port]).to eq(nil)
+        expect(template.variables[:mailpit_ui_auth]).to eq(nil)
+        expect(template.variables[:sentry_dsn]).to eq('sentry_dsn')
+        expect(template.variables[:sentry_sample_rate]).to eq('1.0')
+        expect(template.variables[:user_id].call(chef_run.node)).to eq(1000)
+        expect(template.variables[:volume_path]).to eq('/home/invasives-production/volume')
+      end
+
+      it do
+        expect(chef_run.template('/home/invasives-production/oregoninvasiveshotline/.env')).to \
+          notify('osl_dockercompose[invasives-production]').to(:rebuild)
+      end
+
+      it do
+        expect(chef_run.git('/home/invasives-production/oregoninvasiveshotline')).to \
+          notify('osl_dockercompose[invasives-production]').to(:rebuild)
+      end
+
+      it do
+        is_expected.to create_directory('/home/invasives-production/oregoninvasiveshotline/docker/secrets')
+      end
+
+      it do
+        is_expected.to create_directory('/home/invasives-production/volume/media').with(
+          owner: 1000,
+          group: 1000,
+          recursive: true
+        )
+      end
+
+      it do
+        is_expected.to create_directory('/home/invasives-production/volume/static').with(
+          owner: 1000,
+          group: 1000,
+          recursive: true
+        )
+      end
+
+      it do
+        is_expected.to create_file('/home/invasives-production/oregoninvasiveshotline/docker/secrets/secret_key.txt').with(
+          owner: 1000,
+          group: 1000,
+          mode: '0400',
+          content: 'secret_key:',
+          sensitive: true
+        )
+      end
+
+      it do
+        expect(chef_run.file('/home/invasives-production/oregoninvasiveshotline/docker/secrets/secret_key.txt')).to \
+          notify('osl_dockercompose[invasives-production]').to(:rebuild)
+      end
+
+      it do
+        is_expected.to create_file('/home/invasives-production/oregoninvasiveshotline/docker/secrets/db_password.txt').with(
+          owner: 1000,
+          group: 1000,
+          mode: '0400',
+          content: 'invasives-production',
+          sensitive: true
+        )
+      end
+
+      it do
+        expect(chef_run.file('/home/invasives-production/oregoninvasiveshotline/docker/secrets/db_password.txt')).to \
+          notify('osl_dockercompose[invasives-production]').to(:rebuild)
+      end
+
+      it do
+        is_expected.to create_file('/home/invasives-production/oregoninvasiveshotline/docker/secrets/google_api_key.txt').with(
+          owner: 1000,
+          group: 1000,
+          mode: '0400',
+          content: 'google_api_key:',
+          sensitive: true
+        )
+      end
+
+      it do
+        expect(chef_run.file('/home/invasives-production/oregoninvasiveshotline/docker/secrets/google_api_key.txt')).to \
+          notify('osl_dockercompose[invasives-production]').to(:rebuild)
+      end
+
+      it do
+        is_expected.to pull_docker_image('ghcr.io/osu-cass/oregoninvasiveshotline-main').with(
+          repo: 'ghcr.io/osu-cass/oregoninvasiveshotline',
+          tag: 'main'
+        )
+      end
+
+      it do
+        expect(chef_run.docker_image('ghcr.io/osu-cass/oregoninvasiveshotline-main')).to \
+          notify('osl_dockercompose[invasives-production]').to(:rebuild)
+      end
+
+      it do
+        is_expected.to up_osl_dockercompose('invasives-production').with(
+          directory: '/home/invasives-production/oregoninvasiveshotline',
+          config_files: %w(docker-compose.deploy.yml)
         )
       end
     end

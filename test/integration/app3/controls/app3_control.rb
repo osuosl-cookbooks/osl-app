@@ -146,16 +146,16 @@ control 'app3' do
     its('mode') { should cmp '0400' }
     its('owner') { should eq 'root' }
     its('group') { should eq 'invasives-staging' }
-    its('content') { should match /ENV=staging/ }
-    its('content') { should match /APP_PORT=8087/ }
-    its('content') { should match /DB_NAME=invasives-staging/ }
-    its('content') { should match /DB_USER=invasives-staging/ }
-    its('content') { should match /DB_HOST=10.1.100.*/ }
-    its('content') { should match /SENTRY_TRACES_SAMPLE_RATE=0.5/ }
+    its('content') { should match(/ENV=staging/) }
+    its('content') { should match(/APP_PORT=8087/) }
+    its('content') { should match(/DB_NAME=invasives-staging/) }
+    its('content') { should match(/DB_USER=invasives-staging/) }
+    its('content') { should match(/DB_HOST=10.1.100.*/) }
+    its('content') { should match(/SENTRY_TRACES_SAMPLE_RATE=0.5/) }
     its('content') { should match %r{VOLUME_PATH=/home/invasives-staging/volume} }
-    its('content') { should match /EMAIL_HOST=mailpit/ }
-    its('content') { should match /MAILPIT_PORT=8088/ }
-    its('content') { should match /MAILPIT_UI_AUTH=admin:admin/ }
+    its('content') { should match(/EMAIL_HOST=mailpit/) }
+    its('content') { should match(/MAILPIT_PORT=8088/) }
+    its('content') { should match(/MAILPIT_UI_AUTH=admin:admin/) }
   end
 
   describe directory('/home/invasives-staging/oregoninvasiveshotline/docker/secrets') do
@@ -229,7 +229,7 @@ control 'app3' do
   ) do
     its('status') { should eq 200 }
     its('headers.location') { should cmp nil }
-    its('body') { should match /Oregon Invasives Hotline/ }
+    its('body') { should match(/Oregon Invasives Hotline/) }
   end
 
   describe http(
@@ -237,6 +237,111 @@ control 'app3' do
     headers: { 'Host' => 'staging.oregoninvasiveshotline.org' }
   ) do
     its('status') { should eq 200 }
-    its('body') { should match /User-Agent:/ }
+    its('body') { should match(/User-Agent:/) }
+  end
+
+  # Oregon Invasives Hotline - Production tests
+  describe directory('/home/invasives-production/oregoninvasiveshotline') do
+    it { should exist }
+    its('owner') { should eq 'root' }
+    its('group') { should eq 'invasives-production' }
+  end
+
+  describe file('/home/invasives-production/oregoninvasiveshotline/.env') do
+    it { should exist }
+    it { should be_file }
+    its('mode') { should cmp '0400' }
+    its('owner') { should eq 'root' }
+    its('group') { should eq 'invasives-production' }
+    its('content') { should match(/ENV=production/) }
+    its('content') { should match(/APP_PORT=8089/) }
+    its('content') { should match(/DB_NAME=invasives-production/) }
+    its('content') { should match(/DB_USER=invasives-production/) }
+    its('content') { should match(/DB_HOST=10.1.100.*/) }
+    its('content') { should match(/SENTRY_TRACES_SAMPLE_RATE=1.0/) }
+    its('content') { should match %r{VOLUME_PATH=/home/invasives-production/volume} }
+    its('content') { should match(/EMAIL_HOST=smtp\.osuosl\.org/) }
+    its('content') { should_not match(/MAILPIT_PORT=/) }
+    its('content') { should_not match(/MAILPIT_UI_AUTH=/) }
+  end
+
+  describe directory('/home/invasives-production/oregoninvasiveshotline/docker/secrets') do
+    it { should exist }
+    its('owner') { should eq 'root' }
+    its('group') { should eq 'invasives-production' }
+  end
+
+  describe directory('/home/invasives-production/volume/media') do
+    it { should exist }
+    its('uid') { should eq 1000 }
+    its('gid') { should eq 1000 }
+  end
+
+  describe directory('/home/invasives-production/volume/static') do
+    it { should exist }
+    its('uid') { should eq 1000 }
+    its('gid') { should eq 1000 }
+  end
+
+  describe file('/home/invasives-production/oregoninvasiveshotline/docker/secrets/secret_key.txt') do
+    it { should exist }
+    it { should be_file }
+    its('mode') { should cmp '0400' }
+    its('uid') { should eq 1000 }
+    its('gid') { should eq 1000 }
+    its('content') { should cmp '+cj5n258ct-lge3=vvr!r0byc-8$+ch7$f9&#g6_kk(uxngmkc' }
+  end
+
+  describe file('/home/invasives-production/oregoninvasiveshotline/docker/secrets/db_password.txt') do
+    it { should exist }
+    it { should be_file }
+    its('mode') { should cmp '0400' }
+    its('uid') { should eq 1000 }
+    its('gid') { should eq 1000 }
+    its('content') { should cmp 'invasives-production' }
+  end
+
+  describe file('/home/invasives-production/oregoninvasiveshotline/docker/secrets/google_api_key.txt') do
+    it { should exist }
+    it { should be_file }
+    its('mode') { should cmp '0400' }
+    its('uid') { should eq 1000 }
+    its('gid') { should eq 1000 }
+    its('size') { should eq 0 }
+  end
+
+  describe docker.images.where { repository == 'ghcr.io/osu-cass/oregoninvasiveshotline' && tag == 'main' } do
+    it { should exist }
+  end
+
+  describe json(content: command('docker compose -f /home/invasives-production/oregoninvasiveshotline/docker-compose.deploy.yml -p invasives-production ps --format json --no-trunc | jq -s \'sort_by(.Service) | map({Service: .Service, State: .State})\'').stdout) do
+    its([0, 'Service']) { should eq 'app' }
+    its([0, 'State']) { should eq 'running' }
+    its([1, 'Service']) { should eq 'celery' }
+    its([1, 'State']) { should eq 'running' }
+    its([2, 'Service']) { should eq 'nginx' }
+    its([2, 'State']) { should eq 'running' }
+    its([3, 'Service']) { should eq 'rabbitmq' }
+    its([3, 'State']) { should eq 'running' }
+  end
+
+  describe http(
+    'http://127.0.0.1:8089',
+    headers: {
+      'Host' => 'oregoninvasiveshotline.org',
+      'X-Forwarded-Proto' => 'https',
+    }
+  ) do
+    its('status') { should eq 200 }
+    its('headers.location') { should cmp nil }
+    its('body') { should match(/Oregon Invasives Hotline/) }
+  end
+
+  describe http(
+    'http://127.0.0.1:8089/static/robots.txt',
+    headers: { 'Host' => 'oregoninvasiveshotline.org' }
+  ) do
+    its('status') { should eq 200 }
+    its('body') { should match(/User-Agent:/) }
   end
 end
