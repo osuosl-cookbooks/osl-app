@@ -62,6 +62,18 @@ describe 'osl-app::app1' do
       end
 
       it do
+        is_expected.to pull_docker_image('valkey').with(
+          repo: 'valkey/valkey',
+          tag: '8-alpine'
+        )
+      end
+
+      it do
+        expect(chef_run.docker_image('valkey')).to \
+          notify('docker_container[registry-valkey]').to(:redeploy)
+      end
+
+      it do
         expect(chef_run.docker_image('oidf-members-develop')).to \
           notify('docker_container[openid-staging-website]').to(:redeploy)
       end
@@ -174,10 +186,20 @@ describe 'osl-app::app1' do
       end
 
       it do
+        is_expected.to run_docker_container('registry-valkey').with(
+          repo: 'valkey/valkey',
+          tag: '8-alpine',
+          restart_policy: 'always',
+          command: ['valkey-server', '--appendonly', 'yes', '--maxmemory', '256mb', '--maxmemory-policy', 'allkeys-lru']
+        )
+      end
+
+      it do
         is_expected.to run_docker_container('registry.osuosl.org').with(
           tag: '2',
           port: '8082:5000',
           restart_policy: 'always',
+          links: ['registry-valkey:redis'],
           env: [
             'REGISTRY_STORAGE=s3',
             'REGISTRY_STORAGE_S3_ACCESSKEY=access_key',
@@ -185,9 +207,15 @@ describe 'osl-app::app1' do
             'REGISTRY_STORAGE_S3_REGION=us-east-1',
             'REGISTRY_STORAGE_S3_BUCKET=osuosl-registry',
             'REGISTRY_STORAGE_S3_REGIONENDPOINT=s3.osuosl.org',
+            'REGISTRY_STORAGE_S3_CHUNKSIZE=104857600',
+            'REGISTRY_STORAGE_S3_MULTIPARTCOPYCHUNKSIZE=104857600',
+            'REGISTRY_STORAGE_S3_MULTIPARTCOPYMAXCONCURRENCY=32',
+            'REGISTRY_STORAGE_CACHE_BLOBDESCRIPTOR=redis',
+            'REGISTRY_REDIS_ADDR=redis:6379',
             'REGISTRY_PROXY_REMOTEURL=https://registry-1.docker.io',
             'REGISTRY_PROXY_USERNAME=docker_username',
             'REGISTRY_PROXY_PASSWORD=docker_password',
+            'REGISTRY_HTTP_DRAINTIMEOUT=60s',
           ],
           volumes_binds: ['/usr/local/etc/registry.osuosl.org:/auth'],
           sensitive: true

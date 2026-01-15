@@ -19,8 +19,15 @@ control 'app1' do
     its('ports') { should eq '0.0.0.0:8080->8080/tcp' }
   end
 
+  describe docker_container 'registry-valkey' do
+    it { should exist }
+    it { should be_running }
+  end
+
   describe docker_container 'registry.osuosl.org' do
     it { should exist }
+    it { should be_running }
+    its('ports') { should match %r{0.0.0.0:8082->5000/tcp} }
   end
 
   describe file '/usr/local/etc/registry.osuosl.org/htpasswd' do
@@ -40,12 +47,12 @@ control 'app1' do
 
   describe http 'localhost:8080/foundation/members/registration' do
     its('status') { should cmp 200 }
-    its('body') { should match 'https://openid.net/foundation/members/rpx' }
+    its('body') { should match 'Membership Dues' }
   end
 
   describe http 'localhost:8081/foundation/members/registration' do
     its('status') { should cmp 200 }
-    its('body') { should match 'https://openid.net/foundation/members/rpx' }
+    its('body') { should match 'Membership Dues' }
   end
 
   %w(

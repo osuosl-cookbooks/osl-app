@@ -2,7 +2,7 @@
 # Cookbook:: osl-app
 # Recipe:: app1
 #
-# Copyright:: 2016-2025, Oregon State University
+# Copyright:: 2016-2026, Oregon State University
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -129,24 +129,74 @@ registry_secrets['htpasswds'].each do |u|
   end
 end
 
+# Valkey for registry blob descriptor cache
+docker_image 'valkey' do
+  repo 'valkey/valkey'
+  tag '8-alpine'
+  notifies :redeploy, 'docker_container[registry-valkey]'
+end
+
+docker_container 'registry-valkey' do
+  repo 'valkey/valkey'
+  tag '8-alpine'
+  restart_policy 'always'
+  command 'valkey-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru'
+  volumes ['registry-valkey-data:/data']
+  health_check(
+    'Test' => %w(CMD valkey-cli ping),
+    'Interval' => 30_000_000_000,
+    'Timeout' => 10_000_000_000,
+    'Retries' => 3
+  )
+end
+
+# Use filesystem for testing, S3 for production
+registry_storage_env = if kitchen?
+                         [
+                           'REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY=/var/lib/registry',
+                         ]
+                       else
+                         [
+                           'REGISTRY_STORAGE=s3',
+                           "REGISTRY_STORAGE_S3_ACCESSKEY=#{registry_secrets['access_key']}",
+                           "REGISTRY_STORAGE_S3_SECRETKEY=#{registry_secrets['secret_key']}",
+                           'REGISTRY_STORAGE_S3_REGION=us-east-1',
+                           'REGISTRY_STORAGE_S3_BUCKET=osuosl-registry',
+                           'REGISTRY_STORAGE_S3_REGIONENDPOINT=s3.osuosl.org',
+                           # 100MB chunks (up from 5MB default) - reduces S3 API calls for large layers
+                           'REGISTRY_STORAGE_S3_CHUNKSIZE=104857600',
+                           # 100MB multipart copy chunks - improves cross-repo blob mounting performance
+                           'REGISTRY_STORAGE_S3_MULTIPARTCOPYCHUNKSIZE=104857600',
+                           # 32 concurrent uploads (up from 100 default) - balances throughput vs memory usage
+                           'REGISTRY_STORAGE_S3_MULTIPARTCOPYMAXCONCURRENCY=32',
+                         ]
+                       end
+
 docker_container 'registry.osuosl.org' do
   repo 'registry'
   tag '2'
   restart_policy 'always'
   sensitive true
-  env [
-    'REGISTRY_STORAGE=s3',
-    "REGISTRY_STORAGE_S3_ACCESSKEY=#{registry_secrets['access_key']}",
-    "REGISTRY_STORAGE_S3_SECRETKEY=#{registry_secrets['secret_key']}",
-    'REGISTRY_STORAGE_S3_REGION=us-east-1',
-    'REGISTRY_STORAGE_S3_BUCKET=osuosl-registry',
-    'REGISTRY_STORAGE_S3_REGIONENDPOINT=s3.osuosl.org',
+  links ['registry-valkey:redis']
+  env registry_storage_env + [
+    # Redis/Valkey cache for blob descriptors (persistent, survives restarts)
+    'REGISTRY_STORAGE_CACHE_BLOBDESCRIPTOR=redis',
+    'REGISTRY_REDIS_ADDR=redis:6379',
+    # Proxy/mirror configuration
     'REGISTRY_PROXY_REMOTEURL=https://registry-1.docker.io',
     "REGISTRY_PROXY_USERNAME=#{registry_secrets['docker_username']}",
     "REGISTRY_PROXY_PASSWORD=#{registry_secrets['docker_password']}",
+    # HTTP performance settings
+    'REGISTRY_HTTP_DRAINTIMEOUT=60s',
   ]
   volumes ['/usr/local/etc/registry.osuosl.org:/auth']
   port '8082:5000'
+  health_check(
+    'Test' => ['CMD', 'wget', '--spider', '-q', 'http://localhost:5000/v2/'],
+    'Interval' => 30_000_000_000,
+    'Timeout' => 10_000_000_000,
+    'Retries' => 3
+  )
 end
 
 osl_app_docker_wrapper 'openid-staging-website' do
