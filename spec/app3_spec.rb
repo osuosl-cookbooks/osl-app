@@ -412,6 +412,18 @@ describe 'osl-app::app3' do
       end
 
       it do
+        is_expected.to pull_docker_image('ghcr.io/osu-cass/oregoninvasiveshotline-vite-develop').with(
+          repo: 'ghcr.io/osu-cass/oregoninvasiveshotline-vite',
+          tag: 'develop'
+        )
+      end
+
+      it do
+        expect(chef_run.docker_image('ghcr.io/osu-cass/oregoninvasiveshotline-vite-develop')).to \
+          notify('osl_dockercompose[invasives-staging]').to(:rebuild)
+      end
+
+      it do
         is_expected.to up_osl_dockercompose('invasives-staging').with(
           directory: '/home/invasives-staging/oregoninvasiveshotline',
           config_files: %w(docker-compose.deploy.yml docker-compose.mailpit.yml)
@@ -533,6 +545,18 @@ describe 'osl-app::app3' do
 
       it do
         expect(chef_run.docker_image('ghcr.io/osu-cass/oregoninvasiveshotline-main')).to \
+          notify('osl_dockercompose[invasives-production]').to(:rebuild)
+      end
+
+      it do
+        is_expected.to pull_docker_image('ghcr.io/osu-cass/oregoninvasiveshotline-vite-main').with(
+          repo: 'ghcr.io/osu-cass/oregoninvasiveshotline-vite',
+          tag: 'main'
+        )
+      end
+
+      it do
+        expect(chef_run.docker_image('ghcr.io/osu-cass/oregoninvasiveshotline-vite-main')).to \
           notify('osl_dockercompose[invasives-production]').to(:rebuild)
       end
 

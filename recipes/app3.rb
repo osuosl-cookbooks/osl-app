@@ -275,6 +275,12 @@ docker_image 'ghcr.io/osu-cass/oregoninvasiveshotline-develop' do
   notifies :rebuild, 'osl_dockercompose[invasives-staging]'
 end
 
+docker_image 'ghcr.io/osu-cass/oregoninvasiveshotline-vite-develop' do
+  repo 'ghcr.io/osu-cass/oregoninvasiveshotline-vite'
+  tag 'develop'
+  notifies :rebuild, 'osl_dockercompose[invasives-staging]'
+end
+
 osl_dockercompose 'invasives-staging' do
   directory invasives_staging
   config_files %w(docker-compose.deploy.yml docker-compose.mailpit.yml)
@@ -355,6 +361,12 @@ end
 
 docker_image 'ghcr.io/osu-cass/oregoninvasiveshotline-main' do
   repo 'ghcr.io/osu-cass/oregoninvasiveshotline'
+  tag 'main'
+  notifies :rebuild, 'osl_dockercompose[invasives-production]'
+end
+
+docker_image 'ghcr.io/osu-cass/oregoninvasiveshotline-vite-main' do
+  repo 'ghcr.io/osu-cass/oregoninvasiveshotline-vite'
   tag 'main'
   notifies :rebuild, 'osl_dockercompose[invasives-production]'
 end

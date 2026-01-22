@@ -207,6 +207,10 @@ control 'app3' do
     it { should exist }
   end
 
+  describe docker.images.where { repository == 'ghcr.io/osu-cass/oregoninvasiveshotline-vite' && tag == 'develop' } do
+    it { should exist }
+  end
+
   describe json(content: command('docker compose -f /home/invasives-staging/oregoninvasiveshotline/docker-compose.deploy.yml -f /home/invasives-staging/oregoninvasiveshotline/docker-compose.mailpit.yml -p invasives-staging ps --format json --no-trunc | jq -s \'map({Service: .Service, State: .State})\'').stdout) do
     its([0, 'Service']) { should eq 'app' }
     its([0, 'State']) { should eq 'running' }
@@ -311,6 +315,10 @@ control 'app3' do
   end
 
   describe docker.images.where { repository == 'ghcr.io/osu-cass/oregoninvasiveshotline' && tag == 'main' } do
+    it { should exist }
+  end
+
+  describe docker.images.where { repository == 'ghcr.io/osu-cass/oregoninvasiveshotline-vite' && tag == 'main' } do
     it { should exist }
   end
 
