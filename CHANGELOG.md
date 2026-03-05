@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.11.6 (2026-03-05)
+-------------------
+- Add EEC Walkthrough React staging instance to app3
+
 4.11.5 (2026-01-15)
 -------------------
 - Improve Docker Registry mirror proxy performance
