@@ -193,6 +193,66 @@ docker_container 'etherpad-snowdrift.osuosl.org' do
   sensitive true
 end
 
+# EEC Walkthrough React - Staging
+eec_secrets = data_bag_item('osl-app', 'eec_walkthrough_staging')
+eec_secrets['db_host'] = node['ipaddress'] if node['kitchen']
+
+docker_image 'ghcr.io/osu-cass/eec-walkthrough-react' do
+  tag 'dev'
+  notifies :redeploy, 'docker_container[eec-walkthrough-staging.cass.oregonstate.edu]'
+end
+
+directory '/home/eec-walkthrough-staging/secrets' do
+  recursive true
+end
+
+directory '/home/eec-walkthrough-staging/uploads' do
+  recursive true
+end
+
+directory '/home/eec-walkthrough-staging/public-uploads' do
+  recursive true
+end
+
+file '/home/eec-walkthrough-staging/secrets/mysql_password.txt' do
+  mode '0400'
+  content eec_secrets['db_passwd']
+  sensitive true
+  notifies :redeploy, 'docker_container[eec-walkthrough-staging.cass.oregonstate.edu]'
+end
+
+file '/home/eec-walkthrough-staging/secrets/jwt_secret_key.txt' do
+  mode '0400'
+  content eec_secrets['jwt_secret_key']
+  sensitive true
+  notifies :redeploy, 'docker_container[eec-walkthrough-staging.cass.oregonstate.edu]'
+end
+
+docker_container 'eec-walkthrough-staging.cass.oregonstate.edu' do
+  repo 'ghcr.io/osu-cass/eec-walkthrough-react'
+  tag 'dev'
+  port ['8090:1111', '8091:2222']
+  restart_policy 'always'
+  env [
+    'API_PORT=1111',
+    'FILE_PORT=2222',
+    'NODE_ENV=production',
+    "MYSQL_DB_NAME=#{eec_secrets['db_db']}",
+    "MYSQL_HOST=#{eec_secrets['db_host']}",
+    'MYSQL_PORT=3306',
+    "MYSQL_USER=#{eec_secrets['db_user']}",
+    'MYSQL_PASSWORD_FILE=/run/secrets/mysql_password',
+    'JWT_SECRET_KEY_FILE=/run/secrets/jwt_secret_key',
+  ]
+  volumes [
+    '/home/eec-walkthrough-staging/secrets/mysql_password.txt:/run/secrets/mysql_password:ro',
+    '/home/eec-walkthrough-staging/secrets/jwt_secret_key.txt:/run/secrets/jwt_secret_key:ro',
+    '/home/eec-walkthrough-staging/uploads:/app/client/files/uploads',
+    '/home/eec-walkthrough-staging/public-uploads:/app/client/public/uploads',
+  ]
+  sensitive true
+end
+
 # Oregon Invasives Hotline
 invasives_staging = '/home/invasives-staging/oregoninvasiveshotline'
 invasives_secrets = data_bag_item('osl-app', 'invasives')

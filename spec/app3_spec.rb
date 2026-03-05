@@ -83,6 +83,13 @@ describe 'osl-app::app3' do
             sentry_dsn: 'sentry_dsn',
           }
         )
+        stub_data_bag_item('osl-app', 'eec_walkthrough_staging').and_return(
+          db_db: 'eec_walkthrough_staging',
+          db_user: 'eec-walkthrough-staging',
+          db_passwd: 'eec-walkthrough-staging',
+          db_host: '127.0.0.1',
+          jwt_secret_key: 'staging_jwt_secret'
+        )
       end
 
       it { is_expected.to login_docker_registry('ghcr.io').with(username: 'gh_user', password: 'gh_password') }
@@ -540,6 +547,89 @@ describe 'osl-app::app3' do
         is_expected.to up_osl_dockercompose('invasives-production').with(
           directory: '/home/invasives-production/oregoninvasiveshotline',
           config_files: %w(docker-compose.deploy.yml)
+        )
+      end
+
+      # EEC Walkthrough React - Staging
+      it do
+        is_expected.to pull_docker_image('ghcr.io/osu-cass/eec-walkthrough-react').with(
+          tag: 'dev'
+        )
+      end
+
+      it do
+        expect(chef_run.docker_image('ghcr.io/osu-cass/eec-walkthrough-react')).to \
+          notify('docker_container[eec-walkthrough-staging.cass.oregonstate.edu]').to(:redeploy)
+      end
+
+      it do
+        is_expected.to create_directory('/home/eec-walkthrough-staging/secrets').with(
+          recursive: true
+        )
+      end
+
+      it do
+        is_expected.to create_directory('/home/eec-walkthrough-staging/uploads').with(
+          recursive: true
+        )
+      end
+
+      it do
+        is_expected.to create_directory('/home/eec-walkthrough-staging/public-uploads').with(
+          recursive: true
+        )
+      end
+
+      it do
+        is_expected.to create_file('/home/eec-walkthrough-staging/secrets/mysql_password.txt').with(
+          mode: '0400',
+          content: 'eec-walkthrough-staging',
+          sensitive: true
+        )
+      end
+
+      it do
+        expect(chef_run.file('/home/eec-walkthrough-staging/secrets/mysql_password.txt')).to \
+          notify('docker_container[eec-walkthrough-staging.cass.oregonstate.edu]').to(:redeploy)
+      end
+
+      it do
+        is_expected.to create_file('/home/eec-walkthrough-staging/secrets/jwt_secret_key.txt').with(
+          mode: '0400',
+          content: 'staging_jwt_secret',
+          sensitive: true
+        )
+      end
+
+      it do
+        expect(chef_run.file('/home/eec-walkthrough-staging/secrets/jwt_secret_key.txt')).to \
+          notify('docker_container[eec-walkthrough-staging.cass.oregonstate.edu]').to(:redeploy)
+      end
+
+      it do
+        is_expected.to run_docker_container('eec-walkthrough-staging.cass.oregonstate.edu').with(
+          repo: 'ghcr.io/osu-cass/eec-walkthrough-react',
+          tag: 'dev',
+          port: ['8090:1111', '8091:2222'],
+          restart_policy: 'always',
+          env: [
+            'API_PORT=1111',
+            'FILE_PORT=2222',
+            'NODE_ENV=production',
+            'MYSQL_DB_NAME=eec_walkthrough_staging',
+            'MYSQL_HOST=127.0.0.1',
+            'MYSQL_PORT=3306',
+            'MYSQL_USER=eec-walkthrough-staging',
+            'MYSQL_PASSWORD_FILE=/run/secrets/mysql_password',
+            'JWT_SECRET_KEY_FILE=/run/secrets/jwt_secret_key',
+          ],
+          volumes_binds: [
+            '/home/eec-walkthrough-staging/public-uploads:/app/client/public/uploads',
+            '/home/eec-walkthrough-staging/secrets/jwt_secret_key.txt:/run/secrets/jwt_secret_key:ro',
+            '/home/eec-walkthrough-staging/secrets/mysql_password.txt:/run/secrets/mysql_password:ro',
+            '/home/eec-walkthrough-staging/uploads:/app/client/files/uploads',
+          ],
+          sensitive: true
         )
       end
     end
