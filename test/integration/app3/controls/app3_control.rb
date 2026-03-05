@@ -344,4 +344,75 @@ control 'app3' do
     its('status') { should eq 200 }
     its('body') { should match(/User-Agent:/) }
   end
+
+  # EEC Walkthrough React - Staging
+  describe docker.images.where { repository == 'ghcr.io/osu-cass/eec-walkthrough-react' && tag == 'dev' } do
+    it { should exist }
+  end
+
+  describe docker_container('eec-walkthrough-staging.cass.oregonstate.edu') do
+    it { should exist }
+    it { should be_running }
+    its('image') { should eq 'ghcr.io/osu-cass/eec-walkthrough-react:dev' }
+    its('ports') { should match(/0.0.0.0:8090->1111/) }
+    its('ports') { should match(/0.0.0.0:8091->2222/) }
+  end
+
+  describe directory('/home/eec-walkthrough-staging/secrets') do
+    it { should exist }
+    its('owner') { should eq 'root' }
+    its('group') { should eq 'eec-walkthrough-staging' }
+  end
+
+  describe directory('/home/eec-walkthrough-staging/uploads') do
+    it { should exist }
+  end
+
+  describe directory('/home/eec-walkthrough-staging/public-uploads') do
+    it { should exist }
+  end
+
+  describe file('/home/eec-walkthrough-staging/secrets/mysql_password.txt') do
+    it { should exist }
+    it { should be_file }
+    its('mode') { should cmp '0400' }
+    its('content') { should cmp 'eec-walkthrough-staging' }
+  end
+
+  describe file('/home/eec-walkthrough-staging/secrets/jwt_secret_key.txt') do
+    it { should exist }
+    it { should be_file }
+    its('mode') { should cmp '0400' }
+    its('content') { should cmp 'staging_jwt_secret' }
+  end
+
+  describe command('docker exec eec-walkthrough-staging.cass.oregonstate.edu env') do
+    %W(
+      API_PORT=1111
+      FILE_PORT=2222
+      NODE_ENV=production
+      MYSQL_DB_NAME=eec_walkthrough_staging
+      MYSQL_HOST=#{interface('eth0').ipv4_address}
+      MYSQL_PORT=3306
+      MYSQL_USER=eec-walkthrough-staging
+      MYSQL_PASSWORD_FILE=/run/secrets/mysql_password
+      JWT_SECRET_KEY_FILE=/run/secrets/jwt_secret_key
+    ).each do |line|
+      its('stdout') { should match line }
+    end
+  end
+
+  describe http(
+    'http://127.0.0.1:8091',
+    headers: { 'Host' => 'eec-walkthrough-staging.cass.oregonstate.edu' }
+  ) do
+    its('status') { should eq 200 }
+  end
+
+  describe http(
+    'http://127.0.0.1:8090/api/home',
+    headers: { 'Host' => 'eec-walkthrough-staging.cass.oregonstate.edu' }
+  ) do
+    its('status') { should be_in [200, 304] }
+  end
 end
