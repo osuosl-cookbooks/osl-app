@@ -66,6 +66,14 @@ docker_container 'openid-staging-website' do
     'RAILS_ENV=staging',
     "DB_PASSWORD=#{openid_secrets['db_password']}",
     "DB_HOST=#{openid_db_host}",
+    'BRAINTREE_ENV=sandbox',
+    "SECRET_KEY_BASE=#{openid_secrets['secret_key_base']}",
+    "BRAINTREE_ACCESS_TOKEN=#{openid_secrets['braintree_access_token']}",
+    "RECAPTCHA_SITE_KEY=#{openid_secrets['recaptcha_site_key']}",
+    "RECAPTCHA_SECRET_KEY=#{openid_secrets['recaptcha_secret_key']}",
+    'HELLO_ISSUER=https://issuer.hello.coop',
+    "HELLO_CLIENT_ID=#{openid_secrets['hello_client_id']}",
+    "HELLO_CLIENT_SECRET=#{openid_secrets['hello_client_secret']}",
   ]
   sensitive true
 end
@@ -82,9 +90,11 @@ docker_container 'openid-production-website' do
     "DB_PASSWORD=#{openid_secrets['db_password']}",
     "DB_HOST=#{openid_db_host}",
     "SECRET_KEY_BASE=#{openid_secrets['secret_key_base']}",
+    'BRAINTREE_ENV=production',
     "BRAINTREE_ACCESS_TOKEN=#{openid_secrets['braintree_access_token']}",
     "RECAPTCHA_SITE_KEY=#{openid_secrets['recaptcha_site_key']}",
     "RECAPTCHA_SECRET_KEY=#{openid_secrets['recaptcha_secret_key']}",
+    'HELLO_ISSUER=https://issuer.hello.coop',
   ]
   sensitive true
 end
@@ -98,6 +108,7 @@ docker_container 'openid-staging-delayed-job' do
     'RAILS_ENV=staging',
     "DB_PASSWORD=#{openid_secrets['db_password']}",
     "DB_HOST=#{openid_db_host}",
+    "SECRET_KEY_BASE=#{openid_secrets['secret_key_base']}",
   ]
   sensitive true
 end

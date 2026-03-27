@@ -18,7 +18,9 @@ describe 'osl-app::app1' do
           recaptcha_site_key: '4infjrcfj9e4mcerefa89cm8h4rvnmv9e4cu8anh',
           recaptcha_secret_key: 'hxia4nvuirax4hfx8cem450tuw5uwvn74xgq783y',
           db_password: 'db_password',
-          db_host: 'db_host'
+          db_host: 'db_host',
+          hello_client_id: 'hello_client_id',
+          hello_client_secret: 'hello_client_secret'
         )
         stub_data_bag_item('osl-app', 'registry').and_return(
           access_key: 'access_key',
@@ -129,6 +131,14 @@ describe 'osl-app::app1' do
             'RAILS_ENV=staging',
             'DB_PASSWORD=db_password',
             'DB_HOST=db_host',
+            'BRAINTREE_ENV=sandbox',
+            'SECRET_KEY_BASE=7eef5c70ecb083192f46e601144f9d77c9b66061b634963a5070fb086ae78bc9353af2c6311edb168abbb9d0bd428f800a0b1713534cf4ad239e8d07fdd16c34',
+            'BRAINTREE_ACCESS_TOKEN=access_token$production$mnlc24xq7uGUqKczYhg5PpNGiVOkss',
+            'RECAPTCHA_SITE_KEY=4infjrcfj9e4mcerefa89cm8h4rvnmv9e4cu8anh',
+            'RECAPTCHA_SECRET_KEY=hxia4nvuirax4hfx8cem450tuw5uwvn74xgq783y',
+            'HELLO_ISSUER=https://issuer.hello.coop',
+            'HELLO_CLIENT_ID=hello_client_id',
+            'HELLO_CLIENT_SECRET=hello_client_secret',
           ],
           sensitive: true
         )
@@ -147,9 +157,11 @@ describe 'osl-app::app1' do
             'DB_PASSWORD=db_password',
             'DB_HOST=db_host',
             'SECRET_KEY_BASE=7eef5c70ecb083192f46e601144f9d77c9b66061b634963a5070fb086ae78bc9353af2c6311edb168abbb9d0bd428f800a0b1713534cf4ad239e8d07fdd16c34',
+            'BRAINTREE_ENV=production',
             'BRAINTREE_ACCESS_TOKEN=access_token$production$mnlc24xq7uGUqKczYhg5PpNGiVOkss',
             'RECAPTCHA_SITE_KEY=4infjrcfj9e4mcerefa89cm8h4rvnmv9e4cu8anh',
             'RECAPTCHA_SECRET_KEY=hxia4nvuirax4hfx8cem450tuw5uwvn74xgq783y',
+            'HELLO_ISSUER=https://issuer.hello.coop',
           ],
           sensitive: true
         )
@@ -165,6 +177,7 @@ describe 'osl-app::app1' do
             'RAILS_ENV=staging',
             'DB_PASSWORD=db_password',
             'DB_HOST=db_host',
+            'SECRET_KEY_BASE=7eef5c70ecb083192f46e601144f9d77c9b66061b634963a5070fb086ae78bc9353af2c6311edb168abbb9d0bd428f800a0b1713534cf4ad239e8d07fdd16c34',
           ],
           sensitive: true
         )

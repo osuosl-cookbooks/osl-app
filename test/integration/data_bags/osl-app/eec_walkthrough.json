@@ -1,0 +1,10 @@
+{
+  "id": "eec_walkthrough",
+  "db_db": "eec_walkthrough_staging",
+  "db_user": "eec-walkthrough-staging",
+  "db_passwd": "eec-walkthrough-staging",
+  "staging": {
+    "db_host": "127.0.0.1",
+    "jwt_secret_key": "staging_jwt_secret"
+  }
+}
