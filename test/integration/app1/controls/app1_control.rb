@@ -19,6 +19,28 @@ control 'app1' do
     its('ports') { should eq '0.0.0.0:8080->8080/tcp' }
   end
 
+  describe command('docker exec openid-staging-website env') do
+    its('stdout') { should match /RAILS_ENV=staging/ }
+    its('stdout') { should match /BRAINTREE_ENV=sandbox/ }
+    its('stdout') { should match %r{HELLO_ISSUER=https://issuer\.hello\.coop} }
+    its('stdout') { should match /HELLO_CLIENT_ID=hello_client_id/ }
+    its('stdout') { should match /HELLO_CLIENT_SECRET=hello_client_secret/ }
+    its('stdout') { should match /SECRET_KEY_BASE=7eef5c70ecb083192f46e601144f9d77c9b66061b634963a5070fb086ae78bc9353af2c6311edb168abbb9d0bd428f800a0b1713534cf4ad239e8d07fdd16c34/ }
+    its('stdout') { should match /BRAINTREE_ACCESS_TOKEN=access_token\$production\$mnlc24xq7uGUqKczYhg5PpNGiVOkss/ }
+    its('stdout') { should match /RECAPTCHA_SITE_KEY=fay7bvryba784ycban3dxar7x83a7ca37trateh/ }
+    its('stdout') { should match /RECAPTCHA_SECRET_KEY=vfu389ray3xrwg3r7w3tra7tfazr837tvrany7s/ }
+  end
+
+  describe command('docker exec openid-production-website env') do
+    its('stdout') { should match /RAILS_ENV=production/ }
+    its('stdout') { should match /BRAINTREE_ENV=production/ }
+    its('stdout') { should match %r{HELLO_ISSUER=https://issuer\.hello\.coop} }
+    its('stdout') { should match /SECRET_KEY_BASE=7eef5c70ecb083192f46e601144f9d77c9b66061b634963a5070fb086ae78bc9353af2c6311edb168abbb9d0bd428f800a0b1713534cf4ad239e8d07fdd16c34/ }
+    its('stdout') { should match /BRAINTREE_ACCESS_TOKEN=access_token\$production\$mnlc24xq7uGUqKczYhg5PpNGiVOkss/ }
+    its('stdout') { should match /RECAPTCHA_SITE_KEY=fay7bvryba784ycban3dxar7x83a7ca37trateh/ }
+    its('stdout') { should match /RECAPTCHA_SECRET_KEY=vfu389ray3xrwg3r7w3tra7tfazr837tvrany7s/ }
+  end
+
   describe docker_container 'registry-valkey' do
     it { should exist }
     it { should be_running }
@@ -43,6 +65,10 @@ control 'app1' do
   describe docker_container 'openid-staging-delayed-job' do
     it { should exist }
     it { should be_running }
+  end
+
+  describe command('docker exec openid-staging-delayed-job env') do
+    its('stdout') { should match /SECRET_KEY_BASE=7eef5c70ecb083192f46e601144f9d77c9b66061b634963a5070fb086ae78bc9353af2c6311edb168abbb9d0bd428f800a0b1713534cf4ad239e8d07fdd16c34/ }
   end
 
   describe http 'localhost:8080/foundation/members/registration' do
