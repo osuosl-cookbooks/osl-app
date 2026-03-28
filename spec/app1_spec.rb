@@ -132,13 +132,13 @@ describe 'osl-app::app1' do
             'DB_PASSWORD=db_password',
             'DB_HOST=db_host',
             'BRAINTREE_ENV=sandbox',
-            'SECRET_KEY_BASE=7eef5c70ecb083192f46e601144f9d77c9b66061b634963a5070fb086ae78bc9353af2c6311edb168abbb9d0bd428f800a0b1713534cf4ad239e8d07fdd16c34',
-            'BRAINTREE_ACCESS_TOKEN=access_token$production$mnlc24xq7uGUqKczYhg5PpNGiVOkss',
-            'RECAPTCHA_SITE_KEY=4infjrcfj9e4mcerefa89cm8h4rvnmv9e4cu8anh',
-            'RECAPTCHA_SECRET_KEY=hxia4nvuirax4hfx8cem450tuw5uwvn74xgq783y',
+            'SECRET_KEY_BASE=509252a2adc94851d2d8de0f33d5b523b5a394e7609e66415ca4fa5d2af6d1bba6bdbb5d1c1eb8902bccf6eb26259ed9f8dd8c56031467cd193f397b5fedfe5e',
+            'BRAINTREE_ACCESS_TOKEN=access_token$sandbox$zdjhpzxvqnqjfx5k$ea2ea62289b4f50f64c1647de8718a5f',
+            'RECAPTCHA_SITE_KEY=6LfxLN4UAAAAAFDVD4rzmFXKFchtsBeA3yzlKG-O',
+            'RECAPTCHA_SECRET_KEY=6LfxLN4UAAAAAPqBWff7AopS2K1a92sQt-YJRnYH',
             'HELLO_ISSUER=https://issuer.hello.coop',
-            'HELLO_CLIENT_ID=hello_client_id',
-            'HELLO_CLIENT_SECRET=hello_client_secret',
+            'HELLO_CLIENT_ID=app_h3zSmNfnu8zELuyOQGVNN2zj_E1R',
+            'HELLO_CLIENT_SECRET=qnocbWaMpdSnrk0LyxTLe',
           ],
           sensitive: true
         )
@@ -162,6 +162,8 @@ describe 'osl-app::app1' do
             'RECAPTCHA_SITE_KEY=4infjrcfj9e4mcerefa89cm8h4rvnmv9e4cu8anh',
             'RECAPTCHA_SECRET_KEY=hxia4nvuirax4hfx8cem450tuw5uwvn74xgq783y',
             'HELLO_ISSUER=https://issuer.hello.coop',
+            'HELLO_CLIENT_ID=app_bCVDmIitVZ7poaEFI2Edukwb_QlN',
+            'HELLO_CLIENT_SECRET=LWaYavQ5_oc85UUY6lQl7',
           ],
           sensitive: true
         )
