@@ -19,8 +19,8 @@ describe 'osl-app::app1' do
           recaptcha_secret_key: 'hxia4nvuirax4hfx8cem450tuw5uwvn74xgq783y',
           db_password: 'db_password',
           db_host: 'db_host',
-          hello_client_id: 'hello_client_id',
-          hello_client_secret: 'hello_client_secret'
+          'staging' => { 'hello_client_id' => 'staging_hello_client_id', 'hello_client_secret' => 'staging_hello_client_secret' },
+          'production' => { 'hello_client_id' => 'production_hello_client_id', 'hello_client_secret' => 'production_hello_client_secret' }
         )
         stub_data_bag_item('osl-app', 'registry').and_return(
           access_key: 'access_key',
@@ -137,8 +137,8 @@ describe 'osl-app::app1' do
             'RECAPTCHA_SITE_KEY=4infjrcfj9e4mcerefa89cm8h4rvnmv9e4cu8anh',
             'RECAPTCHA_SECRET_KEY=hxia4nvuirax4hfx8cem450tuw5uwvn74xgq783y',
             'HELLO_ISSUER=https://issuer.hello.coop',
-            'HELLO_CLIENT_ID=hello_client_id',
-            'HELLO_CLIENT_SECRET=hello_client_secret',
+            'HELLO_CLIENT_ID=staging_hello_client_id',
+            'HELLO_CLIENT_SECRET=staging_hello_client_secret',
           ],
           sensitive: true
         )
@@ -162,6 +162,8 @@ describe 'osl-app::app1' do
             'RECAPTCHA_SITE_KEY=4infjrcfj9e4mcerefa89cm8h4rvnmv9e4cu8anh',
             'RECAPTCHA_SECRET_KEY=hxia4nvuirax4hfx8cem450tuw5uwvn74xgq783y',
             'HELLO_ISSUER=https://issuer.hello.coop',
+            'HELLO_CLIENT_ID=production_hello_client_id',
+            'HELLO_CLIENT_SECRET=production_hello_client_secret',
           ],
           sensitive: true
         )

@@ -72,8 +72,8 @@ docker_container 'openid-staging-website' do
     "RECAPTCHA_SITE_KEY=#{openid_secrets['recaptcha_site_key']}",
     "RECAPTCHA_SECRET_KEY=#{openid_secrets['recaptcha_secret_key']}",
     'HELLO_ISSUER=https://issuer.hello.coop',
-    "HELLO_CLIENT_ID=#{openid_secrets['hello_client_id']}",
-    "HELLO_CLIENT_SECRET=#{openid_secrets['hello_client_secret']}",
+    "HELLO_CLIENT_ID=#{openid_secrets['staging']['hello_client_id']}",
+    "HELLO_CLIENT_SECRET=#{openid_secrets['staging']['hello_client_secret']}",
   ]
   sensitive true
 end
@@ -95,6 +95,8 @@ docker_container 'openid-production-website' do
     "RECAPTCHA_SITE_KEY=#{openid_secrets['recaptcha_site_key']}",
     "RECAPTCHA_SECRET_KEY=#{openid_secrets['recaptcha_secret_key']}",
     'HELLO_ISSUER=https://issuer.hello.coop',
+    "HELLO_CLIENT_ID=#{openid_secrets['production']['hello_client_id']}",
+    "HELLO_CLIENT_SECRET=#{openid_secrets['production']['hello_client_secret']}",
   ]
   sensitive true
 end

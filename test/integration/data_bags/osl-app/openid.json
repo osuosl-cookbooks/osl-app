@@ -1,59 +1,17 @@
 {
-  "id": "openid",
-  "secret_key_base": {
-    "encrypted_data": "C4I8GYswzlNbnQV7VSfJjYz1vExeW0fsgOMHieNIS//BHDvcrJS+Fzx9Yv2u\nThdczKMiPV9J6unU31+GsyVn+j0nmBh1ttT9K08jGNihVQOtEPkoK6bCkIdf\n+Fs7PnjPwwKQHfSH1vaPwQwKmIQjtBb5VZWwC6Z7lgjQsA1bgKnobcDveMl2\nG5jb/R1D1ENnV5yhrVUT4otpB6itVgMv+A==\n",
-    "hmac": "RKewf0e0AbYF1Ae2+KPu1/X4xvsCckN17rIiI22tauk=\n",
-    "iv": "WpRW84L9N42ym5ay2rs0aQ==\n",
-    "version": 2,
-    "cipher": "aes-256-cbc"
-  },
-  "braintree_access_token": {
-    "encrypted_data": "YShSX1P19bdMfHxSRiia9hNHUzx1EZaQ6u0io+ti6cbUhEgAw64VHb6okfIp\ntkmFuj478ZmSgmlDh1p9yhuETeeHg3qefatf5z3pTooX9yo=\n",
-    "hmac": "8HhkHlGL/BsGRIK0pLthMWOd2kswOjQllFFkmGLabHk=\n",
-    "iv": "RmGzbjBfDr6V9NDcXJvjRA==\n",
-    "version": 2,
-    "cipher": "aes-256-cbc"
-  },
-  "recaptcha_site_key": {
-    "encrypted_data": "vaGpmALbJqqvRn1KqVS1t+fjOX7z95ZOg+tL0gfxfuFG5EWb24+5S7dh1iI+\nZnG42FPI4b11i7VVa6rND3QOHA==\n",
-    "hmac": "JMRUMbSllDOWSXYYriAfp3vcOfo8pPjPVvk5VZm2Bsc=\n",
-    "iv": "4oiADIkxUWI9lQ9pHudOyQ==\n",
-    "version": 2,
-    "cipher": "aes-256-cbc"
-  },
-  "recaptcha_secret_key": {
-    "encrypted_data": "8SByN5OGuyMZUNItxjPohWX6dRHlzjirHv8R00YLSBgJVKUSs8ADOHyfy7kE\nYybq44t1Ud6uHghZRkb4wqZ4kQ==\n",
-    "hmac": "i9fZKb/AAhjHuiSHk/sw3Epn54Jf+W34D/U7ChS7nlw=\n",
-    "iv": "+Z6fDaxY//q0jdM7gbd2/w==\n",
-    "version": 2,
-    "cipher": "aes-256-cbc"
-  },
-  "hello_client_id": {
-    "encrypted_data": "laWEjPGUIrgJIDI+zRhrBFKNyuCD3Be2xRweFcwSDc50uv012crx8RWGsiot\nWGjn\n",
-    "hmac": "Cui11XhpylU6FZyax7uJKAUTcf/FBRRn9i+MRq8MnLA=\n",
-    "iv": "wI6+Px3gMCwGTNcuxW1GfA==\n",
-    "version": 2,
-    "cipher": "aes-256-cbc"
-  },
-  "hello_client_secret": {
-    "encrypted_data": "qpwuX2j/7lXMBxYCq3cnq8qF1jEyRnJWftFaP0C+qEwMKOpDTAFK8pdoL2ot\nflkK\n",
-    "hmac": "ksIVIQI/JfE6EswXlzx97iMCgslf9CQmux2V3UN9OxQ=\n",
-    "iv": "k5LSpyx9ijJXPytyyF7M8g==\n",
-    "version": 2,
-    "cipher": "aes-256-cbc"
-  },
-  "db_password": {
-    "encrypted_data": "keY/FBOGOBJ6Md4/kOF5z5ujLahK/+70bBv/ZxFwUPU=\n",
-    "hmac": "QXznq8EwnJAw4+LOScbFNtwZ1eBpRWiC9T35HEzp3S4=\n",
-    "iv": "ZUdSXAJ//+I2llFA97BYQQ==\n",
-    "version": 2,
-    "cipher": "aes-256-cbc"
-  },
-  "db_host": {
-    "encrypted_data": "TOrLx7hoDO8d4M5vNk77zORahDDQPUJvEtqKTIpW+ls=\n",
-    "hmac": "w3BqFPQW7sxr/M2aR3OHltWHJc46dkURcjwwm36+lRU=\n",
-    "iv": "wb6HSHHaK7yUFkGjyAgJmQ==\n",
-    "version": 2,
-    "cipher": "aes-256-cbc"
-  }
+    "id": "openid",
+    "secret_key_base": "7eef5c70ecb083192f46e601144f9d77c9b66061b634963a5070fb086ae78bc9353af2c6311edb168abbb9d0bd428f800a0b1713534cf4ad239e8d07fdd16c34",
+    "braintree_access_token": "access_token$production$mnlc24xq7uGUqKczYhg5PpNGiVOkss",
+    "recaptcha_site_key": "fay7bvryba784ycban3dxar7x83a7ca37trateh",
+    "recaptcha_secret_key": "vfu389ray3xrwg3r7w3tra7tfazr837tvrany7s",
+    "staging": {
+        "hello_client_id": "staging_hello_client_id",
+        "hello_client_secret": "staging_hello_client_secret"
+    },
+    "production": {
+        "hello_client_id": "production_hello_client_id",
+        "hello_client_secret": "production_hello_client_secret"
+    },
+    "db_password": "N0Vztme4dTpD",
+    "db_host": "127.0.0.1"
 }

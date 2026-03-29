@@ -23,8 +23,8 @@ control 'app1' do
     its('stdout') { should match /RAILS_ENV=staging/ }
     its('stdout') { should match /BRAINTREE_ENV=sandbox/ }
     its('stdout') { should match %r{HELLO_ISSUER=https://issuer\.hello\.coop} }
-    its('stdout') { should match /HELLO_CLIENT_ID=hello_client_id/ }
-    its('stdout') { should match /HELLO_CLIENT_SECRET=hello_client_secret/ }
+    its('stdout') { should match /HELLO_CLIENT_ID=staging_hello_client_id/ }
+    its('stdout') { should match /HELLO_CLIENT_SECRET=staging_hello_client_secret/ }
     its('stdout') { should match /SECRET_KEY_BASE=7eef5c70ecb083192f46e601144f9d77c9b66061b634963a5070fb086ae78bc9353af2c6311edb168abbb9d0bd428f800a0b1713534cf4ad239e8d07fdd16c34/ }
     its('stdout') { should match /BRAINTREE_ACCESS_TOKEN=access_token\$production\$mnlc24xq7uGUqKczYhg5PpNGiVOkss/ }
     its('stdout') { should match /RECAPTCHA_SITE_KEY=fay7bvryba784ycban3dxar7x83a7ca37trateh/ }
@@ -35,6 +35,8 @@ control 'app1' do
     its('stdout') { should match /RAILS_ENV=production/ }
     its('stdout') { should match /BRAINTREE_ENV=production/ }
     its('stdout') { should match %r{HELLO_ISSUER=https://issuer\.hello\.coop} }
+    its('stdout') { should match /HELLO_CLIENT_ID=production_hello_client_id/ }
+    its('stdout') { should match /HELLO_CLIENT_SECRET=production_hello_client_secret/ }
     its('stdout') { should match /SECRET_KEY_BASE=7eef5c70ecb083192f46e601144f9d77c9b66061b634963a5070fb086ae78bc9353af2c6311edb168abbb9d0bd428f800a0b1713534cf4ad239e8d07fdd16c34/ }
     its('stdout') { should match /BRAINTREE_ACCESS_TOKEN=access_token\$production\$mnlc24xq7uGUqKczYhg5PpNGiVOkss/ }
     its('stdout') { should match /RECAPTCHA_SITE_KEY=fay7bvryba784ycban3dxar7x83a7ca37trateh/ }
