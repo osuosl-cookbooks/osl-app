@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.11.8 (2026-03-29)
+-------------------
+- Use per-environment nested hashes for Hello credentials
+
 4.11.7 (2026-03-27)
 -------------------
 - Add missing env vars to openid staging/production containers
