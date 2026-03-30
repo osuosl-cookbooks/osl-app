@@ -1,14 +1,18 @@
 {
     "id": "openid",
-    "secret_key_base": "7eef5c70ecb083192f46e601144f9d77c9b66061b634963a5070fb086ae78bc9353af2c6311edb168abbb9d0bd428f800a0b1713534cf4ad239e8d07fdd16c34",
-    "braintree_access_token": "access_token$production$mnlc24xq7uGUqKczYhg5PpNGiVOkss",
-    "recaptcha_site_key": "fay7bvryba784ycban3dxar7x83a7ca37trateh",
-    "recaptcha_secret_key": "vfu389ray3xrwg3r7w3tra7tfazr837tvrany7s",
     "staging": {
+        "secret_key_base": "staging_secret_key_base",
+        "braintree_access_token": "staging_braintree_access_token",
+        "recaptcha_site_key": "staging_recaptcha_site_key",
+        "recaptcha_secret_key": "staging_recaptcha_secret_key",
         "hello_client_id": "staging_hello_client_id",
         "hello_client_secret": "staging_hello_client_secret"
     },
     "production": {
+        "secret_key_base": "production_secret_key_base",
+        "braintree_access_token": "production_braintree_access_token",
+        "recaptcha_site_key": "production_recaptcha_site_key",
+        "recaptcha_secret_key": "production_recaptcha_secret_key",
         "hello_client_id": "production_hello_client_id",
         "hello_client_secret": "production_hello_client_secret"
     },

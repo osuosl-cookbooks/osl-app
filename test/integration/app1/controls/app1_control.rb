@@ -25,10 +25,10 @@ control 'app1' do
     its('stdout') { should match %r{HELLO_ISSUER=https://issuer\.hello\.coop} }
     its('stdout') { should match /HELLO_CLIENT_ID=staging_hello_client_id/ }
     its('stdout') { should match /HELLO_CLIENT_SECRET=staging_hello_client_secret/ }
-    its('stdout') { should match /SECRET_KEY_BASE=7eef5c70ecb083192f46e601144f9d77c9b66061b634963a5070fb086ae78bc9353af2c6311edb168abbb9d0bd428f800a0b1713534cf4ad239e8d07fdd16c34/ }
-    its('stdout') { should match /BRAINTREE_ACCESS_TOKEN=access_token\$production\$mnlc24xq7uGUqKczYhg5PpNGiVOkss/ }
-    its('stdout') { should match /RECAPTCHA_SITE_KEY=fay7bvryba784ycban3dxar7x83a7ca37trateh/ }
-    its('stdout') { should match /RECAPTCHA_SECRET_KEY=vfu389ray3xrwg3r7w3tra7tfazr837tvrany7s/ }
+    its('stdout') { should match /SECRET_KEY_BASE=staging_secret_key_base/ }
+    its('stdout') { should match /BRAINTREE_ACCESS_TOKEN=staging_braintree_access_token/ }
+    its('stdout') { should match /RECAPTCHA_SITE_KEY=staging_recaptcha_site_key/ }
+    its('stdout') { should match /RECAPTCHA_SECRET_KEY=staging_recaptcha_secret_key/ }
   end
 
   describe command('docker exec openid-production-website env') do
@@ -37,10 +37,10 @@ control 'app1' do
     its('stdout') { should match %r{HELLO_ISSUER=https://issuer\.hello\.coop} }
     its('stdout') { should match /HELLO_CLIENT_ID=production_hello_client_id/ }
     its('stdout') { should match /HELLO_CLIENT_SECRET=production_hello_client_secret/ }
-    its('stdout') { should match /SECRET_KEY_BASE=7eef5c70ecb083192f46e601144f9d77c9b66061b634963a5070fb086ae78bc9353af2c6311edb168abbb9d0bd428f800a0b1713534cf4ad239e8d07fdd16c34/ }
-    its('stdout') { should match /BRAINTREE_ACCESS_TOKEN=access_token\$production\$mnlc24xq7uGUqKczYhg5PpNGiVOkss/ }
-    its('stdout') { should match /RECAPTCHA_SITE_KEY=fay7bvryba784ycban3dxar7x83a7ca37trateh/ }
-    its('stdout') { should match /RECAPTCHA_SECRET_KEY=vfu389ray3xrwg3r7w3tra7tfazr837tvrany7s/ }
+    its('stdout') { should match /SECRET_KEY_BASE=production_secret_key_base/ }
+    its('stdout') { should match /BRAINTREE_ACCESS_TOKEN=production_braintree_access_token/ }
+    its('stdout') { should match /RECAPTCHA_SITE_KEY=production_recaptcha_site_key/ }
+    its('stdout') { should match /RECAPTCHA_SECRET_KEY=production_recaptcha_secret_key/ }
   end
 
   describe docker_container 'registry-valkey' do
@@ -70,7 +70,7 @@ control 'app1' do
   end
 
   describe command('docker exec openid-staging-delayed-job env') do
-    its('stdout') { should match /SECRET_KEY_BASE=7eef5c70ecb083192f46e601144f9d77c9b66061b634963a5070fb086ae78bc9353af2c6311edb168abbb9d0bd428f800a0b1713534cf4ad239e8d07fdd16c34/ }
+    its('stdout') { should match /SECRET_KEY_BASE=staging_secret_key_base/ }
   end
 
   describe http 'localhost:8080/foundation/members/registration' do

@@ -11,16 +11,24 @@ describe 'osl-app::app1' do
 
       before do
         stub_data_bag_item('osl-app', 'openid').and_return(
-          secret_key_base: '7eef5c70ecb083192f46e601144f9d77c9b66061b634963a507'\
-            '0fb086ae78bc9353af2c6311edb168abbb9d0bd428f800a0b1713534cf4ad239e8d'\
-            '07fdd16c34',
-          braintree_access_token: 'access_token$production$mnlc24xq7uGUqKczYhg5PpNGiVOkss',
-          recaptcha_site_key: '4infjrcfj9e4mcerefa89cm8h4rvnmv9e4cu8anh',
-          recaptcha_secret_key: 'hxia4nvuirax4hfx8cem450tuw5uwvn74xgq783y',
           db_password: 'db_password',
           db_host: 'db_host',
-          'staging' => { 'hello_client_id' => 'staging_hello_client_id', 'hello_client_secret' => 'staging_hello_client_secret' },
-          'production' => { 'hello_client_id' => 'production_hello_client_id', 'hello_client_secret' => 'production_hello_client_secret' }
+          'staging' => {
+            'secret_key_base' => 'staging_secret_key_base',
+            'braintree_access_token' => 'staging_braintree_access_token',
+            'recaptcha_site_key' => 'staging_recaptcha_site_key',
+            'recaptcha_secret_key' => 'staging_recaptcha_secret_key',
+            'hello_client_id' => 'staging_hello_client_id',
+            'hello_client_secret' => 'staging_hello_client_secret',
+          },
+          'production' => {
+            'secret_key_base' => 'production_secret_key_base',
+            'braintree_access_token' => 'production_braintree_access_token',
+            'recaptcha_site_key' => 'production_recaptcha_site_key',
+            'recaptcha_secret_key' => 'production_recaptcha_secret_key',
+            'hello_client_id' => 'production_hello_client_id',
+            'hello_client_secret' => 'production_hello_client_secret',
+          }
         )
         stub_data_bag_item('osl-app', 'registry').and_return(
           access_key: 'access_key',
@@ -132,10 +140,10 @@ describe 'osl-app::app1' do
             'DB_PASSWORD=db_password',
             'DB_HOST=db_host',
             'BRAINTREE_ENV=sandbox',
-            'SECRET_KEY_BASE=7eef5c70ecb083192f46e601144f9d77c9b66061b634963a5070fb086ae78bc9353af2c6311edb168abbb9d0bd428f800a0b1713534cf4ad239e8d07fdd16c34',
-            'BRAINTREE_ACCESS_TOKEN=access_token$production$mnlc24xq7uGUqKczYhg5PpNGiVOkss',
-            'RECAPTCHA_SITE_KEY=4infjrcfj9e4mcerefa89cm8h4rvnmv9e4cu8anh',
-            'RECAPTCHA_SECRET_KEY=hxia4nvuirax4hfx8cem450tuw5uwvn74xgq783y',
+            'SECRET_KEY_BASE=staging_secret_key_base',
+            'BRAINTREE_ACCESS_TOKEN=staging_braintree_access_token',
+            'RECAPTCHA_SITE_KEY=staging_recaptcha_site_key',
+            'RECAPTCHA_SECRET_KEY=staging_recaptcha_secret_key',
             'HELLO_ISSUER=https://issuer.hello.coop',
             'HELLO_CLIENT_ID=staging_hello_client_id',
             'HELLO_CLIENT_SECRET=staging_hello_client_secret',
@@ -156,11 +164,11 @@ describe 'osl-app::app1' do
             'RAILS_ENV=production',
             'DB_PASSWORD=db_password',
             'DB_HOST=db_host',
-            'SECRET_KEY_BASE=7eef5c70ecb083192f46e601144f9d77c9b66061b634963a5070fb086ae78bc9353af2c6311edb168abbb9d0bd428f800a0b1713534cf4ad239e8d07fdd16c34',
+            'SECRET_KEY_BASE=production_secret_key_base',
             'BRAINTREE_ENV=production',
-            'BRAINTREE_ACCESS_TOKEN=access_token$production$mnlc24xq7uGUqKczYhg5PpNGiVOkss',
-            'RECAPTCHA_SITE_KEY=4infjrcfj9e4mcerefa89cm8h4rvnmv9e4cu8anh',
-            'RECAPTCHA_SECRET_KEY=hxia4nvuirax4hfx8cem450tuw5uwvn74xgq783y',
+            'BRAINTREE_ACCESS_TOKEN=production_braintree_access_token',
+            'RECAPTCHA_SITE_KEY=production_recaptcha_site_key',
+            'RECAPTCHA_SECRET_KEY=production_recaptcha_secret_key',
             'HELLO_ISSUER=https://issuer.hello.coop',
             'HELLO_CLIENT_ID=production_hello_client_id',
             'HELLO_CLIENT_SECRET=production_hello_client_secret',
@@ -179,7 +187,7 @@ describe 'osl-app::app1' do
             'RAILS_ENV=staging',
             'DB_PASSWORD=db_password',
             'DB_HOST=db_host',
-            'SECRET_KEY_BASE=7eef5c70ecb083192f46e601144f9d77c9b66061b634963a5070fb086ae78bc9353af2c6311edb168abbb9d0bd428f800a0b1713534cf4ad239e8d07fdd16c34',
+            'SECRET_KEY_BASE=staging_secret_key_base',
           ],
           sensitive: true
         )
