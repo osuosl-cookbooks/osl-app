@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.11.10 (2026-04-01)
+--------------------
+- Add SECRET_KEY_BASE to openid-production-delayed-job
+
 4.11.9 (2026-03-30)
 -------------------
 - Move secret_key_base, braintree, and recaptcha into per-env hashes
