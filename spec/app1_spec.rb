@@ -203,6 +203,7 @@ describe 'osl-app::app1' do
             'RAILS_ENV=production',
             'DB_PASSWORD=db_password',
             'DB_HOST=db_host',
+            'SECRET_KEY_BASE=production_secret_key_base',
           ],
           sensitive: true
         )
