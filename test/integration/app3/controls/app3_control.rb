@@ -415,4 +415,81 @@ control 'app3' do
   ) do
     its('status') { should be_in [200, 304] }
   end
+
+  # dockercompose_wrapper - invasives-staging
+  %w(console logs ps).each do |cmd|
+    describe file "/usr/local/bin/invasives-staging-#{cmd}" do
+      it { should exist }
+      it { should be_executable }
+    end
+  end
+
+  describe file '/usr/local/bin/invasives-staging-console' do
+    its('content') { should match /docker compose -p invasives-staging/ }
+    its('content') { should match /exec/ }
+    its('content') { should match /usage\(\)/ }
+  end
+
+  describe file '/usr/local/bin/invasives-staging-logs' do
+    its('content') { should match /docker compose -p invasives-staging/ }
+    its('content') { should match /logs/ }
+    its('content') { should match /usage\(\)/ }
+  end
+
+  describe file '/usr/local/bin/invasives-staging-ps' do
+    its('content') { should match /docker compose -p invasives-staging/ }
+    its('content') { should match /ps/ }
+    its('content') { should match /usage\(\)/ }
+  end
+
+  describe command 'sudo -U invasives-staging -l' do
+    its('stdout') { should match %r{\(ALL\) NOPASSWD: /usr/local/bin/invasives-staging-console} }
+    its('stdout') { should match %r{\(ALL\) NOPASSWD: /usr/local/bin/invasives-staging-logs} }
+    its('stdout') { should match %r{\(ALL\) NOPASSWD: /usr/local/bin/invasives-staging-ps} }
+  end
+
+  # dockercompose_wrapper - invasives-production
+  %w(console logs ps).each do |cmd|
+    describe file "/usr/local/bin/invasives-production-#{cmd}" do
+      it { should exist }
+      it { should be_executable }
+    end
+  end
+
+  describe file '/usr/local/bin/invasives-production-console' do
+    its('content') { should match /docker compose -p invasives-production/ }
+    its('content') { should match /exec/ }
+    its('content') { should match /usage\(\)/ }
+  end
+
+  describe file '/usr/local/bin/invasives-production-logs' do
+    its('content') { should match /docker compose -p invasives-production/ }
+    its('content') { should match /logs/ }
+    its('content') { should match /usage\(\)/ }
+  end
+
+  describe file '/usr/local/bin/invasives-production-ps' do
+    its('content') { should match /docker compose -p invasives-production/ }
+    its('content') { should match /ps/ }
+    its('content') { should match /usage\(\)/ }
+  end
+
+  describe command 'sudo -U invasives-production -l' do
+    its('stdout') { should match %r{\(ALL\) NOPASSWD: /usr/local/bin/invasives-production-console} }
+    its('stdout') { should match %r{\(ALL\) NOPASSWD: /usr/local/bin/invasives-production-logs} }
+    its('stdout') { should match %r{\(ALL\) NOPASSWD: /usr/local/bin/invasives-production-ps} }
+  end
+
+  # docker_wrapper - eec-walkthrough-staging
+  %w(console logs).each do |cmd|
+    describe file "/usr/local/bin/eec-walkthrough-staging.cass.oregonstate.edu-#{cmd}" do
+      it { should exist }
+      it { should be_executable }
+    end
+  end
+
+  describe command 'sudo -U eec-walkthrough-staging -l' do
+    its('stdout') { should match %r{\(ALL\) NOPASSWD: /usr/local/bin/eec-walkthrough-staging.cass.oregonstate.edu-console} }
+    its('stdout') { should match %r{\(ALL\) NOPASSWD: /usr/local/bin/eec-walkthrough-staging.cass.oregonstate.edu-logs} }
+  end
 end

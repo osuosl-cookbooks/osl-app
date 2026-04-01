@@ -1,0 +1,16 @@
+#!/bin/bash
+usage() {
+  echo "Usage: $(basename "$0") [SERVICE]"
+  echo
+  echo "Open a console on a container in the <%= @project_name %> compose project."
+  echo
+  echo "Arguments:"
+  echo "  SERVICE  Service name to exec into (default: <%= @service %>)"
+  exit 0
+}
+
+case "${1:-}" in -h|--help) usage ;; esac
+
+SERVICE="${1:-<%= @service %>}"
+cd <%= @directory %>
+/usr/bin/docker compose -p <%= @project_name %> <%= @config_flags %>exec ${SERVICE} <%= @command %>

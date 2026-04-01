@@ -1,0 +1,31 @@
+#!/bin/bash
+usage() {
+  echo "Usage: $(basename "$0") [-f] [SERVICE]"
+  echo
+  echo "View logs for a container in the <%= @project_name %> compose project."
+  echo
+  echo "Options:"
+  echo "  -f       Follow log output"
+  echo
+  echo "Arguments:"
+  echo "  SERVICE  Service name to view logs for (default: <%= @service %>)"
+  exit 0
+}
+
+case "${1:-}" in -h|--help) usage ;; esac
+
+FOLLOW=""
+while getopts "f" opt ; do
+  case $opt in
+    f)
+      FOLLOW="--follow"
+      ;;
+    *)
+    ;;
+  esac
+done
+shift $((OPTIND - 1))
+
+SERVICE="${1:-<%= @service %>}"
+cd <%= @directory %>
+/usr/bin/docker compose -p <%= @project_name %> <%= @config_flags %>logs ${FOLLOW} ${SERVICE}

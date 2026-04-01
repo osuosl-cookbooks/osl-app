@@ -253,6 +253,10 @@ docker_container 'eec-walkthrough-staging.cass.oregonstate.edu' do
   sensitive true
 end
 
+osl_app_docker_wrapper 'eec-walkthrough-staging.cass.oregonstate.edu' do
+  user 'eec-walkthrough-staging'
+end
+
 # Oregon Invasives Hotline
 invasives_staging = '/home/invasives-staging/oregoninvasiveshotline'
 invasives_secrets = data_bag_item('osl-app', 'invasives')
@@ -340,6 +344,12 @@ osl_dockercompose 'invasives-staging' do
   config_files %w(docker-compose.deploy.yml docker-compose.mailpit.yml)
 end
 
+osl_app_dockercompose_wrapper 'invasives-staging' do
+  directory invasives_staging
+  config_files %w(docker-compose.deploy.yml docker-compose.mailpit.yml)
+  user 'invasives-staging'
+end
+
 # Oregon Invasives Hotline - Production
 invasives_production = '/home/invasives-production/oregoninvasiveshotline'
 invasives_secrets['production']['db_host'] = node['ipaddress'] if node['kitchen']
@@ -422,4 +432,10 @@ end
 osl_dockercompose 'invasives-production' do
   directory invasives_production
   config_files %w(docker-compose.deploy.yml)
+end
+
+osl_app_dockercompose_wrapper 'invasives-production' do
+  directory invasives_production
+  config_files %w(docker-compose.deploy.yml)
+  user 'invasives-production'
 end

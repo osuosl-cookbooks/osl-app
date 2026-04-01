@@ -62,4 +62,24 @@ describe 'osl_app_docker_wrapper' do
       nopasswd: true
     )
   end
+
+  it do
+    expect(chef_run).to render_file('/usr/local/bin/test_app-console')
+      .with_content(/usage\(\)/)
+      .with_content(/Open a console on the test_app container/)
+      .with_content(/docker exec -it test_app sh/)
+  end
+
+  it do
+    expect(chef_run).to render_file('/usr/local/bin/test_app_bash-console')
+      .with_content(/Open a console on the test_app_bash container/)
+      .with_content(/docker exec -it test_app_bash bash/)
+  end
+
+  it do
+    expect(chef_run).to render_file('/usr/local/bin/test_app-logs')
+      .with_content(/usage\(\)/)
+      .with_content(/View logs for the test_app container/)
+      .with_content(/docker logs \$\{FOLLOW\} test_app/)
+  end
 end

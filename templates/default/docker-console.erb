@@ -1,2 +1,11 @@
 #!/bin/bash
+usage() {
+  echo "Usage: $(basename "$0")"
+  echo
+  echo "Open a console on the <%= @container_name %> container."
+  exit 0
+}
+
+case "${1:-}" in -h|--help) usage ;; esac
+
 /usr/bin/docker exec -it <%= @container_name %> <%= @command %>

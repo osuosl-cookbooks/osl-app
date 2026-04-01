@@ -426,6 +426,14 @@ describe 'osl-app::app3' do
       end
 
       it do
+        is_expected.to create_osl_app_dockercompose_wrapper('invasives-staging').with(
+          directory: '/home/invasives-staging/oregoninvasiveshotline',
+          config_files: %w(docker-compose.deploy.yml docker-compose.mailpit.yml),
+          user: 'invasives-staging'
+        )
+      end
+
+      it do
         is_expected.to sync_git('/home/invasives-production/oregoninvasiveshotline').with(
           repository: 'https://github.com/osu-cass/oregoninvasiveshotline.git',
           revision: 'main'
@@ -550,6 +558,14 @@ describe 'osl-app::app3' do
         )
       end
 
+      it do
+        is_expected.to create_osl_app_dockercompose_wrapper('invasives-production').with(
+          directory: '/home/invasives-production/oregoninvasiveshotline',
+          config_files: %w(docker-compose.deploy.yml),
+          user: 'invasives-production'
+        )
+      end
+
       # EEC Walkthrough React - Staging
       it do
         is_expected.to pull_docker_image('ghcr.io/osu-cass/eec-walkthrough-react').with(
@@ -630,6 +646,12 @@ describe 'osl-app::app3' do
             '/home/eec-walkthrough-staging/uploads:/app/client/files/uploads',
           ],
           sensitive: true
+        )
+      end
+
+      it do
+        is_expected.to create_osl_app_docker_wrapper('eec-walkthrough-staging.cass.oregonstate.edu').with(
+          user: 'eec-walkthrough-staging'
         )
       end
     end
