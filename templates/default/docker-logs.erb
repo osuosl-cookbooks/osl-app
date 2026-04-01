@@ -1,4 +1,16 @@
 #!/bin/bash
+usage() {
+  echo "Usage: $(basename "$0") [-f]"
+  echo
+  echo "View logs for the <%= @container_name %> container."
+  echo
+  echo "Options:"
+  echo "  -f  Follow log output"
+  exit 0
+}
+
+case "${1:-}" in -h|--help) usage ;; esac
+
 FOLLOW=""
 while getopts "f" opt ; do
   case $opt in

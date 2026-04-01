@@ -1,0 +1,12 @@
+#!/bin/bash
+usage() {
+  echo "Usage: $(basename "$0")"
+  echo
+  echo "List containers in the <%= @project_name %> compose project."
+  exit 0
+}
+
+case "${1:-}" in -h|--help) usage ;; esac
+
+cd <%= @directory %>
+/usr/bin/docker compose -p <%= @project_name %> <%= @config_flags %>ps
