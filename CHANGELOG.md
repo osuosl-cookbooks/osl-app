@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.12.0 (2026-04-01)
+-------------------
+- Add osl_app_dockercompose_wrapper resource and docker wrapper improvements
+
 4.11.10 (2026-04-01)
 --------------------
 - Add SECRET_KEY_BASE to openid-production-delayed-job
