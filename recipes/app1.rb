@@ -124,6 +124,7 @@ docker_container 'openid-production-delayed-job' do
     'RAILS_ENV=production',
     "DB_PASSWORD=#{openid_secrets['db_password']}",
     "DB_HOST=#{openid_db_host}",
+    "SECRET_KEY_BASE=#{openid_secrets['production']['secret_key_base']}",
   ]
   sensitive true
 end

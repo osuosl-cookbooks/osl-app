@@ -73,6 +73,10 @@ control 'app1' do
     its('stdout') { should match /SECRET_KEY_BASE=staging_secret_key_base/ }
   end
 
+  describe command('docker exec openid-production-delayed-job env') do
+    its('stdout') { should match /SECRET_KEY_BASE=production_secret_key_base/ }
+  end
+
   describe http 'localhost:8080/foundation/members/registration' do
     its('status') { should cmp 200 }
     its('body') { should match 'Membership Dues' }
