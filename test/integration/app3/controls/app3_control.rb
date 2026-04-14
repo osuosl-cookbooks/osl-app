@@ -203,6 +203,15 @@ control 'app3' do
     its('size') { should eq 0 }
   end
 
+  describe file('/home/invasives-staging/oregoninvasiveshotline/docker/secrets/google_map_id.txt') do
+    it { should exist }
+    it { should be_file }
+    its('mode') { should cmp '0400' }
+    its('uid') { should eq 1000 }
+    its('gid') { should eq 1000 }
+    its('size') { should eq 0 }
+  end
+
   describe docker.images.where { repository == 'ghcr.io/osu-cass/oregoninvasiveshotline' && tag == 'develop' } do
     it { should exist }
   end
@@ -302,6 +311,15 @@ control 'app3' do
   end
 
   describe file('/home/invasives-production/oregoninvasiveshotline/docker/secrets/google_api_key.txt') do
+    it { should exist }
+    it { should be_file }
+    its('mode') { should cmp '0400' }
+    its('uid') { should eq 1000 }
+    its('gid') { should eq 1000 }
+    its('size') { should eq 0 }
+  end
+
+  describe file('/home/invasives-production/oregoninvasiveshotline/docker/secrets/google_map_id.txt') do
     it { should exist }
     it { should be_file }
     its('mode') { should cmp '0400' }
