@@ -70,6 +70,7 @@ describe 'osl-app::app3' do
             db_pass: 'invasives-staging',
             db_host: '127.0.0.1',
             google_api_key: 'google_api_key:',
+            google_map_id: 'google_map_id:',
             mailpit_ui_auth: 'admin:admin',
             secret_key: 'secret_key:',
           },
@@ -79,6 +80,7 @@ describe 'osl-app::app3' do
             db_pass: 'invasives-production',
             db_host: '127.0.0.1',
             google_api_key: 'google_api_key:',
+            google_map_id: 'google_map_id:',
             secret_key: 'secret_key:',
             sentry_dsn: 'sentry_dsn',
           }
@@ -407,6 +409,21 @@ describe 'osl-app::app3' do
       end
 
       it do
+        is_expected.to create_file('/home/invasives-staging/oregoninvasiveshotline/docker/secrets/google_map_id.txt').with(
+          owner: 1000,
+          group: 1000,
+          mode: '0400',
+          content: 'google_map_id:',
+          sensitive: true
+        )
+      end
+
+      it do
+        expect(chef_run.file('/home/invasives-staging/oregoninvasiveshotline/docker/secrets/google_map_id.txt')).to \
+          notify('osl_dockercompose[invasives-staging]').to(:rebuild)
+      end
+
+      it do
         is_expected.to pull_docker_image('ghcr.io/osu-cass/oregoninvasiveshotline-develop').with(
           repo: 'ghcr.io/osu-cass/oregoninvasiveshotline',
           tag: 'develop'
@@ -536,6 +553,21 @@ describe 'osl-app::app3' do
 
       it do
         expect(chef_run.file('/home/invasives-production/oregoninvasiveshotline/docker/secrets/google_api_key.txt')).to \
+          notify('osl_dockercompose[invasives-production]').to(:rebuild)
+      end
+
+      it do
+        is_expected.to create_file('/home/invasives-production/oregoninvasiveshotline/docker/secrets/google_map_id.txt').with(
+          owner: 1000,
+          group: 1000,
+          mode: '0400',
+          content: 'google_map_id:',
+          sensitive: true
+        )
+      end
+
+      it do
+        expect(chef_run.file('/home/invasives-production/oregoninvasiveshotline/docker/secrets/google_map_id.txt')).to \
           notify('osl_dockercompose[invasives-production]').to(:rebuild)
       end
 

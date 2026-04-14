@@ -333,6 +333,15 @@ file "#{invasives_staging}/docker/secrets/google_api_key.txt" do
   notifies :rebuild, 'osl_dockercompose[invasives-staging]'
 end
 
+file "#{invasives_staging}/docker/secrets/google_map_id.txt" do
+  owner 1000
+  group 1000
+  mode '0400'
+  content invasives_secrets['staging']['google_map_id']
+  sensitive true
+  notifies :rebuild, 'osl_dockercompose[invasives-staging]'
+end
+
 docker_image 'ghcr.io/osu-cass/oregoninvasiveshotline-develop' do
   repo 'ghcr.io/osu-cass/oregoninvasiveshotline'
   tag 'develop'
@@ -419,6 +428,15 @@ file "#{invasives_production}/docker/secrets/google_api_key.txt" do
   group 1000
   mode '0400'
   content invasives_secrets['production']['google_api_key']
+  sensitive true
+  notifies :rebuild, 'osl_dockercompose[invasives-production]'
+end
+
+file "#{invasives_production}/docker/secrets/google_map_id.txt" do
+  owner 1000
+  group 1000
+  mode '0400'
+  content invasives_secrets['production']['google_map_id']
   sensitive true
   notifies :rebuild, 'osl_dockercompose[invasives-production]'
 end
