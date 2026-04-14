@@ -245,13 +245,13 @@ describe 'osl-app::app3' do
       end
 
       it do
-        is_expected.to pull_docker_image('elestio/etherpad').with(
+        is_expected.to pull_docker_image('etherpad/etherpad').with(
           tag: 'latest'
         )
       end
 
       it do
-        expect(chef_run.docker_image('elestio/etherpad')).to \
+        expect(chef_run.docker_image('etherpad/etherpad')).to \
           notify('docker_container[etherpad-lite.osuosl.org]').to(:redeploy)
       end
 
@@ -262,7 +262,7 @@ describe 'osl-app::app3' do
 
       it do
         is_expected.to run_docker_container('etherpad-lite.osuosl.org').with(
-          repo: 'elestio/etherpad',
+          repo: 'etherpad/etherpad',
           tag: 'latest',
           port: '8085:9001',
           restart_policy: 'always',
