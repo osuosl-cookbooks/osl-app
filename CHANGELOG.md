@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.12.3 (2026-04-14)
+-------------------
+- Add google_map_id secret for invasives
+
 4.12.2 (2026-04-14)
 -------------------
 - Switch etherpad-lite from elestio/etherpad to etherpad/etherpad
