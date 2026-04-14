@@ -146,7 +146,7 @@ end
 etherpad_osl_secrets = data_bag_item('etherpad', 'osl')
 etherpad_osl_secrets['db_hostname'] = node['ipaddress'] if node['kitchen']
 
-docker_image 'elestio/etherpad' do
+docker_image 'etherpad/etherpad' do
   notifies :redeploy, 'docker_container[etherpad-lite.osuosl.org]'
 end
 
@@ -155,7 +155,7 @@ docker_image 'ghcr.io/osuosl/etherpad-snowdrift' do
 end
 
 docker_container 'etherpad-lite.osuosl.org' do
-  repo 'elestio/etherpad'
+  repo 'etherpad/etherpad'
   port '8085:9001'
   restart_policy 'always'
   user 'etherpad'

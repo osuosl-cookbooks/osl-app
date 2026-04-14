@@ -56,7 +56,7 @@ control 'app3' do
     it { should exist }
   end
 
-  describe docker.images.where { repository == 'elestio/etherpad' && tag == 'latest' } do
+  describe docker.images.where { repository == 'etherpad/etherpad' && tag == 'latest' } do
     it { should exist }
   end
 
