@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.12.1 (2026-04-14)
+-------------------
+- Unlock redmine tag from 5.1.4 to 5.1
+
 4.12.0 (2026-04-01)
 -------------------
 - Add osl_app_dockercompose_wrapper resource and docker wrapper improvements
