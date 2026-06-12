@@ -23,6 +23,13 @@ describe 'osl-app::app2' do
           recaptcha_secret: 'fakerecaptcha',
           sentry_uri: 'fakeuri'
         )
+        stub_data_bag_item('osl-app', 'formsender-opf').and_return(
+          rt_url: 'https://rt.example.org/REST/2.0/',
+          token: 'opf_faketoken',
+          rt_token: 'opf_rt_faketoken',
+          recaptcha_secret: 'opf_fakerecaptcha',
+          sentry_uri: 'opf_fakeuri'
+        )
       end
 
       it { is_expected.to login_docker_registry('ghcr.io').with(username: 'gh_user', password: 'gh_password') }
@@ -67,6 +74,16 @@ describe 'osl-app::app2' do
       it { expect(chef_run).to pull_docker_image('ghcr.io/osuosl/formsender').with(tag: 'master') }
 
       it do
+        expect(chef_run.docker_image('ghcr.io/osuosl/formsender')).to \
+          notify('docker_container[formsender]').to(:redeploy)
+      end
+
+      it do
+        expect(chef_run.docker_image('ghcr.io/osuosl/formsender')).to \
+          notify('docker_container[formsender-opf]').to(:redeploy)
+      end
+
+      it do
         expect(chef_run).to run_docker_container('formsender').with(
           repo: 'ghcr.io/osuosl/formsender',
           tag: 'master',
@@ -77,6 +94,23 @@ describe 'osl-app::app2' do
             'RT_TOKEN=rt_faketoken',
             'RECAPTCHA_SECRET=fakerecaptcha',
             'SENTRY_URI=fakeuri',
+          ],
+          sensitive: true
+        )
+      end
+
+      it do
+        expect(chef_run).to run_docker_container('formsender-opf').with(
+          repo: 'ghcr.io/osuosl/formsender',
+          tag: 'master',
+          port: '8087:5000',
+          restart_policy: 'always',
+          env: [
+            'RT_URL=https://rt.example.org/REST/2.0/',
+            'TOKEN=opf_faketoken',
+            'RT_TOKEN=opf_rt_faketoken',
+            'RECAPTCHA_SECRET=opf_fakerecaptcha',
+            'SENTRY_URI=opf_fakeuri',
           ],
           sensitive: true
         )

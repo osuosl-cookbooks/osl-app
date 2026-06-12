@@ -54,4 +54,15 @@ control 'app2' do
   describe http 'http://127.0.0.1:8085/server-status' do
     its('status') { should eq 200 }
   end
+
+  describe docker_container('formsender-opf') do
+    it { should exist }
+    it { should be_running }
+    its('image') { should eq 'ghcr.io/osuosl/formsender:master' }
+    its('ports') { should eq '0.0.0.0:8087->5000/tcp' }
+  end
+
+  describe http 'http://127.0.0.1:8087/server-status' do
+    its('status') { should eq 200 }
+  end
 end

@@ -65,6 +65,7 @@ end
 docker_image 'ghcr.io/osuosl/formsender' do
   tag 'master'
   notifies :redeploy, 'docker_container[formsender]'
+  notifies :redeploy, 'docker_container[formsender-opf]'
 end
 
 formsender_env = data_bag_item('osl-app', 'formsender')
@@ -79,6 +80,26 @@ docker_container 'formsender' do
     "RT_TOKEN=#{formsender_env['rt_token']}",
     "RECAPTCHA_SECRET=#{formsender_env['recaptcha_secret']}",
     "SENTRY_URI=#{formsender_env['sentry_uri']}",
+  ]
+  sensitive true
+end
+
+# Second formsender instance for the OpenPower Foundation, pointed at a
+# separate RT instance via RT_URL. Same image as above; the RT user/token,
+# form token, and reCAPTCHA secret all differ and live in their own data bag.
+formsender_opf_env = data_bag_item('osl-app', 'formsender-opf')
+
+docker_container 'formsender-opf' do
+  repo 'ghcr.io/osuosl/formsender'
+  tag 'master'
+  port '8087:5000'
+  restart_policy 'always'
+  env [
+    "RT_URL=#{formsender_opf_env['rt_url']}",
+    "TOKEN=#{formsender_opf_env['token']}",
+    "RT_TOKEN=#{formsender_opf_env['rt_token']}",
+    "RECAPTCHA_SECRET=#{formsender_opf_env['recaptcha_secret']}",
+    "SENTRY_URI=#{formsender_opf_env['sentry_uri']}",
   ]
   sensitive true
 end
