@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.12.4 (2026-06-13)
+-------------------
+- Add formsender-opf instance and test the PR image
+
 4.12.3 (2026-04-14)
 -------------------
 - Add google_map_id secret for invasives
