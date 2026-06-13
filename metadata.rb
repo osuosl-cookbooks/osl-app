@@ -12,7 +12,7 @@ supports         'almalinux', '~> 8.0'
 supports         'almalinux', '~> 9.0'
 supports         'almalinux', '~> 10.0'
 
-depends          'htpasswd'
+depends          'htpasswd', '< 2.0.18'
 depends          'osl-docker'
 depends          'osl-firewall'
 depends          'osl-git'
