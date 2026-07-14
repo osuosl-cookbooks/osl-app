@@ -434,6 +434,77 @@ control 'app3' do
     its('status') { should be_in [200, 304] }
   end
 
+  # EEC Walkthrough React - Production
+  describe docker.images.where { repository == 'ghcr.io/osu-cass/eec-walkthrough-react' && tag == 'main' } do
+    it { should exist }
+  end
+
+  describe docker_container('walkthrough.eec.oregonstate.edu') do
+    it { should exist }
+    it { should be_running }
+    its('image') { should eq 'ghcr.io/osu-cass/eec-walkthrough-react:main' }
+    its('ports') { should match(/0.0.0.0:8092->1111/) }
+    its('ports') { should match(/0.0.0.0:8093->2222/) }
+  end
+
+  describe directory('/home/eec-walkthrough-production/secrets') do
+    it { should exist }
+    its('owner') { should eq 'root' }
+    its('group') { should eq 'eec-walkthrough-production' }
+  end
+
+  describe directory('/home/eec-walkthrough-production/uploads') do
+    it { should exist }
+  end
+
+  describe directory('/home/eec-walkthrough-production/public-uploads') do
+    it { should exist }
+  end
+
+  describe file('/home/eec-walkthrough-production/secrets/mysql_password.txt') do
+    it { should exist }
+    it { should be_file }
+    its('mode') { should cmp '0400' }
+    its('content') { should cmp 'eec-walkthrough-production' }
+  end
+
+  describe file('/home/eec-walkthrough-production/secrets/jwt_secret_key.txt') do
+    it { should exist }
+    it { should be_file }
+    its('mode') { should cmp '0400' }
+    its('content') { should cmp 'production_jwt_secret' }
+  end
+
+  describe command('docker exec walkthrough.eec.oregonstate.edu env') do
+    %W(
+      API_PORT=1111
+      FILE_PORT=2222
+      NODE_ENV=production
+      MYSQL_DB_NAME=eec_walkthrough_production
+      MYSQL_HOST=#{interface('eth0').ipv4_address}
+      MYSQL_PORT=3306
+      MYSQL_USER=eec-walkthrough-production
+      MYSQL_PASSWORD_FILE=/run/secrets/mysql_password
+      JWT_SECRET_KEY_FILE=/run/secrets/jwt_secret_key
+    ).each do |line|
+      its('stdout') { should match line }
+    end
+  end
+
+  describe http(
+    'http://127.0.0.1:8093',
+    headers: { 'Host' => 'walkthrough.eec.oregonstate.edu' }
+  ) do
+    its('status') { should eq 200 }
+  end
+
+  describe http(
+    'http://127.0.0.1:8092/api/home',
+    headers: { 'Host' => 'walkthrough.eec.oregonstate.edu' }
+  ) do
+    its('status') { should be_in [200, 304] }
+  end
+
   # dockercompose_wrapper - invasives-staging
   %w(console logs ps).each do |cmd|
     describe file "/usr/local/bin/invasives-staging-#{cmd}" do
@@ -509,5 +580,18 @@ control 'app3' do
   describe command 'sudo -U eec-walkthrough-staging -l' do
     its('stdout') { should match %r{\(ALL\) NOPASSWD: /usr/local/bin/eec-walkthrough-staging.cass.oregonstate.edu-console} }
     its('stdout') { should match %r{\(ALL\) NOPASSWD: /usr/local/bin/eec-walkthrough-staging.cass.oregonstate.edu-logs} }
+  end
+
+  # docker_wrapper - eec-walkthrough-production
+  %w(console logs).each do |cmd|
+    describe file "/usr/local/bin/walkthrough.eec.oregonstate.edu-#{cmd}" do
+      it { should exist }
+      it { should be_executable }
+    end
+  end
+
+  describe command 'sudo -U eec-walkthrough-production -l' do
+    its('stdout') { should match %r{\(ALL\) NOPASSWD: /usr/local/bin/walkthrough.eec.oregonstate.edu-console} }
+    its('stdout') { should match %r{\(ALL\) NOPASSWD: /usr/local/bin/walkthrough.eec.oregonstate.edu-logs} }
   end
 end
