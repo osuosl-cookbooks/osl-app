@@ -197,7 +197,8 @@ end
 eec_secrets = data_bag_item('osl-app', 'eec_walkthrough_staging')
 eec_secrets['db_host'] = node['ipaddress'] if node['kitchen']
 
-docker_image 'ghcr.io/osu-cass/eec-walkthrough-react' do
+docker_image 'eec-walkthrough-react-dev' do
+  repo 'ghcr.io/osu-cass/eec-walkthrough-react'
   tag 'dev'
   notifies :redeploy, 'docker_container[eec-walkthrough-staging.cass.oregonstate.edu]'
 end
@@ -255,6 +256,71 @@ end
 
 osl_app_docker_wrapper 'eec-walkthrough-staging.cass.oregonstate.edu' do
   user 'eec-walkthrough-staging'
+end
+
+# EEC Walkthrough React - Production
+eec_production_secrets = data_bag_item('osl-app', 'eec_walkthrough_production')
+eec_production_secrets['db_host'] = node['ipaddress'] if node['kitchen']
+
+docker_image 'eec-walkthrough-react-main' do
+  repo 'ghcr.io/osu-cass/eec-walkthrough-react'
+  tag 'main'
+  notifies :redeploy, 'docker_container[walkthrough.eec.oregonstate.edu]'
+end
+
+directory '/home/eec-walkthrough-production/secrets' do
+  recursive true
+end
+
+directory '/home/eec-walkthrough-production/uploads' do
+  recursive true
+end
+
+directory '/home/eec-walkthrough-production/public-uploads' do
+  recursive true
+end
+
+file '/home/eec-walkthrough-production/secrets/mysql_password.txt' do
+  mode '0400'
+  content eec_production_secrets['db_passwd']
+  sensitive true
+  notifies :redeploy, 'docker_container[walkthrough.eec.oregonstate.edu]'
+end
+
+file '/home/eec-walkthrough-production/secrets/jwt_secret_key.txt' do
+  mode '0400'
+  content eec_production_secrets['jwt_secret_key']
+  sensitive true
+  notifies :redeploy, 'docker_container[walkthrough.eec.oregonstate.edu]'
+end
+
+docker_container 'walkthrough.eec.oregonstate.edu' do
+  repo 'ghcr.io/osu-cass/eec-walkthrough-react'
+  tag 'main'
+  port ['8092:1111', '8093:2222']
+  restart_policy 'always'
+  env [
+    'API_PORT=1111',
+    'FILE_PORT=2222',
+    'NODE_ENV=production',
+    "MYSQL_DB_NAME=#{eec_production_secrets['db_db']}",
+    "MYSQL_HOST=#{eec_production_secrets['db_host']}",
+    'MYSQL_PORT=3306',
+    "MYSQL_USER=#{eec_production_secrets['db_user']}",
+    'MYSQL_PASSWORD_FILE=/run/secrets/mysql_password',
+    'JWT_SECRET_KEY_FILE=/run/secrets/jwt_secret_key',
+  ]
+  volumes [
+    '/home/eec-walkthrough-production/secrets/mysql_password.txt:/run/secrets/mysql_password:ro',
+    '/home/eec-walkthrough-production/secrets/jwt_secret_key.txt:/run/secrets/jwt_secret_key:ro',
+    '/home/eec-walkthrough-production/uploads:/app/client/files/uploads',
+    '/home/eec-walkthrough-production/public-uploads:/app/client/public/uploads',
+  ]
+  sensitive true
+end
+
+osl_app_docker_wrapper 'walkthrough.eec.oregonstate.edu' do
+  user 'eec-walkthrough-production'
 end
 
 # Oregon Invasives Hotline
