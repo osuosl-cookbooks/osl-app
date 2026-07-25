@@ -53,6 +53,7 @@ end
 docker_image 'registry' do
   tag '2'
   notifies :redeploy, 'docker_container[registry.osuosl.org]'
+  notifies :redeploy, 'docker_container[registry-quay]'
 end
 
 docker_container 'openid-staging-website' do
@@ -140,6 +141,7 @@ registry_secrets['htpasswds'].each do |u|
     password u['password']
     type u['type'] if u['type']
     notifies :redeploy, 'docker_container[registry.osuosl.org]'
+    notifies :redeploy, 'docker_container[registry-quay]'
   end
 end
 
@@ -205,6 +207,46 @@ docker_container 'registry.osuosl.org' do
   ]
   volumes ['/usr/local/etc/registry.osuosl.org:/auth']
   port '8082:5000'
+  health_check(
+    'Test' => ['CMD', 'wget', '--spider', '-q', 'http://localhost:5000/v2/'],
+    'Interval' => 30_000_000_000,
+    'Timeout' => 10_000_000_000,
+    'Retries' => 3
+  )
+end
+
+# quay.io pull-through cache. A registry instance can only proxy a single
+# upstream, so this runs alongside the Docker Hub cache and haproxy routes
+# /v2/quay.io/* requests here (stripping the prefix). Shares the S3 bucket
+# under its own root directory so repository paths from the two upstreams
+# can't collide.
+registry_quay_storage_env =
+  if kitchen?
+    registry_storage_env
+  else
+    registry_storage_env + ['REGISTRY_STORAGE_S3_ROOTDIRECTORY=/quay']
+  end
+
+docker_container 'registry-quay' do
+  repo 'registry'
+  tag '2'
+  restart_policy 'always'
+  sensitive true
+  links ['registry-valkey:redis']
+  env registry_quay_storage_env + [
+    # Same Valkey instance as the Docker Hub cache, isolated in its own DB
+    'REGISTRY_STORAGE_CACHE_BLOBDESCRIPTOR=redis',
+    'REGISTRY_REDIS_ADDR=redis:6379',
+    'REGISTRY_REDIS_DB=1',
+    # Proxy/mirror configuration
+    'REGISTRY_PROXY_REMOTEURL=https://quay.io',
+    "REGISTRY_PROXY_USERNAME=#{registry_secrets['quay_username']}",
+    "REGISTRY_PROXY_PASSWORD=#{registry_secrets['quay_password']}",
+    # HTTP performance settings
+    'REGISTRY_HTTP_DRAINTIMEOUT=60s',
+  ]
+  volumes ['/usr/local/etc/registry.osuosl.org:/auth']
+  port '8083:5000'
   health_check(
     'Test' => ['CMD', 'wget', '--spider', '-q', 'http://localhost:5000/v2/'],
     'Interval' => 30_000_000_000,

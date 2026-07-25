@@ -4,6 +4,8 @@
   "secret_key": "secret_key",
   "docker_username": "example",
   "docker_password": "example",
+  "quay_username": "example",
+  "quay_password": "example",
   "htpasswds": [
     {
       "username": "guest",
