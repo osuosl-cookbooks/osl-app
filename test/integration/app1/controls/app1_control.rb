@@ -54,6 +54,12 @@ control 'app1' do
     its('ports') { should match %r{0.0.0.0:8082->5000/tcp} }
   end
 
+  describe docker_container 'registry-quay' do
+    it { should exist }
+    it { should be_running }
+    its('ports') { should match %r{0.0.0.0:8083->5000/tcp} }
+  end
+
   describe file '/usr/local/etc/registry.osuosl.org/htpasswd' do
     its('content') { should match /^guest:\$apr1/ }
     its('content') { should match /^admin:\$apr1/ }

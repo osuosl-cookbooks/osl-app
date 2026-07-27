@@ -35,6 +35,8 @@ describe 'osl-app::app1' do
           secret_key: 'secret_key',
           docker_username: 'docker_username',
           docker_password: 'docker_password',
+          quay_username: 'quay_username',
+          quay_password: 'quay_password',
           htpasswds: [
             {
               username: 'guest',
@@ -106,6 +108,11 @@ describe 'osl-app::app1' do
       it do
         expect(chef_run.docker_image('registry')).to \
           notify('docker_container[registry.osuosl.org]').to(:redeploy)
+      end
+
+      it do
+        expect(chef_run.docker_image('registry')).to \
+          notify('docker_container[registry-quay]').to(:redeploy)
       end
 
       it { is_expected.to create_directory('/usr/local/etc/registry.osuosl.org').with(recursive: true) }
@@ -239,6 +246,36 @@ describe 'osl-app::app1' do
             'REGISTRY_PROXY_REMOTEURL=https://registry-1.docker.io',
             'REGISTRY_PROXY_USERNAME=docker_username',
             'REGISTRY_PROXY_PASSWORD=docker_password',
+            'REGISTRY_HTTP_DRAINTIMEOUT=60s',
+          ],
+          volumes_binds: ['/usr/local/etc/registry.osuosl.org:/auth'],
+          sensitive: true
+        )
+      end
+
+      it do
+        is_expected.to run_docker_container('registry-quay').with(
+          tag: '2',
+          port: '8083:5000',
+          restart_policy: 'always',
+          links: ['registry-valkey:redis'],
+          env: [
+            'REGISTRY_STORAGE=s3',
+            'REGISTRY_STORAGE_S3_ACCESSKEY=access_key',
+            'REGISTRY_STORAGE_S3_SECRETKEY=secret_key',
+            'REGISTRY_STORAGE_S3_REGION=us-east-1',
+            'REGISTRY_STORAGE_S3_BUCKET=osuosl-registry',
+            'REGISTRY_STORAGE_S3_REGIONENDPOINT=s3.osuosl.org',
+            'REGISTRY_STORAGE_S3_CHUNKSIZE=104857600',
+            'REGISTRY_STORAGE_S3_MULTIPARTCOPYCHUNKSIZE=104857600',
+            'REGISTRY_STORAGE_S3_MULTIPARTCOPYMAXCONCURRENCY=32',
+            'REGISTRY_STORAGE_S3_ROOTDIRECTORY=/quay',
+            'REGISTRY_STORAGE_CACHE_BLOBDESCRIPTOR=redis',
+            'REGISTRY_REDIS_ADDR=redis:6379',
+            'REGISTRY_REDIS_DB=1',
+            'REGISTRY_PROXY_REMOTEURL=https://quay.io',
+            'REGISTRY_PROXY_USERNAME=quay_username',
+            'REGISTRY_PROXY_PASSWORD=quay_password',
             'REGISTRY_HTTP_DRAINTIMEOUT=60s',
           ],
           volumes_binds: ['/usr/local/etc/registry.osuosl.org:/auth'],
