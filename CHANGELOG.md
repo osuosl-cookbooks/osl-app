@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.12.5 (2026-07-27)
+-------------------
+- Add quay.io pull-through cache registry
+
 4.12.4 (2026-06-13)
 -------------------
 - Add formsender-opf instance and test the PR image
