@@ -3,6 +3,7 @@
   %w(etherpad snowdrift),
   %w(mulgara_redmine mysql_creds),
   %w(osl-app eec_walkthrough_staging),
+  %w(osl-app eec_walkthrough_production),
 ].each do |bag, item|
   dbcreds = data_bag_item(bag, item)
   dbcreds['db_hostname'] = '172.%'
@@ -78,6 +79,15 @@ end
 
 execute "mysql -posl_mysql_test eec_walkthrough_staging < #{Chef::Config[:file_cache_path]}/eec_walkthrough.sql && touch /tmp/eec_walkthrough.done" do
   creates '/tmp/eec_walkthrough.done'
+end
+
+remote_file "#{Chef::Config[:file_cache_path]}/eec_walkthrough_production.sql" do
+  source 'https://github.com/osu-cass/eec-walkthrough-react/raw/refs/heads/main/services/database/db-init-new.sql'
+  sensitive true
+end
+
+execute "mysql -posl_mysql_test eec_walkthrough_production < #{Chef::Config[:file_cache_path]}/eec_walkthrough_production.sql && touch /tmp/eec_walkthrough_production.done" do
+  creates '/tmp/eec_walkthrough_production.done'
 end
 
 directory '/data/docker/code.mulgara.org/2019/09' do
