@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.12.6 (2026-08-12)
+-------------------
+- Add EEC Walkthrough React production instance
+
 4.12.5 (2026-07-27)
 -------------------
 - Add quay.io pull-through cache registry
