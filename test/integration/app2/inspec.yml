@@ -3,3 +3,5 @@ name: app2
 depends:
   - name: default
     path: ../osl-app/test/integration/default
+  - name: inspec-docker-resources
+    gem: inspec-docker-resources
