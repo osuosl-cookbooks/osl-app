@@ -523,3 +523,77 @@ osl_app_dockercompose_wrapper 'invasives-production' do
   config_files %w(docker-compose.deploy.yml)
   user 'invasives-production'
 end
+
+# HempDB - Staging
+hempdb_staging = '/home/hemp-db-staging/hemp-db'
+hempdb_secrets = data_bag_item('osl-app', 'hempdb')
+hempdb_secrets['staging']['db_host'] = node['ipaddress'] if node['kitchen']
+
+git hempdb_staging do
+  repository 'https://github.com/osu-cass/hemp-db.git'
+  revision 'dev'
+  notifies :rebuild, 'osl_dockercompose[hempdb-staging]'
+end
+
+template "#{hempdb_staging}/.env" do
+  source 'hemp-db-env.erb'
+  mode '0400'
+  variables(
+    app_port: '8094',
+    database_ssl: !node['kitchen'],
+    image: 'dev',
+    mailpit_port: '8095',
+    production_url: 'hemp-db-staging.cass.oregonstate.edu',
+    sentry_dsn: hempdb_secrets['staging']['sentry_dsn']
+  )
+  sensitive true
+  notifies :rebuild, 'osl_dockercompose[hempdb-staging]'
+end
+
+directory "#{hempdb_staging}/docker/secrets"
+
+file "#{hempdb_staging}/docker/secrets/secret_key" do
+  owner 1000
+  group 1000
+  mode '0400'
+  content hempdb_secrets['staging']['secret_key']
+  sensitive true
+  notifies :rebuild, 'osl_dockercompose[hempdb-staging]'
+end
+
+file "#{hempdb_staging}/docker/secrets/database_url" do
+  owner 1000
+  group 1000
+  mode '0400'
+  content 'mysql://' \
+    "#{hempdb_secrets['staging']['db_user']}:#{hempdb_secrets['staging']['db_pass']}" \
+    "@#{hempdb_secrets['staging']['db_host']}:3306/#{hempdb_secrets['staging']['db_name']}"
+  sensitive true
+  notifies :rebuild, 'osl_dockercompose[hempdb-staging]'
+end
+
+file "#{hempdb_staging}/docker/secrets/database_ca" do
+  owner 1000
+  group 1000
+  mode '0400'
+  content hempdb_secrets['staging']['db_ca']
+  sensitive true
+  notifies :rebuild, 'osl_dockercompose[hempdb-staging]'
+end
+
+docker_image 'ghcr.io/osu-cass/hemp-db-dev' do
+  repo 'ghcr.io/osu-cass/hemp-db'
+  tag 'dev'
+  notifies :rebuild, 'osl_dockercompose[hempdb-staging]'
+end
+
+osl_dockercompose 'hempdb-staging' do
+  directory hempdb_staging
+  config_files %w(compose.deploy.yaml compose.staging.yaml)
+end
+
+osl_app_dockercompose_wrapper 'hempdb-staging' do
+  directory hempdb_staging
+  config_files %w(compose.deploy.yaml compose.staging.yaml)
+  user 'hemp-db-staging'
+end

@@ -1,0 +1,21 @@
+# HempDB deployment environment. Managed by Chef.
+HEMPDB_IMAGE=ghcr.io/osu-cass/hemp-db:<%= @image %>
+
+# Hostname only: do not include https://.
+PRODUCTION_URL=<%= @production_url %>
+
+# Host ports published for the load balancer (unicorn firewall range).
+APP_PORT=<%= @app_port %>
+MAILPIT_PORT=<%= @mailpit_port %>
+
+# Docker secret source files.
+SECRET_KEY_PATH=./docker/secrets/secret_key
+DATABASE_URL_PATH=./docker/secrets/database_url
+DATABASE_CA_PATH=./docker/secrets/database_ca
+<% unless @database_ssl -%>
+
+# Test database without TLS.
+DATABASE_SSL=false
+<% end -%>
+
+SENTRY_DSN=<%= @sentry_dsn %>

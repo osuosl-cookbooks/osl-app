@@ -23,6 +23,22 @@
   end
 end
 
+hempdb_creds = data_bag_item('osl-app', 'hempdb')
+
+osl_mysql_test hempdb_creds['staging']['db_name'] do
+  username hempdb_creds['staging']['db_user']
+  password hempdb_creds['staging']['db_pass']
+end
+
+# Create the same user with a different host destination to allow for them to connect remotely
+mariadb_user hempdb_creds['staging']['db_user'] do
+  password hempdb_creds['staging']['db_pass']
+  host '172.%'
+  database_name hempdb_creds['staging']['db_name']
+  ctrl_password 'osl_mysql_test'
+  action [:create, :grant]
+end
+
 osl_postgresql_test 'streamwebs-staging' do
   username 'streamwebs-staging'
   password 'staging_password'
