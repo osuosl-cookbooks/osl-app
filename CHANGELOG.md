@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.13.0 (2026-08-26)
+-------------------
+- app3: Add hemp-db staging deployment
+
 4.12.6 (2026-08-12)
 -------------------
 - Add EEC Walkthrough React production instance
