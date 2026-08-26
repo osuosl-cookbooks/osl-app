@@ -637,15 +637,6 @@ control 'app3' do
     its('content') { should match %r{mysql://hempdb-staging:hempdb-staging@.*:3306/hempdb-staging} }
   end
 
-  describe file('/home/hemp-db-staging/hemp-db/docker/secrets/database_ca') do
-    it { should exist }
-    it { should be_file }
-    its('mode') { should cmp '0400' }
-    its('uid') { should eq 1000 }
-    its('gid') { should eq 1000 }
-    its('size') { should eq 0 }
-  end
-
   describe docker.images.where { repository == 'ghcr.io/osu-cass/hemp-db' && tag == 'dev' } do
     it { should exist }
   end

@@ -572,15 +572,6 @@ file "#{hempdb_staging}/docker/secrets/database_url" do
   notifies :rebuild, 'osl_dockercompose[hempdb-staging]'
 end
 
-file "#{hempdb_staging}/docker/secrets/database_ca" do
-  owner 1000
-  group 1000
-  mode '0400'
-  content hempdb_secrets['staging']['db_ca']
-  sensitive true
-  notifies :rebuild, 'osl_dockercompose[hempdb-staging]'
-end
-
 docker_image 'ghcr.io/osu-cass/hemp-db-dev' do
   repo 'ghcr.io/osu-cass/hemp-db'
   tag 'dev'

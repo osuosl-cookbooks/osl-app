@@ -91,7 +91,6 @@ describe 'osl-app::app3' do
             db_user: 'hempdb-staging',
             db_pass: 'hempdb-staging',
             db_host: '127.0.0.1',
-            db_ca: '',
             sentry_dsn: '',
             secret_key: 'hempdb-staging-secret-key',
           }
@@ -859,21 +858,6 @@ describe 'osl-app::app3' do
 
       it do
         expect(chef_run.file('/home/hemp-db-staging/hemp-db/docker/secrets/database_url')).to \
-          notify('osl_dockercompose[hempdb-staging]').to(:rebuild)
-      end
-
-      it do
-        is_expected.to create_file('/home/hemp-db-staging/hemp-db/docker/secrets/database_ca').with(
-          owner: 1000,
-          group: 1000,
-          mode: '0400',
-          content: '',
-          sensitive: true
-        )
-      end
-
-      it do
-        expect(chef_run.file('/home/hemp-db-staging/hemp-db/docker/secrets/database_ca')).to \
           notify('osl_dockercompose[hempdb-staging]').to(:rebuild)
       end
 
