@@ -526,6 +526,7 @@ end
 
 # HempDB - Staging
 hempdb_staging = '/home/hemp-db-staging/hemp-db'
+hempdb_staging_fqdn = 'hemp-db-staging.cass.oregonstate.edu'
 hempdb_secrets = data_bag_item('osl-app', 'hempdb')
 hempdb_secrets['staging']['db_host'] = node['ipaddress'] if node['kitchen']
 
@@ -539,11 +540,12 @@ template "#{hempdb_staging}/.env" do
   source 'hemp-db-env.erb'
   mode '0400'
   variables(
+    allowed_hosts: [hempdb_staging_fqdn, node['ipaddress']],
     app_port: '8094',
     database_ssl: !node['kitchen'],
     image: 'dev',
     mailpit_port: '8095',
-    production_url: 'hemp-db-staging.cass.oregonstate.edu',
+    production_url: hempdb_staging_fqdn,
     sentry_dsn: hempdb_secrets['staging']['sentry_dsn']
   )
   sensitive true

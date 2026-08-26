@@ -4,6 +4,10 @@ HEMPDB_IMAGE=ghcr.io/osu-cass/hemp-db:<%= @image %>
 # Hostname only: do not include https://.
 PRODUCTION_URL=<%= @production_url %>
 
+# Canonical hostname plus this host's address, so load balancer probes that
+# address the app by IP are accepted instead of rejected as a bad Host header.
+ALLOWED_HOSTS=<%= @allowed_hosts.join(',') %>
+
 # Host ports published for the load balancer (unicorn firewall range).
 APP_PORT=<%= @app_port %>
 MAILPIT_PORT=<%= @mailpit_port %>
