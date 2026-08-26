@@ -608,6 +608,7 @@ control 'app3' do
     its('mode') { should cmp '0400' }
     its('content') { should match %r{HEMPDB_IMAGE=ghcr.io/osu-cass/hemp-db:dev} }
     its('content') { should match(/PRODUCTION_URL=hemp-db-staging.cass.oregonstate.edu/) }
+    its('content') { should match(/ALLOWED_HOSTS=hemp-db-staging.cass.oregonstate.edu,/) }
     its('content') { should match(/APP_PORT=8094/) }
     its('content') { should match(/MAILPIT_PORT=8095/) }
     its('content') { should match(/DATABASE_SSL=false/) }

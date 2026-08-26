@@ -815,6 +815,7 @@ describe 'osl-app::app3' do
           sensitive: true
         )
         expect(template.variables[:app_port]).to eq('8094')
+        expect(template.variables[:allowed_hosts]).to eq(['hemp-db-staging.cass.oregonstate.edu', '10.0.0.2'])
         expect(template.variables[:database_ssl]).to eq(true)
         expect(template.variables[:image]).to eq('dev')
         expect(template.variables[:mailpit_port]).to eq('8095')
