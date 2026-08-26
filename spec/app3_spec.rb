@@ -85,6 +85,16 @@ describe 'osl-app::app3' do
             sentry_dsn: 'sentry_dsn',
           }
         )
+        stub_data_bag_item('osl-app', 'hempdb').and_return(
+          "staging": {
+            db_name: 'hempdb-staging',
+            db_user: 'hempdb-staging',
+            db_pass: 'hempdb-staging',
+            db_host: '127.0.0.1',
+            sentry_dsn: '',
+            secret_key: 'hempdb-staging-secret-key',
+          }
+        )
         stub_data_bag_item('osl-app', 'eec_walkthrough_staging').and_return(
           db_db: 'eec_walkthrough_staging',
           db_user: 'eec-walkthrough-staging',
@@ -782,6 +792,92 @@ describe 'osl-app::app3' do
       it do
         is_expected.to create_osl_app_docker_wrapper('walkthrough.eec.oregonstate.edu').with(
           user: 'eec-walkthrough-production'
+        )
+      end
+
+      it do
+        is_expected.to sync_git('/home/hemp-db-staging/hemp-db').with(
+          repository: 'https://github.com/osu-cass/hemp-db.git',
+          revision: 'dev'
+        )
+      end
+
+      it do
+        expect(chef_run.git('/home/hemp-db-staging/hemp-db')).to \
+          notify('osl_dockercompose[hempdb-staging]').to(:rebuild)
+      end
+
+      it do
+        template = chef_run.template('/home/hemp-db-staging/hemp-db/.env')
+        is_expected.to create_template('/home/hemp-db-staging/hemp-db/.env').with(
+          source: 'hemp-db-env.erb',
+          mode: '0400',
+          sensitive: true
+        )
+        expect(template.variables[:app_port]).to eq('8094')
+        expect(template.variables[:database_ssl]).to eq(true)
+        expect(template.variables[:image]).to eq('dev')
+        expect(template.variables[:mailpit_port]).to eq('8095')
+        expect(template.variables[:production_url]).to eq('hemp-db-staging.cass.oregonstate.edu')
+        expect(template.variables[:sentry_dsn]).to eq('')
+      end
+
+      it do
+        expect(chef_run.template('/home/hemp-db-staging/hemp-db/.env')).to \
+          notify('osl_dockercompose[hempdb-staging]').to(:rebuild)
+      end
+
+      it do
+        is_expected.to create_directory('/home/hemp-db-staging/hemp-db/docker/secrets')
+      end
+
+      it do
+        is_expected.to create_file('/home/hemp-db-staging/hemp-db/docker/secrets/secret_key').with(
+          owner: 1000,
+          group: 1000,
+          mode: '0400',
+          content: 'hempdb-staging-secret-key',
+          sensitive: true
+        )
+      end
+
+      it do
+        expect(chef_run.file('/home/hemp-db-staging/hemp-db/docker/secrets/secret_key')).to \
+          notify('osl_dockercompose[hempdb-staging]').to(:rebuild)
+      end
+
+      it do
+        is_expected.to create_file('/home/hemp-db-staging/hemp-db/docker/secrets/database_url').with(
+          owner: 1000,
+          group: 1000,
+          mode: '0400',
+          content: 'mysql://hempdb-staging:hempdb-staging@127.0.0.1:3306/hempdb-staging',
+          sensitive: true
+        )
+      end
+
+      it do
+        expect(chef_run.file('/home/hemp-db-staging/hemp-db/docker/secrets/database_url')).to \
+          notify('osl_dockercompose[hempdb-staging]').to(:rebuild)
+      end
+
+      it do
+        is_expected.to pull_docker_image('ghcr.io/osu-cass/hemp-db-dev').with(
+          repo: 'ghcr.io/osu-cass/hemp-db',
+          tag: 'dev'
+        )
+      end
+
+      it do
+        expect(chef_run.docker_image('ghcr.io/osu-cass/hemp-db-dev')).to \
+          notify('osl_dockercompose[hempdb-staging]').to(:rebuild)
+      end
+
+      it do
+        is_expected.to create_osl_app_dockercompose_wrapper('hempdb-staging').with(
+          directory: '/home/hemp-db-staging/hemp-db',
+          config_files: %w(compose.deploy.yaml compose.staging.yaml),
+          user: 'hemp-db-staging'
         )
       end
     end

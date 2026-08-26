@@ -1,7 +1,6 @@
 ---
 driver:
   name: vagrant
-  flavor_ref: 'm2.local.8c8m100d'
 
 verifier:
   name: inspec

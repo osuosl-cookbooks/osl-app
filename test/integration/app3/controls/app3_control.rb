@@ -594,4 +594,86 @@ control 'app3' do
     its('stdout') { should match %r{\(ALL\) NOPASSWD: /usr/local/bin/walkthrough.eec.oregonstate.edu-console} }
     its('stdout') { should match %r{\(ALL\) NOPASSWD: /usr/local/bin/walkthrough.eec.oregonstate.edu-logs} }
   end
+
+  # HempDB - Staging tests
+  describe directory('/home/hemp-db-staging/hemp-db') do
+    it { should exist }
+    its('owner') { should eq 'root' }
+    its('group') { should eq 'hemp-db-staging' }
+  end
+
+  describe file('/home/hemp-db-staging/hemp-db/.env') do
+    it { should exist }
+    it { should be_file }
+    its('mode') { should cmp '0400' }
+    its('content') { should match %r{HEMPDB_IMAGE=ghcr.io/osu-cass/hemp-db:dev} }
+    its('content') { should match(/PRODUCTION_URL=hemp-db-staging.cass.oregonstate.edu/) }
+    its('content') { should match(/APP_PORT=8094/) }
+    its('content') { should match(/MAILPIT_PORT=8095/) }
+    its('content') { should match(/DATABASE_SSL=false/) }
+  end
+
+  describe directory('/home/hemp-db-staging/hemp-db/docker/secrets') do
+    it { should exist }
+    its('owner') { should eq 'root' }
+    its('group') { should eq 'hemp-db-staging' }
+  end
+
+  describe file('/home/hemp-db-staging/hemp-db/docker/secrets/secret_key') do
+    it { should exist }
+    it { should be_file }
+    its('mode') { should cmp '0400' }
+    its('uid') { should eq 1000 }
+    its('gid') { should eq 1000 }
+    its('content') { should cmp 'hempdb-staging-secret-key' }
+  end
+
+  describe file('/home/hemp-db-staging/hemp-db/docker/secrets/database_url') do
+    it { should exist }
+    it { should be_file }
+    its('mode') { should cmp '0400' }
+    its('uid') { should eq 1000 }
+    its('gid') { should eq 1000 }
+    its('content') { should match %r{mysql://hempdb-staging:hempdb-staging@.*:3306/hempdb-staging} }
+  end
+
+  describe docker.images.where { repository == 'ghcr.io/osu-cass/hemp-db' && tag == 'dev' } do
+    it { should exist }
+  end
+
+  describe json(content: command('docker compose -f /home/hemp-db-staging/hemp-db/compose.deploy.yaml -f /home/hemp-db-staging/hemp-db/compose.staging.yaml -p hempdb-staging ps --format json --no-trunc | jq -s \'map({Service: .Service, State: .State})\'').stdout) do
+    its([0, 'Service']) { should eq 'app' }
+    its([0, 'State']) { should eq 'running' }
+    its([1, 'Service']) { should eq 'mailpit' }
+    its([1, 'State']) { should eq 'running' }
+    its([2, 'Service']) { should eq 'valkey' }
+    its([2, 'State']) { should eq 'running' }
+  end
+
+  describe http(
+    'http://127.0.0.1:8094',
+    headers: {
+      'Host' => 'hemp-db-staging.cass.oregonstate.edu',
+      'X-Forwarded-Proto' => 'https',
+    }
+  ) do
+    its('status') { should eq 200 }
+    its('body') { should match(/HempDB/) }
+  end
+
+  describe http(
+    'http://127.0.0.1:8094/health/ready/',
+    headers: {
+      'Host' => 'hemp-db-staging.cass.oregonstate.edu',
+      'X-Forwarded-Proto' => 'https',
+    }
+  ) do
+    its('status') { should eq 200 }
+    its('body') { should match(/ok/) }
+  end
+
+  # The load balancer proxies /mailpit to this port; MP_WEBROOT must match
+  describe http('http://127.0.0.1:8095/mailpit/') do
+    its('status') { should eq 200 }
+  end
 end
