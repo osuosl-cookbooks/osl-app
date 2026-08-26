@@ -526,7 +526,7 @@ end
 
 # HempDB - Staging
 hempdb_staging = '/home/hemp-db-staging/hemp-db'
-hempdb_staging_fqdn = 'hemp-db-staging.cass.oregonstate.edu'
+hempdb_staging_fqdn = 'hempdb-staging.cass.oregonstate.edu'
 hempdb_secrets = data_bag_item('osl-app', 'hempdb')
 hempdb_secrets['staging']['db_host'] = node['ipaddress'] if node['kitchen']
 

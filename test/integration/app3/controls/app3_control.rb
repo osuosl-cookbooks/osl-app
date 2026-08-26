@@ -607,8 +607,8 @@ control 'app3' do
     it { should be_file }
     its('mode') { should cmp '0400' }
     its('content') { should match %r{HEMPDB_IMAGE=ghcr.io/osu-cass/hemp-db:dev} }
-    its('content') { should match(/PRODUCTION_URL=hemp-db-staging.cass.oregonstate.edu/) }
-    its('content') { should match(/ALLOWED_HOSTS=hemp-db-staging.cass.oregonstate.edu,/) }
+    its('content') { should match(/PRODUCTION_URL=hempdb-staging.cass.oregonstate.edu/) }
+    its('content') { should match(/ALLOWED_HOSTS=hempdb-staging.cass.oregonstate.edu,/) }
     its('content') { should match(/APP_PORT=8094/) }
     its('content') { should match(/MAILPIT_PORT=8095/) }
     its('content') { should match(/DATABASE_SSL=false/) }
@@ -654,7 +654,7 @@ control 'app3' do
   describe http(
     'http://127.0.0.1:8094',
     headers: {
-      'Host' => 'hemp-db-staging.cass.oregonstate.edu',
+      'Host' => 'hempdb-staging.cass.oregonstate.edu',
       'X-Forwarded-Proto' => 'https',
     }
   ) do
@@ -665,7 +665,7 @@ control 'app3' do
   describe http(
     'http://127.0.0.1:8094/health/ready/',
     headers: {
-      'Host' => 'hemp-db-staging.cass.oregonstate.edu',
+      'Host' => 'hempdb-staging.cass.oregonstate.edu',
       'X-Forwarded-Proto' => 'https',
     }
   ) do
