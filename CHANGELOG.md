@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.13.1 (2026-08-26)
+-------------------
+- app3: Accept hemp-db load balancer probes addressed by IP
+
 4.13.0 (2026-08-26)
 -------------------
 - app3: Add hemp-db staging deployment
