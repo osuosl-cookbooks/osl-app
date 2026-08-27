@@ -21,14 +21,14 @@ control 'app2' do
     its('body') { should match %r{<link rel="self" href="http://replicant.redmine.us/projects/replicant/activity.atom"/>} }
   end
 
-  describe docker.images.where { repository == 'osuosl/redmine-replicant' && tag == '4.2.3-2022.01.14.1907' } do
+  describe docker.images.where { repository == 'ghcr.io/osuosl/redmine-replicant' && tag == 'latest' } do
     it { should exist }
   end
 
   describe docker_container('redmine.replicant.us') do
     it { should exist }
     it { should be_running }
-    its('image') { should eq 'osuosl/redmine-replicant:4.2.3-2022.01.14.1907' }
+    its('image') { should eq 'ghcr.io/osuosl/redmine-replicant:latest' }
     its('ports') { should eq '0.0.0.0:8090->3000/tcp' }
   end
 
