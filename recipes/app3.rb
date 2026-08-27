@@ -122,14 +122,14 @@ end
 mulgara_redmine_creds = data_bag_item('mulgara_redmine', 'mysql_creds')
 mulgara_redmine_creds['db_hostname'] = node['ipaddress'] if node['kitchen']
 
-docker_image 'library/redmine' do
-  tag '5.1'
+docker_image 'ghcr.io/osuosl/redmine-mulgara' do
+  tag 'latest'
   notifies :redeploy, 'docker_container[code.mulgara.org]'
 end
 
 docker_container 'code.mulgara.org' do
-  repo 'redmine'
-  tag '5.1'
+  repo 'ghcr.io/osuosl/redmine-mulgara'
+  tag 'latest'
   port '8084:3000'
   restart_policy 'always'
   volumes ['/data/docker/code.mulgara.org:/usr/src/redmine/files']

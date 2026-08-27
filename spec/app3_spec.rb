@@ -233,20 +233,20 @@ describe 'osl-app::app3' do
       end
 
       it do
-        is_expected.to pull_docker_image('library/redmine').with(
-          tag: '5.1'
+        is_expected.to pull_docker_image('ghcr.io/osuosl/redmine-mulgara').with(
+          tag: 'latest'
         )
       end
 
       it do
-        expect(chef_run.docker_image('library/redmine')).to \
+        expect(chef_run.docker_image('ghcr.io/osuosl/redmine-mulgara')).to \
           notify('docker_container[code.mulgara.org]').to(:redeploy)
       end
 
       it do
         is_expected.to run_docker_container('code.mulgara.org').with(
-          repo: 'redmine',
-          tag: '5.1',
+          repo: 'ghcr.io/osuosl/redmine-mulgara',
+          tag: 'latest',
           port: '8084:3000',
           restart_policy: 'always',
           # This needs to be volumes_binds, since the volumes property gets coerced into a volumes_binds property if it's
