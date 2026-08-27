@@ -38,8 +38,8 @@ directory '/data/docker/redmine.replicant.us' do
   recursive true
 end
 
-docker_image 'osuosl/redmine-replicant' do
-  tag '4.2.3-2022.01.14.1907'
+docker_image 'ghcr.io/osuosl/redmine-replicant' do
+  tag 'latest'
   notifies :redeploy, 'docker_container[redmine.replicant.us]'
 end
 
@@ -47,8 +47,8 @@ replicant_dbcreds = data_bag_item('replicant_redmine', 'mysql_creds')
 replicant_dbcreds['db_hostname'] = node['ipaddress'] if node['kitchen']
 
 docker_container 'redmine.replicant.us' do
-  repo 'osuosl/redmine-replicant'
-  tag '4.2.3-2022.01.14.1907'
+  repo 'ghcr.io/osuosl/redmine-replicant'
+  tag 'latest'
   port '8090:3000'
   restart_policy 'always'
   volumes ['/data/docker/redmine.replicant.us:/usr/src/redmine/files']

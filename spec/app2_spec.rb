@@ -41,20 +41,20 @@ describe 'osl-app::app2' do
       end
 
       it do
-        expect(chef_run).to pull_docker_image('osuosl/redmine-replicant').with(
-          tag: '4.2.3-2022.01.14.1907'
+        expect(chef_run).to pull_docker_image('ghcr.io/osuosl/redmine-replicant').with(
+          tag: 'latest'
         )
       end
 
       it do
-        expect(chef_run.docker_image('osuosl/redmine-replicant')).to \
+        expect(chef_run.docker_image('ghcr.io/osuosl/redmine-replicant')).to \
           notify('docker_container[redmine.replicant.us]').to(:redeploy)
       end
 
       it do
         expect(chef_run).to run_docker_container('redmine.replicant.us').with(
-          repo: 'osuosl/redmine-replicant',
-          tag: '4.2.3-2022.01.14.1907',
+          repo: 'ghcr.io/osuosl/redmine-replicant',
+          tag: 'latest',
           port: '8090:3000',
           restart_policy: 'always',
           # This needs to be volumes_binds, since the volumes property gets coerced into a volumes_binds property if it's
