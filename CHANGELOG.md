@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.13.3 (2026-08-27)
+-------------------
+- app2: Move redmine-replicant image to ghcr.io
+
 4.13.2 (2026-08-26)
 -------------------
 - app3: Fix the hemp-db staging hostname
