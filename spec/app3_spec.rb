@@ -91,6 +91,7 @@ describe 'osl-app::app3' do
             db_user: 'hempdb-staging',
             db_pass: 'hempdb-staging',
             db_host: '127.0.0.1',
+            mailpit_ui_auth: 'admin:admin',
             sentry_dsn: '',
             secret_key: 'hempdb-staging-secret-key',
           }
@@ -857,6 +858,7 @@ describe 'osl-app::app3' do
         expect(template.variables[:database_ssl]).to eq(true)
         expect(template.variables[:image]).to eq('dev')
         expect(template.variables[:mailpit_port]).to eq('8095')
+        expect(template.variables[:mailpit_ui_auth]).to eq('admin:admin')
         expect(template.variables[:production_url]).to eq('hempdb-staging.cass.oregonstate.edu')
         expect(template.variables[:sentry_dsn]).to eq('')
       end

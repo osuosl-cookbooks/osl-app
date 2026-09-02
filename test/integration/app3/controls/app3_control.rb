@@ -629,6 +629,7 @@ control 'app3' do
     its('content') { should match(/ALLOWED_HOSTS=hempdb-staging.cass.oregonstate.edu,/) }
     its('content') { should match(/APP_PORT=8094/) }
     its('content') { should match(/MAILPIT_PORT=8095/) }
+    its('content') { should match(/MAILPIT_UI_AUTH=admin:admin/) }
     its('content') { should match(/DATABASE_SSL=false/) }
   end
 
@@ -691,8 +692,13 @@ control 'app3' do
     its('body') { should match(/ok/) }
   end
 
-  # The load balancer proxies /mailpit to this port; MP_WEBROOT must match
+  # The load balancer proxies /mailpit to this port; MP_WEBROOT must match,
+  # and the UI must refuse requests without the basic-auth credentials.
   describe http('http://127.0.0.1:8095/mailpit/') do
+    its('status') { should eq 401 }
+  end
+
+  describe http('http://127.0.0.1:8095/mailpit/', auth: { user: 'admin', pass: 'admin' }) do
     its('status') { should eq 200 }
   end
 end

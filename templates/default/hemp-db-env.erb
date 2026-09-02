@@ -12,6 +12,9 @@ ALLOWED_HOSTS=<%= @allowed_hosts.join(',') %>
 APP_PORT=<%= @app_port %>
 MAILPIT_PORT=<%= @mailpit_port %>
 
+# Basic auth for the Mailpit UI, which the load balancer publishes at /mailpit.
+MAILPIT_UI_AUTH=<%= @mailpit_ui_auth %>
+
 # Docker secret source files.
 SECRET_KEY_PATH=./docker/secrets/secret_key
 DATABASE_URL_PATH=./docker/secrets/database_url

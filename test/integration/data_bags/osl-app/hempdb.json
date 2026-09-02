@@ -5,6 +5,7 @@
     "db_user": "hempdb-staging",
     "db_pass": "hempdb-staging",
     "db_host": "127.0.0.1",
+    "mailpit_ui_auth": "admin:admin",
     "sentry_dsn": "",
     "secret_key": "hempdb-staging-secret-key"
   }
