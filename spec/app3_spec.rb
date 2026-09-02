@@ -99,6 +99,8 @@ describe 'osl-app::app3' do
           db_db: 'eec_walkthrough_staging',
           db_user: 'eec-walkthrough-staging',
           db_passwd: 'eec-walkthrough-staging',
+          sentry_dsn: 'https://serverkey@sentry.example.com/eec-staging-server',
+          sentry_client_dsn: 'https://browserkey@sentry.example.com/eec-staging-browser',
           db_host: '127.0.0.1',
           jwt_secret_key: 'staging_jwt_secret'
         )
@@ -106,6 +108,8 @@ describe 'osl-app::app3' do
           db_db: 'eec_walkthrough_production',
           db_user: 'eec-walkthrough-production',
           db_passwd: 'eec-walkthrough-production',
+          sentry_dsn: 'https://serverkey@sentry.example.com/eec-production-server',
+          sentry_client_dsn: 'https://browserkey@sentry.example.com/eec-production-browser',
           db_host: '127.0.0.1',
           jwt_secret_key: 'production_jwt_secret'
         )
@@ -673,6 +677,19 @@ describe 'osl-app::app3' do
       end
 
       it do
+        is_expected.to create_file('/home/eec-walkthrough-staging/secrets/sentry_dsn.txt').with(
+          mode: '0400',
+          content: 'https://serverkey@sentry.example.com/eec-staging-server',
+          sensitive: true
+        )
+      end
+
+      it do
+        expect(chef_run.file('/home/eec-walkthrough-staging/secrets/sentry_dsn.txt')).to \
+          notify('docker_container[eec-walkthrough-staging.cass.oregonstate.edu]').to(:redeploy)
+      end
+
+      it do
         is_expected.to run_docker_container('eec-walkthrough-staging.cass.oregonstate.edu').with(
           repo: 'ghcr.io/osu-cass/eec-walkthrough-react',
           tag: 'dev',
@@ -688,11 +705,15 @@ describe 'osl-app::app3' do
             'MYSQL_USER=eec-walkthrough-staging',
             'MYSQL_PASSWORD_FILE=/run/secrets/mysql_password',
             'JWT_SECRET_KEY_FILE=/run/secrets/jwt_secret_key',
+            'SENTRY_DSN_FILE=/run/secrets/sentry_dsn',
+            'SENTRY_CLIENT_DSN=https://browserkey@sentry.example.com/eec-staging-browser',
+            'SENTRY_ENVIRONMENT=staging',
           ],
           volumes_binds: [
             '/home/eec-walkthrough-staging/public-uploads:/app/client/public/uploads',
             '/home/eec-walkthrough-staging/secrets/jwt_secret_key.txt:/run/secrets/jwt_secret_key:ro',
             '/home/eec-walkthrough-staging/secrets/mysql_password.txt:/run/secrets/mysql_password:ro',
+            '/home/eec-walkthrough-staging/secrets/sentry_dsn.txt:/run/secrets/sentry_dsn:ro',
             '/home/eec-walkthrough-staging/uploads:/app/client/files/uploads',
           ],
           sensitive: true
@@ -763,6 +784,19 @@ describe 'osl-app::app3' do
       end
 
       it do
+        is_expected.to create_file('/home/eec-walkthrough-production/secrets/sentry_dsn.txt').with(
+          mode: '0400',
+          content: 'https://serverkey@sentry.example.com/eec-production-server',
+          sensitive: true
+        )
+      end
+
+      it do
+        expect(chef_run.file('/home/eec-walkthrough-production/secrets/sentry_dsn.txt')).to \
+          notify('docker_container[walkthrough.eec.oregonstate.edu]').to(:redeploy)
+      end
+
+      it do
         is_expected.to run_docker_container('walkthrough.eec.oregonstate.edu').with(
           repo: 'ghcr.io/osu-cass/eec-walkthrough-react',
           tag: 'main',
@@ -778,11 +812,15 @@ describe 'osl-app::app3' do
             'MYSQL_USER=eec-walkthrough-production',
             'MYSQL_PASSWORD_FILE=/run/secrets/mysql_password',
             'JWT_SECRET_KEY_FILE=/run/secrets/jwt_secret_key',
+            'SENTRY_DSN_FILE=/run/secrets/sentry_dsn',
+            'SENTRY_CLIENT_DSN=https://browserkey@sentry.example.com/eec-production-browser',
+            'SENTRY_ENVIRONMENT=production',
           ],
           volumes_binds: [
             '/home/eec-walkthrough-production/public-uploads:/app/client/public/uploads',
             '/home/eec-walkthrough-production/secrets/jwt_secret_key.txt:/run/secrets/jwt_secret_key:ro',
             '/home/eec-walkthrough-production/secrets/mysql_password.txt:/run/secrets/mysql_password:ro',
+            '/home/eec-walkthrough-production/secrets/sentry_dsn.txt:/run/secrets/sentry_dsn:ro',
             '/home/eec-walkthrough-production/uploads:/app/client/files/uploads',
           ],
           sensitive: true

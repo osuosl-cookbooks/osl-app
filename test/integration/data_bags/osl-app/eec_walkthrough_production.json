@@ -4,5 +4,7 @@
   "db_user": "eec-walkthrough-production",
   "db_passwd": "eec-walkthrough-production",
   "db_host": "127.0.0.1",
-  "jwt_secret_key": "production_jwt_secret"
+  "jwt_secret_key": "production_jwt_secret",
+  "sentry_dsn": "https://serverkey@sentry.example.com/eec-production-server",
+  "sentry_client_dsn": "https://browserkey@sentry.example.com/eec-production-browser"
 }
