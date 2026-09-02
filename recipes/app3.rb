@@ -229,6 +229,13 @@ file '/home/eec-walkthrough-staging/secrets/jwt_secret_key.txt' do
   notifies :redeploy, 'docker_container[eec-walkthrough-staging.cass.oregonstate.edu]'
 end
 
+file '/home/eec-walkthrough-staging/secrets/sentry_dsn.txt' do
+  mode '0400'
+  content eec_secrets['sentry_dsn']
+  sensitive true
+  notifies :redeploy, 'docker_container[eec-walkthrough-staging.cass.oregonstate.edu]'
+end
+
 docker_container 'eec-walkthrough-staging.cass.oregonstate.edu' do
   repo 'ghcr.io/osu-cass/eec-walkthrough-react'
   tag 'dev'
@@ -244,10 +251,14 @@ docker_container 'eec-walkthrough-staging.cass.oregonstate.edu' do
     "MYSQL_USER=#{eec_secrets['db_user']}",
     'MYSQL_PASSWORD_FILE=/run/secrets/mysql_password',
     'JWT_SECRET_KEY_FILE=/run/secrets/jwt_secret_key',
+    'SENTRY_DSN_FILE=/run/secrets/sentry_dsn',
+    "SENTRY_CLIENT_DSN=#{eec_secrets['sentry_client_dsn']}",
+    'SENTRY_ENVIRONMENT=staging',
   ]
   volumes [
     '/home/eec-walkthrough-staging/secrets/mysql_password.txt:/run/secrets/mysql_password:ro',
     '/home/eec-walkthrough-staging/secrets/jwt_secret_key.txt:/run/secrets/jwt_secret_key:ro',
+    '/home/eec-walkthrough-staging/secrets/sentry_dsn.txt:/run/secrets/sentry_dsn:ro',
     '/home/eec-walkthrough-staging/uploads:/app/client/files/uploads',
     '/home/eec-walkthrough-staging/public-uploads:/app/client/public/uploads',
   ]
@@ -294,6 +305,13 @@ file '/home/eec-walkthrough-production/secrets/jwt_secret_key.txt' do
   notifies :redeploy, 'docker_container[walkthrough.eec.oregonstate.edu]'
 end
 
+file '/home/eec-walkthrough-production/secrets/sentry_dsn.txt' do
+  mode '0400'
+  content eec_production_secrets['sentry_dsn']
+  sensitive true
+  notifies :redeploy, 'docker_container[walkthrough.eec.oregonstate.edu]'
+end
+
 docker_container 'walkthrough.eec.oregonstate.edu' do
   repo 'ghcr.io/osu-cass/eec-walkthrough-react'
   tag 'main'
@@ -309,10 +327,14 @@ docker_container 'walkthrough.eec.oregonstate.edu' do
     "MYSQL_USER=#{eec_production_secrets['db_user']}",
     'MYSQL_PASSWORD_FILE=/run/secrets/mysql_password',
     'JWT_SECRET_KEY_FILE=/run/secrets/jwt_secret_key',
+    'SENTRY_DSN_FILE=/run/secrets/sentry_dsn',
+    "SENTRY_CLIENT_DSN=#{eec_production_secrets['sentry_client_dsn']}",
+    'SENTRY_ENVIRONMENT=production',
   ]
   volumes [
     '/home/eec-walkthrough-production/secrets/mysql_password.txt:/run/secrets/mysql_password:ro',
     '/home/eec-walkthrough-production/secrets/jwt_secret_key.txt:/run/secrets/jwt_secret_key:ro',
+    '/home/eec-walkthrough-production/secrets/sentry_dsn.txt:/run/secrets/sentry_dsn:ro',
     '/home/eec-walkthrough-production/uploads:/app/client/files/uploads',
     '/home/eec-walkthrough-production/public-uploads:/app/client/public/uploads',
   ]

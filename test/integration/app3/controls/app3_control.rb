@@ -404,6 +404,12 @@ control 'app3' do
     its('content') { should cmp 'staging_jwt_secret' }
   end
 
+  describe file('/home/eec-walkthrough-staging/secrets/sentry_dsn.txt') do
+    it { should exist }
+    its('mode') { should cmp '0400' }
+    its('content') { should cmp 'https://serverkey@sentry.example.com/eec-staging-server' }
+  end
+
   describe command('docker exec eec-walkthrough-staging.cass.oregonstate.edu env') do
     %W(
       API_PORT=1111
@@ -415,6 +421,9 @@ control 'app3' do
       MYSQL_USER=eec-walkthrough-staging
       MYSQL_PASSWORD_FILE=/run/secrets/mysql_password
       JWT_SECRET_KEY_FILE=/run/secrets/jwt_secret_key
+      SENTRY_DSN_FILE=/run/secrets/sentry_dsn
+      SENTRY_CLIENT_DSN=https://browserkey@sentry.example.com/eec-staging-browser
+      SENTRY_ENVIRONMENT=staging
     ).each do |line|
       its('stdout') { should match line }
     end
@@ -475,6 +484,12 @@ control 'app3' do
     its('content') { should cmp 'production_jwt_secret' }
   end
 
+  describe file('/home/eec-walkthrough-production/secrets/sentry_dsn.txt') do
+    it { should exist }
+    its('mode') { should cmp '0400' }
+    its('content') { should cmp 'https://serverkey@sentry.example.com/eec-production-server' }
+  end
+
   describe command('docker exec walkthrough.eec.oregonstate.edu env') do
     %W(
       API_PORT=1111
@@ -486,6 +501,9 @@ control 'app3' do
       MYSQL_USER=eec-walkthrough-production
       MYSQL_PASSWORD_FILE=/run/secrets/mysql_password
       JWT_SECRET_KEY_FILE=/run/secrets/jwt_secret_key
+      SENTRY_DSN_FILE=/run/secrets/sentry_dsn
+      SENTRY_CLIENT_DSN=https://browserkey@sentry.example.com/eec-production-browser
+      SENTRY_ENVIRONMENT=production
     ).each do |line|
       its('stdout') { should match line }
     end
