@@ -94,6 +94,14 @@ describe 'osl-app::app3' do
             mailpit_ui_auth: 'admin:admin',
             sentry_dsn: '',
             secret_key: 'hempdb-staging-secret-key',
+          },
+          "production": {
+            db_name: 'hempdb-production',
+            db_user: 'hempdb-production',
+            db_pass: 'hempdb-production',
+            db_host: '127.0.0.1',
+            sentry_dsn: '',
+            secret_key: 'hempdb-production-secret-key',
           }
         )
         stub_data_bag_item('osl-app', 'eec_walkthrough_staging').and_return(
@@ -861,6 +869,7 @@ describe 'osl-app::app3' do
         expect(template.variables[:mailpit_ui_auth]).to eq('admin:admin')
         expect(template.variables[:production_url]).to eq('hempdb-staging.cass.oregonstate.edu')
         expect(template.variables[:sentry_dsn]).to eq('')
+        expect(template.variables[:default_from_email]).to eq(nil)
       end
 
       it do
@@ -919,6 +928,104 @@ describe 'osl-app::app3' do
           directory: '/home/hemp-db-staging/hemp-db',
           config_files: %w(compose.deploy.yaml compose.staging.yaml),
           user: 'hemp-db-staging'
+        )
+      end
+
+      it do
+        is_expected.to sync_git('/home/hemp-db-production/hemp-db').with(
+          repository: 'https://github.com/osu-cass/hemp-db.git',
+          revision: 'main'
+        )
+      end
+
+      it do
+        expect(chef_run.git('/home/hemp-db-production/hemp-db')).to \
+          notify('osl_dockercompose[hempdb-production]').to(:rebuild)
+      end
+
+      it do
+        template = chef_run.template('/home/hemp-db-production/hemp-db/.env')
+        is_expected.to create_template('/home/hemp-db-production/hemp-db/.env').with(
+          source: 'hemp-db-env.erb',
+          mode: '0400',
+          sensitive: true
+        )
+        expect(template.variables[:app_port]).to eq('8096')
+        expect(template.variables[:allowed_hosts]).to eq(['hempdb.cass.oregonstate.edu', '10.0.0.2'])
+        expect(template.variables[:database_ssl]).to eq(true)
+        expect(template.variables[:default_from_email]).to eq('noreply@hempdb.cass.oregonstate.edu')
+        expect(template.variables[:image]).to eq('main')
+        expect(template.variables[:mailpit_port]).to eq(nil)
+        expect(template.variables[:mailpit_ui_auth]).to eq(nil)
+        expect(template.variables[:production_url]).to eq('hempdb.cass.oregonstate.edu')
+        expect(template.variables[:sentry_dsn]).to eq('')
+      end
+
+      it do
+        expect(chef_run.template('/home/hemp-db-production/hemp-db/.env')).to \
+          notify('osl_dockercompose[hempdb-production]').to(:rebuild)
+      end
+
+      it do
+        is_expected.to create_directory('/home/hemp-db-production/hemp-db/docker/secrets')
+      end
+
+      it do
+        is_expected.to create_file('/home/hemp-db-production/hemp-db/docker/secrets/secret_key').with(
+          owner: 1000,
+          group: 1000,
+          mode: '0400',
+          content: 'hempdb-production-secret-key',
+          sensitive: true
+        )
+      end
+
+      it do
+        expect(chef_run.file('/home/hemp-db-production/hemp-db/docker/secrets/secret_key')).to \
+          notify('osl_dockercompose[hempdb-production]').to(:rebuild)
+      end
+
+      it do
+        is_expected.to create_file('/home/hemp-db-production/hemp-db/docker/secrets/database_url').with(
+          owner: 1000,
+          group: 1000,
+          mode: '0400',
+          content: 'mysql://hempdb-production:hempdb-production@127.0.0.1:3306/hempdb-production',
+          sensitive: true
+        )
+      end
+
+      it do
+        expect(chef_run.file('/home/hemp-db-production/hemp-db/docker/secrets/database_url')).to \
+          notify('osl_dockercompose[hempdb-production]').to(:rebuild)
+      end
+
+      it do
+        is_expected.to pull_docker_image('ghcr.io/osu-cass/hemp-db-main').with(
+          repo: 'ghcr.io/osu-cass/hemp-db',
+          tag: 'main'
+        )
+      end
+
+      it do
+        expect(chef_run.docker_image('ghcr.io/osu-cass/hemp-db-main')).to \
+          notify('osl_dockercompose[hempdb-production]').to(:rebuild)
+      end
+
+      it do
+        is_expected.to create_osl_app_dockercompose_wrapper('hempdb-production').with(
+          directory: '/home/hemp-db-production/hemp-db',
+          config_files: %w(compose.deploy.yaml compose.prod.yaml),
+          user: 'hemp-db-production'
+        )
+      end
+
+      it do
+        is_expected.to create_cron('hempdb-production-cron').with(
+          minute: '0',
+          hour: '3',
+          command: 'cd /home/hemp-db-production/hemp-db && /usr/bin/docker compose -p hempdb-production ' \
+            '-f compose.deploy.yaml -f compose.prod.yaml run --rm --no-deps cron > /dev/null'
         )
       end
     end

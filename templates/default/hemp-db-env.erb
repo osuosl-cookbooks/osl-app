@@ -10,10 +10,17 @@ ALLOWED_HOSTS=<%= @allowed_hosts.join(',') %>
 
 # Host ports published for the load balancer (unicorn firewall range).
 APP_PORT=<%= @app_port %>
+<% if @mailpit_port -%>
 MAILPIT_PORT=<%= @mailpit_port %>
 
 # Basic auth for the Mailpit UI, which the load balancer publishes at /mailpit.
 MAILPIT_UI_AUTH=<%= @mailpit_ui_auth %>
+<% end -%>
+<% if @default_from_email -%>
+
+# Mail goes through the OSL SMTP relay.
+DEFAULT_FROM_EMAIL=<%= @default_from_email %>
+<% end -%>
 
 # Docker secret source files.
 SECRET_KEY_PATH=./docker/secrets/secret_key
