@@ -8,9 +8,9 @@ chef_version     '>= 16.0'
 description      'Installs/Configures osl-app'
 version          '4.13.5'
 
-supports         'almalinux', '~> 8.0'
-supports         'almalinux', '~> 9.0'
-supports         'almalinux', '~> 10.0'
+supports 'almalinux', '~> 8.0'
+supports 'almalinux', '~> 9.0'
+supports 'almalinux', '~> 10.0'
 
 depends          'htpasswd', '< 2.0.18'
 depends          'osl-docker', '>= 4.19.5'
