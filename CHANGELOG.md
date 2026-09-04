@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.13.7 (2026-09-04)
+-------------------
+- app3: Add hemp-db production deployment
+
 4.13.6 (2026-09-04)
 -------------------
 - app3: Require basic auth on the hemp-db staging Mailpit UI
