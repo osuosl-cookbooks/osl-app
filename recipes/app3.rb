@@ -567,6 +567,7 @@ template "#{hempdb_staging}/.env" do
     database_ssl: !node['kitchen'],
     image: 'dev',
     mailpit_port: '8095',
+    mailpit_ui_auth: hempdb_secrets['staging']['mailpit_ui_auth'],
     production_url: hempdb_staging_fqdn,
     sentry_dsn: hempdb_secrets['staging']['sentry_dsn']
   )
