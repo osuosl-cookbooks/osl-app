@@ -613,3 +613,78 @@ osl_app_dockercompose_wrapper 'hempdb-staging' do
   config_files %w(compose.deploy.yaml compose.staging.yaml)
   user 'hemp-db-staging'
 end
+
+# HempDB - Production
+hempdb_production = '/home/hemp-db-production/hemp-db'
+hempdb_production_fqdn = 'hempdb.cass.oregonstate.edu'
+hempdb_production_compose = %w(compose.deploy.yaml compose.prod.yaml)
+hempdb_secrets['production']['db_host'] = node['ipaddress'] if node['kitchen']
+
+git hempdb_production do
+  repository 'https://github.com/osu-cass/hemp-db.git'
+  revision 'main'
+  notifies :rebuild, 'osl_dockercompose[hempdb-production]'
+end
+
+template "#{hempdb_production}/.env" do
+  source 'hemp-db-env.erb'
+  mode '0400'
+  variables(
+    allowed_hosts: [hempdb_production_fqdn, node['ipaddress']],
+    app_port: '8096',
+    database_ssl: !node['kitchen'],
+    default_from_email: "noreply@#{hempdb_production_fqdn}",
+    image: 'main',
+    production_url: hempdb_production_fqdn,
+    sentry_dsn: hempdb_secrets['production']['sentry_dsn']
+  )
+  sensitive true
+  notifies :rebuild, 'osl_dockercompose[hempdb-production]'
+end
+
+directory "#{hempdb_production}/docker/secrets"
+
+file "#{hempdb_production}/docker/secrets/secret_key" do
+  owner 1000
+  group 1000
+  mode '0400'
+  content hempdb_secrets['production']['secret_key']
+  sensitive true
+  notifies :rebuild, 'osl_dockercompose[hempdb-production]'
+end
+
+file "#{hempdb_production}/docker/secrets/database_url" do
+  owner 1000
+  group 1000
+  mode '0400'
+  content 'mysql://' \
+    "#{hempdb_secrets['production']['db_user']}:#{hempdb_secrets['production']['db_pass']}" \
+    "@#{hempdb_secrets['production']['db_host']}:3306/#{hempdb_secrets['production']['db_name']}"
+  sensitive true
+  notifies :rebuild, 'osl_dockercompose[hempdb-production]'
+end
+
+docker_image 'ghcr.io/osu-cass/hemp-db-main' do
+  repo 'ghcr.io/osu-cass/hemp-db'
+  tag 'main'
+  notifies :rebuild, 'osl_dockercompose[hempdb-production]'
+end
+
+osl_dockercompose 'hempdb-production' do
+  directory hempdb_production
+  config_files hempdb_production_compose
+end
+
+osl_app_dockercompose_wrapper 'hempdb-production' do
+  directory hempdb_production
+  config_files hempdb_production_compose
+  user 'hemp-db-production'
+end
+
+# Daily poll of the one-shot cron service; the app decides when the audit runs.
+cron 'hempdb-production-cron' do
+  minute '0'
+  hour '3'
+  command "cd #{hempdb_production} && /usr/bin/docker compose -p hempdb-production " \
+    "#{hempdb_production_compose.map { |f| "-f #{f}" }.join(' ')} run --rm --no-deps cron > /dev/null"
+end

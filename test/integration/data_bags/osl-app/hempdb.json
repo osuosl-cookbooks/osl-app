@@ -8,5 +8,13 @@
     "mailpit_ui_auth": "admin:admin",
     "sentry_dsn": "",
     "secret_key": "hempdb-staging-secret-key"
+  },
+  "production": {
+    "db_name": "hempdb-production",
+    "db_user": "hempdb-production",
+    "db_pass": "hempdb-production",
+    "db_host": "127.0.0.1",
+    "sentry_dsn": "",
+    "secret_key": "hempdb-production-secret-key"
   }
 }
