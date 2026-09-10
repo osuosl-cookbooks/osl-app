@@ -10,7 +10,7 @@ transport:
 
 provisioner:
   name: cinc_infra
-  product_version: '18'
+  product_version: '19'
   data_bag_path: test/integration/data_bags
   encrypted_data_bag_secret_key_path: test/integration/encrypted_data_bag_secret
   enforce_idempotency: true
