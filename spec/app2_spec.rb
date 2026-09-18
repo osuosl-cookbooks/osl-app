@@ -20,6 +20,7 @@ describe 'osl-app::app2' do
         stub_data_bag_item('osl-app', 'formsender').and_return(
           token: 'faketoken',
           rt_token: 'rt_faketoken',
+          turnstile_secret: 'faketurnstile',
           recaptcha_secret: 'fakerecaptcha',
           sentry_uri: 'fakeuri'
         )
@@ -27,6 +28,7 @@ describe 'osl-app::app2' do
           rt_url: 'https://rt.example.org/REST/2.0/',
           token: 'opf_faketoken',
           rt_token: 'opf_rt_faketoken',
+          turnstile_secret: 'opf_faketurnstile',
           recaptcha_secret: 'opf_fakerecaptcha',
           sentry_uri: 'opf_fakeuri'
         )
@@ -92,8 +94,10 @@ describe 'osl-app::app2' do
           env: [
             'TOKEN=faketoken',
             'RT_TOKEN=rt_faketoken',
+            'TURNSTILE_SECRET=faketurnstile',
             'RECAPTCHA_SECRET=fakerecaptcha',
             'SENTRY_URI=fakeuri',
+            'TRUSTED_PROXY_COUNT=1',
           ],
           sensitive: true
         )
@@ -109,8 +113,10 @@ describe 'osl-app::app2' do
             'RT_URL=https://rt.example.org/REST/2.0/',
             'TOKEN=opf_faketoken',
             'RT_TOKEN=opf_rt_faketoken',
+            'TURNSTILE_SECRET=opf_faketurnstile',
             'RECAPTCHA_SECRET=opf_fakerecaptcha',
             'SENTRY_URI=opf_fakeuri',
+            'TRUSTED_PROXY_COUNT=1',
           ],
           sensitive: true
         )

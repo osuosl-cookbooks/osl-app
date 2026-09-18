@@ -78,15 +78,19 @@ docker_container 'formsender' do
   env [
     "TOKEN=#{formsender_env['token']}",
     "RT_TOKEN=#{formsender_env['rt_token']}",
+    "TURNSTILE_SECRET=#{formsender_env['turnstile_secret']}",
     "RECAPTCHA_SECRET=#{formsender_env['recaptcha_secret']}",
     "SENTRY_URI=#{formsender_env['sentry_uri']}",
+    # We sit behind haproxy, so trust one X-Forwarded-For hop; without this
+    # the captcha provider is told haproxy's address, not the sender's.
+    'TRUSTED_PROXY_COUNT=1',
   ]
   sensitive true
 end
 
 # Second formsender instance for the OpenPower Foundation, pointed at a
 # separate RT instance via RT_URL. Same image as above; the RT user/token,
-# form token, and reCAPTCHA secret all differ and live in their own data bag.
+# form token, and captcha secrets all differ and live in their own data bag.
 formsender_opf_env = data_bag_item('osl-app', 'formsender-opf')
 
 docker_container 'formsender-opf' do
@@ -98,8 +102,10 @@ docker_container 'formsender-opf' do
     "RT_URL=#{formsender_opf_env['rt_url']}",
     "TOKEN=#{formsender_opf_env['token']}",
     "RT_TOKEN=#{formsender_opf_env['rt_token']}",
+    "TURNSTILE_SECRET=#{formsender_opf_env['turnstile_secret']}",
     "RECAPTCHA_SECRET=#{formsender_opf_env['recaptcha_secret']}",
     "SENTRY_URI=#{formsender_opf_env['sentry_uri']}",
+    'TRUSTED_PROXY_COUNT=1',
   ]
   sensitive true
 end

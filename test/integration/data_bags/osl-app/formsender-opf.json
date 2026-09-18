@@ -2,6 +2,7 @@
   "rt_url": "",
   "token": "",
   "rt_token": "",
+  "turnstile_secret": "1x0000000000000000000000000000000AA",
   "recaptcha_secret": "",
   "sentry_uri": ""
 }
