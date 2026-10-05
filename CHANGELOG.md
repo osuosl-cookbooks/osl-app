@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.13.9 (2026-10-05)
+-------------------
+- app2: only accept captchas solved on osuosl.org
+
 4.13.8 (2026-09-18)
 -------------------
 - app2: pass a Turnstile secret to both formsender containers
