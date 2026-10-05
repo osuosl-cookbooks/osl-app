@@ -98,6 +98,7 @@ describe 'osl-app::app2' do
             'RECAPTCHA_SECRET=fakerecaptcha',
             'SENTRY_URI=fakeuri',
             'TRUSTED_PROXY_COUNT=1',
+            'CAPTCHA_ALLOWED_HOSTNAMES=osuosl.org,www.osuosl.org',
           ],
           sensitive: true
         )

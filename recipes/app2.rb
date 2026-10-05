@@ -84,6 +84,9 @@ docker_container 'formsender' do
     # We sit behind haproxy, so trust one X-Forwarded-For hop; without this
     # the captcha provider is told haproxy's address, not the sender's.
     'TRUSTED_PROXY_COUNT=1',
+    # Only osuosl.org's forms post here. Refuse captchas solved anywhere
+    # else, such as a website PR preview built with production settings.
+    'CAPTCHA_ALLOWED_HOSTNAMES=osuosl.org,www.osuosl.org',
   ]
   sensitive true
 end
