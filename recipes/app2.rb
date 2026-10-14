@@ -109,6 +109,10 @@ docker_container 'formsender-opf' do
     "RECAPTCHA_SECRET=#{formsender_opf_env['recaptcha_secret']}",
     "SENTRY_URI=#{formsender_opf_env['sentry_uri']}",
     'TRUSTED_PROXY_COUNT=1',
+    # OPF's RT is slow to answer ticket creates: 10 s captcha + 30 s RT stays
+    # under gunicorn's 45 s, which stays under haproxy's 50 s server timeout
+    'RT_TIMEOUT=30',
+    'GUNICORN_CMD_ARGS=--timeout 45',
   ]
   sensitive true
 end
