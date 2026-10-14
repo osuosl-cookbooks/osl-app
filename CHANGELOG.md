@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.13.10 (2026-10-14)
+--------------------
+- app2: give formsender-opf longer RT and gunicorn timeouts
+
 4.13.9 (2026-10-05)
 -------------------
 - app2: only accept captchas solved on osuosl.org
