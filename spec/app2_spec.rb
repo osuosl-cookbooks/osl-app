@@ -118,6 +118,8 @@ describe 'osl-app::app2' do
             'RECAPTCHA_SECRET=opf_fakerecaptcha',
             'SENTRY_URI=opf_fakeuri',
             'TRUSTED_PROXY_COUNT=1',
+            'RT_TIMEOUT=30',
+            'GUNICORN_CMD_ARGS=--timeout 45',
           ],
           sensitive: true
         )

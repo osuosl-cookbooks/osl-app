@@ -62,6 +62,11 @@ control 'app2' do
     its('ports') { should eq '0.0.0.0:8087->5000/tcp' }
   end
 
+  describe command('docker exec formsender-opf env') do
+    its('stdout') { should match /^RT_TIMEOUT=30$/ }
+    its('stdout') { should match /^GUNICORN_CMD_ARGS=--timeout 45$/ }
+  end
+
   describe http 'http://127.0.0.1:8087/server-status' do
     its('status') { should eq 200 }
   end
