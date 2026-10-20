@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.13.11 (2026-10-20)
+--------------------
+- app1: cap registry mirror memory
+
 4.13.10 (2026-10-14)
 --------------------
 - app2: give formsender-opf longer RT and gunicorn timeouts
