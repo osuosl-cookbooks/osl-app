@@ -238,7 +238,7 @@ describe 'osl-app::app1' do
             'REGISTRY_STORAGE_S3_REGION=us-east-1',
             'REGISTRY_STORAGE_S3_BUCKET=osuosl-registry',
             'REGISTRY_STORAGE_S3_REGIONENDPOINT=s3.osuosl.org',
-            'REGISTRY_STORAGE_S3_CHUNKSIZE=104857600',
+            'REGISTRY_STORAGE_S3_CHUNKSIZE=16777216',
             'REGISTRY_STORAGE_S3_MULTIPARTCOPYCHUNKSIZE=104857600',
             'REGISTRY_STORAGE_S3_MULTIPARTCOPYMAXCONCURRENCY=32',
             'REGISTRY_STORAGE_CACHE_BLOBDESCRIPTOR=redis',
@@ -247,7 +247,10 @@ describe 'osl-app::app1' do
             'REGISTRY_PROXY_USERNAME=docker_username',
             'REGISTRY_PROXY_PASSWORD=docker_password',
             'REGISTRY_HTTP_DRAINTIMEOUT=60s',
+            'GOMEMLIMIT=1536MiB',
           ],
+          memory: 2147483648,
+          memory_swap: 2147483648,
           volumes_binds: ['/usr/local/etc/registry.osuosl.org:/auth'],
           sensitive: true
         )
@@ -266,7 +269,7 @@ describe 'osl-app::app1' do
             'REGISTRY_STORAGE_S3_REGION=us-east-1',
             'REGISTRY_STORAGE_S3_BUCKET=osuosl-registry',
             'REGISTRY_STORAGE_S3_REGIONENDPOINT=s3.osuosl.org',
-            'REGISTRY_STORAGE_S3_CHUNKSIZE=104857600',
+            'REGISTRY_STORAGE_S3_CHUNKSIZE=16777216',
             'REGISTRY_STORAGE_S3_MULTIPARTCOPYCHUNKSIZE=104857600',
             'REGISTRY_STORAGE_S3_MULTIPARTCOPYMAXCONCURRENCY=32',
             'REGISTRY_STORAGE_S3_ROOTDIRECTORY=/quay',
@@ -277,7 +280,10 @@ describe 'osl-app::app1' do
             'REGISTRY_PROXY_USERNAME=quay_username',
             'REGISTRY_PROXY_PASSWORD=quay_password',
             'REGISTRY_HTTP_DRAINTIMEOUT=60s',
+            'GOMEMLIMIT=768MiB',
           ],
+          memory: 1073741824,
+          memory_swap: 1073741824,
           volumes_binds: ['/usr/local/etc/registry.osuosl.org:/auth'],
           sensitive: true
         )

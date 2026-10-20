@@ -179,11 +179,11 @@ registry_storage_env = if kitchen?
                            'REGISTRY_STORAGE_S3_REGION=us-east-1',
                            'REGISTRY_STORAGE_S3_BUCKET=osuosl-registry',
                            'REGISTRY_STORAGE_S3_REGIONENDPOINT=s3.osuosl.org',
-                           # 100MB chunks (up from 5MB default) - reduces S3 API calls for large layers
-                           'REGISTRY_STORAGE_S3_CHUNKSIZE=104857600',
+                           # 16MiB parts; each uncached blob holds two of these in RAM while it is stored
+                           'REGISTRY_STORAGE_S3_CHUNKSIZE=16777216',
                            # 100MB multipart copy chunks - improves cross-repo blob mounting performance
                            'REGISTRY_STORAGE_S3_MULTIPARTCOPYCHUNKSIZE=104857600',
-                           # 32 concurrent uploads (up from 100 default) - balances throughput vs memory usage
+                           # 32 concurrent server-side part copies (down from 100 default)
                            'REGISTRY_STORAGE_S3_MULTIPARTCOPYMAXCONCURRENCY=32',
                          ]
                        end
@@ -204,7 +204,11 @@ docker_container 'registry.osuosl.org' do
     "REGISTRY_PROXY_PASSWORD=#{registry_secrets['docker_password']}",
     # HTTP performance settings
     'REGISTRY_HTTP_DRAINTIMEOUT=60s',
+    'GOMEMLIMIT=1536MiB',
   ]
+  # Cap memory so a CI pull burst OOMs the mirror, not openid on the same host
+  memory '2g'
+  memory_swap '2g'
   volumes ['/usr/local/etc/registry.osuosl.org:/auth']
   port '8082:5000'
   health_check(
@@ -244,7 +248,10 @@ docker_container 'registry-quay' do
     "REGISTRY_PROXY_PASSWORD=#{registry_secrets['quay_password']}",
     # HTTP performance settings
     'REGISTRY_HTTP_DRAINTIMEOUT=60s',
+    'GOMEMLIMIT=768MiB',
   ]
+  memory '1g'
+  memory_swap '1g'
   volumes ['/usr/local/etc/registry.osuosl.org:/auth']
   port '8083:5000'
   health_check(

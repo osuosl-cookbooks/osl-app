@@ -60,6 +60,19 @@ control 'app1' do
     its('ports') { should match %r{0.0.0.0:8083->5000/tcp} }
   end
 
+  {
+    'registry.osuosl.org' => [2147483648, '1536MiB'],
+    'registry-quay' => [1073741824, '768MiB'],
+  }.each do |name, (bytes, gomemlimit)|
+    describe command("docker inspect -f '{{.HostConfig.Memory}} {{.HostConfig.MemorySwap}}' #{name}") do
+      its('stdout.strip') { should eq "#{bytes} #{bytes}" }
+    end
+
+    describe command("docker exec #{name} env") do
+      its('stdout') { should match /^GOMEMLIMIT=#{gomemlimit}$/ }
+    end
+  end
+
   describe file '/usr/local/etc/registry.osuosl.org/htpasswd' do
     its('content') { should match /^guest:\$apr1/ }
     its('content') { should match /^admin:\$apr1/ }
