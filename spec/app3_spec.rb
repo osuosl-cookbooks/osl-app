@@ -364,6 +364,13 @@ describe 'osl-app::app3' do
       end
 
       it do
+        is_expected.to render_file('/home/invasives-staging/oregoninvasiveshotline/.env').with_content { |c|
+          expect(c).to match(%r{^STATIC_ROOT=/static$})
+          expect(c).not_to match(/STATICFILES_STORAGE/)
+        }
+      end
+
+      it do
         expect(chef_run.template('/home/invasives-staging/oregoninvasiveshotline/.env')).to \
           notify('osl_dockercompose[invasives-staging]').to(:rebuild)
       end
@@ -509,6 +516,13 @@ describe 'osl-app::app3' do
         expect(template.variables[:sentry_sample_rate]).to eq('1.0')
         expect(template.variables[:user_id].call(chef_run.node)).to eq(1000)
         expect(template.variables[:volume_path]).to eq('/home/invasives-production/volume')
+      end
+
+      it do
+        is_expected.to render_file('/home/invasives-production/oregoninvasiveshotline/.env').with_content { |c|
+          expect(c).to match(%r{^STATIC_ROOT=/static$})
+          expect(c).not_to match(/STATICFILES_STORAGE/)
+        }
       end
 
       it do
