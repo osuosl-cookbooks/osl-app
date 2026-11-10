@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.13.12 (2026-11-10)
+--------------------
+- app3: drop STATICFILES_STORAGE from the invasives env
+
 4.13.11 (2026-10-20)
 --------------------
 - app1: cap registry mirror memory
