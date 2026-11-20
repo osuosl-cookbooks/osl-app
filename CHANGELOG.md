@@ -3,6 +3,10 @@ osl-app CHANGELOG
 This file is used to list changes made in each version of the
 osl-app cookbook.
 
+4.13.13 (2026-11-20)
+--------------------
+- app3: require osl-docker 5 so the compose stacks' images are pulled
+
 4.13.12 (2026-11-10)
 --------------------
 - app3: drop STATICFILES_STORAGE from the invasives env
