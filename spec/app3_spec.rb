@@ -938,6 +938,13 @@ describe 'osl-app::app3' do
       end
 
       it do
+        is_expected.to up_osl_dockercompose('hempdb-staging').with(
+          directory: '/home/hemp-db-staging/hemp-db',
+          config_files: %w(compose.deploy.yaml compose.staging.yaml)
+        )
+      end
+
+      it do
         is_expected.to create_osl_app_dockercompose_wrapper('hempdb-staging').with(
           directory: '/home/hemp-db-staging/hemp-db',
           config_files: %w(compose.deploy.yaml compose.staging.yaml),
@@ -1024,6 +1031,13 @@ describe 'osl-app::app3' do
       it do
         expect(chef_run.docker_image('ghcr.io/osu-cass/hemp-db-main')).to \
           notify('osl_dockercompose[hempdb-production]').to(:rebuild)
+      end
+
+      it do
+        is_expected.to up_osl_dockercompose('hempdb-production').with(
+          directory: '/home/hemp-db-production/hemp-db',
+          config_files: %w(compose.deploy.yaml compose.prod.yaml)
+        )
       end
 
       it do

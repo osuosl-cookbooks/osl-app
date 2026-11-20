@@ -793,4 +793,22 @@ control 'app3' do
     its('stdout') { should match %r{\(ALL\) NOPASSWD: /usr/local/bin/hempdb-production-logs} }
     its('stdout') { should match %r{\(ALL\) NOPASSWD: /usr/local/bin/hempdb-production-ps} }
   end
+
+  # osl-docker's pull_images (on by default) keeps every running container on the image its tag
+  # points at now; the tags follow osu-cass's compose files, so none are pinned here
+  {
+    'invasives-staging' => ['/home/invasives-staging/oregoninvasiveshotline', %w(docker-compose.deploy.yml docker-compose.mailpit.yml)],
+    'invasives-production' => ['/home/invasives-production/oregoninvasiveshotline', %w(docker-compose.deploy.yml)],
+    'hempdb-staging' => ['/home/hemp-db-staging/hemp-db', %w(compose.deploy.yaml compose.staging.yaml)],
+    'hempdb-production' => ['/home/hemp-db-production/hemp-db', %w(compose.deploy.yaml compose.prod.yaml)],
+  }.each do |project, (dir, files)|
+    compose = "docker compose -p #{project} #{files.map { |f| "-f #{dir}/#{f}" }.join(' ')}"
+    describe command(
+      "set -o pipefail; #{compose} ps --format '{{.Service}} {{.ID}} {{.Image}}' | while read s id img; do " \
+      "[ \"$(docker inspect -f '{{.Image}}' $id)\" = \"$(docker image inspect -f '{{.Id}}' $img)\" ] || echo \"stale $s\"; done"
+    ) do
+      its('exit_status') { should eq 0 }
+      its('stdout') { should eq '' }
+    end
+  end
 end
